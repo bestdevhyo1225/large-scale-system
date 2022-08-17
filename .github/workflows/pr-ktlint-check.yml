@@ -1,0 +1,21 @@
+name: Pull Request - ktlint check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-ktlint:
+    name: Check kotlin code style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout V3
+        uses: actions/checkout@v3
+
+      - name: Check ktlint
+        uses: ScaCap/action-ktlint@master
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-check # Change reporter
