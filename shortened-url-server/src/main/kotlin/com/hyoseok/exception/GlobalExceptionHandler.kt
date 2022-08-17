@@ -51,7 +51,8 @@ class GlobalExceptionHandler {
         logger.error { exception }
 
         return ResponseEntity(
-            ErrorResponse(message = HttpStatus.INTERNAL_SERVER_ERROR.name), HttpStatus.INTERNAL_SERVER_ERROR,
+            ErrorResponse(message = HttpStatus.INTERNAL_SERVER_ERROR.name),
+            HttpStatus.INTERNAL_SERVER_ERROR,
         )
     }
 }
