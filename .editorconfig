@@ -1,0 +1,18 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+end_of_line = lf
+indent_size = 4
+indent_style = space
+max_line_length = 120
+tab_width = 4
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+disabled_rules = import-ordering
+# java.* 패키지를 의존하는 경우  IntelliJ의 Orgarnize Import 기능으로는 알파벳 순서대로 import 구문을 정렬할 수 없다.
+# 이는 ktlint의 import-ordering 규칙과 맞지 않는다.
