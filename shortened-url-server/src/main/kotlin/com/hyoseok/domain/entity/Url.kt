@@ -38,10 +38,7 @@ class Url private constructor(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherUrl = (other as? Url) ?: return false
-        return this.id == otherUrl.id &&
-            this.shortUrl == otherUrl.shortUrl &&
-            this.longUrl == otherUrl.longUrl &&
-            this.createdAt == otherUrl.createdAt
+        return this.id == otherUrl.id
     }
 
     companion object {
