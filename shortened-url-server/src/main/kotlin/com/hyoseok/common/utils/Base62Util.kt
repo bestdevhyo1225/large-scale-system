@@ -2,16 +2,17 @@ package com.hyoseok.common.utils
 
 object Base62Util {
     private val BASE62: CharArray = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()
+    private const val FIRST_OFFSET = 0
 
     fun encode(value: Long): String {
         val stringBuilder = StringBuilder()
         var tempValue = value
         do {
             val i = (tempValue % 62).toInt()
-            stringBuilder.append(BASE62[i])
+            stringBuilder.insert(FIRST_OFFSET, BASE62[i])
             tempValue /= 62
         } while (tempValue > 0)
-        return stringBuilder.reverse().toString()
+        return stringBuilder.toString()
     }
 
     fun decode(value: String): Int {
