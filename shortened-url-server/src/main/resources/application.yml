@@ -2,7 +2,6 @@ server:
   tomcat:
     threads:
       min-spare: 20
-      max: 100
 
 spring:
   profiles:
