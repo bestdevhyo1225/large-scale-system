@@ -13,7 +13,7 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableConfigurationProperties(value = [WriteProperty::class, ReadProperty::class])
-@Profile(value = ["prod"])
+@Profile(value = ["prod", "prod-docker"])
 class ReplicationDataSourceConfig(
     private val writeProperty: WriteProperty,
     private val readProperty: ReadProperty,

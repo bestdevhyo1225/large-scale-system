@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile
 
 @ConstructorBinding
 @ConfigurationProperties(value = "spring.datasource.hikari.write")
-@Profile(value = ["prod"])
+@Profile(value = ["prod", "prod-docker"])
 data class WriteProperty(
     val driverClassName: String,
     val jdbcUrl: String,

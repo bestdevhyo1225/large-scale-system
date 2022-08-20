@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile
 
 @ConstructorBinding
 @ConfigurationProperties(value = "spring.datasource.hikari.read")
-@Profile(value = ["prod"])
+@Profile(value = ["prod", "prod-docker"])
 data class ReadProperty(
     val driverClassName: String,
     val jdbcUrl: String,
