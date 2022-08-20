@@ -56,7 +56,7 @@ chmod +x ./shortened-url-server/stop.sh
 
 > Cache 적용 전, 결과 (MySQL 사용)
 
-- `60초` 동안 `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
+- `60초` 동안, `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
 
 | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -64,7 +64,7 @@ chmod +x ./shortened-url-server/stop.sh
 
 > Cache 적용 후, 결과 (MySQL, Redis 사용)
 
-- `60초` 동안 `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
+- `60초` 동안, `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
 
 | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
