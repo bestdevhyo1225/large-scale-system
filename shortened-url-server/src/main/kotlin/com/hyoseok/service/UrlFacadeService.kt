@@ -33,7 +33,7 @@ class UrlFacadeService(
                 key = key,
                 value = longUrl,
                 expireTime = RedisExpireTimes.URLS,
-                timeUnit = TimeUnit.MILLISECONDS,
+                timeUnit = TimeUnit.SECONDS,
             )
         }
 
