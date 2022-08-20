@@ -50,12 +50,10 @@ class ReplicationDataSourceConfig(
         dataSourceMap[ReplicationDataSourceType.WRITE] = writeDataSource
         dataSourceMap[ReplicationDataSourceType.READ] = readDataSource
 
-        val replicationRoutingDataSource = ReplicationRoutingDataSource().apply {
+        return ReplicationRoutingDataSource().apply {
             setTargetDataSources(dataSourceMap)
             setDefaultTargetDataSource(writeDataSource)
         }
-
-        return replicationRoutingDataSource
     }
 
     @Bean
