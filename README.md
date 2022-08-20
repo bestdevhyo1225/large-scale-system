@@ -45,3 +45,16 @@ chmod +x ./shortened-url-server/stop.sh
 ```shell
 ./shortened-url-server/stop.sh
 ```
+
+### 부하 테스트 결과
+
+- `Total Vusers`: 동시에 접속하는 가상 사용자의 수
+- `TPS` : 초당 트랜잭션의 수(HTTP request가 성공할 때마다 트랜잭션 수 1씩 증가) , 초당 처리 수
+
+> MySQL
+
+| Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| 30 | 423.6 | 638.0 | 21,458 | 21,458 | 08|
+
+> Redis
