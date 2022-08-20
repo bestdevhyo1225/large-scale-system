@@ -4,7 +4,6 @@ import com.hyoseok.service.UrlService
 import com.hyoseok.web.request.CreateUrlRequest
 import com.hyoseok.web.response.SuccessResponse
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping
@@ -33,6 +32,7 @@ class UrlController(
     fun get(@PathVariable shortUrl: String): ResponseEntity<SuccessResponse<Any>> {
         val httpHeader = HttpHeaders()
         httpHeader.location = URI.create(urlService.find(shortUrl = shortUrl))
-        return ResponseEntity(httpHeader, HttpStatus.MOVED_PERMANENTLY)
+        return ok(SuccessResponse(data = object {}))
+//        return ResponseEntity(httpHeader, HttpStatus.MOVED_PERMANENTLY)
     }
 }
