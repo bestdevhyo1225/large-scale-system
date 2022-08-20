@@ -55,6 +55,6 @@ chmod +x ./shortened-url-server/stop.sh
 
 | Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| 30 | 423.6 | 638.0 | 21,458 | 21,458 | 0 |
+| | | | | | |
 
 > Redis
