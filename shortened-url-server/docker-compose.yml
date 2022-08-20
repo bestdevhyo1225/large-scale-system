@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+  shortened-url-server:
+    image: shortened-url-server:latest
+    container_name: shortened-url-server
+    ports:
+      - '8080:8080'
