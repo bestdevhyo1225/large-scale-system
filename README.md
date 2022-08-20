@@ -51,13 +51,13 @@ chmod +x ./shortened-url-server/stop.sh
 - `Total Vusers`: 동시에 접속하는 가상 사용자의 수
 - `TPS` : 초당 트랜잭션의 수(HTTP request가 성공할 때마다 트랜잭션 수 1씩 증가) , 초당 처리 수
 
-> MySQL
+> Cache 적용 전, 결과 (MySQL 사용)
 
 | Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | | | | | | |
 
-> Redis
+> Cache 적용 후, 결과 (MySQL, Redis 사용)
 
 | Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
 | :-: | :-: | :-: | :-: | :-: | :-: |
