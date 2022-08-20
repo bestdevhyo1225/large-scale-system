@@ -1,5 +1,6 @@
 package com.hyoseok.web
 
+import com.hyoseok.service.UrlFacadeService
 import com.hyoseok.service.UrlService
 import com.hyoseok.web.request.CreateUrlRequest
 import com.hyoseok.web.response.SuccessResponse
@@ -19,6 +20,7 @@ import javax.validation.Valid
 @RequestMapping("/api/v1")
 class UrlController(
     private val urlService: UrlService,
+    private val urlFacadeService: UrlFacadeService,
 ) {
 
     @PostMapping("/url/shorten")
@@ -31,7 +33,7 @@ class UrlController(
     @GetMapping("/{shortUrl}")
     fun get(@PathVariable shortUrl: String): ResponseEntity<SuccessResponse<Any>> {
         val httpHeader = HttpHeaders()
-        httpHeader.location = URI.create(urlService.find(shortUrl = shortUrl))
+        httpHeader.location = URI.create(urlFacadeService.find(shortUrl = shortUrl))
         return ok(SuccessResponse(data = object {}))
 //        return ResponseEntity(httpHeader, HttpStatus.MOVED_PERMANENTLY)
     }
