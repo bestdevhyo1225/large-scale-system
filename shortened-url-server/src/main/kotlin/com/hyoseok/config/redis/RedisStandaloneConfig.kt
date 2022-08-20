@@ -10,7 +10,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
-import java.time.Duration
 
 @Configuration
 @EnableCaching(proxyTargetClass = true)
@@ -21,9 +20,6 @@ class RedisStandaloneConfig(
 
     @Value("\${spring.data.redis.port}")
     private val port: Int,
-
-    @Value("\${spring.data.redis.shutdown-timeout}")
-    private val shutdownTimeout: Long,
 ) {
 
     @Bean
@@ -34,6 +30,5 @@ class RedisStandaloneConfig(
         LettuceClientConfiguration.builder()
             .clientName("large-scale-system-client")
             .readFrom(REPLICA_PREFERRED)
-            .shutdownTimeout(Duration.ofMillis(shutdownTimeout))
             .build()
 }
