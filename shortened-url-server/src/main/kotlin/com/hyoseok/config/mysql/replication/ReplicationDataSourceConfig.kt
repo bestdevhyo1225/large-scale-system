@@ -44,15 +44,16 @@ class ReplicationDataSourceConfig(
     @Bean
     fun routingDataSource(): DataSource {
         val dataSourceMap: MutableMap<Any, Any> = HashMap()
-        val orderWriteDataSource = writeDataSource()
-        val orderReadDataSource = readDataSource()
+        val writeDataSource = writeDataSource()
+        val readDataSource = readDataSource()
 
-        dataSourceMap[ReplicationDataSourceType.WRITE] = orderWriteDataSource
-        dataSourceMap[ReplicationDataSourceType.READ] = orderReadDataSource
+        dataSourceMap[ReplicationDataSourceType.WRITE] = writeDataSource
+        dataSourceMap[ReplicationDataSourceType.READ] = readDataSource
 
-        val replicationRoutingDataSource = ReplicationRoutingDataSource()
-        replicationRoutingDataSource.setTargetDataSources(dataSourceMap)
-        replicationRoutingDataSource.setDefaultTargetDataSource(orderWriteDataSource)
+        val replicationRoutingDataSource = ReplicationRoutingDataSource().apply {
+            setTargetDataSources(dataSourceMap)
+            setDefaultTargetDataSource(writeDataSource)
+        }
 
         return replicationRoutingDataSource
     }
