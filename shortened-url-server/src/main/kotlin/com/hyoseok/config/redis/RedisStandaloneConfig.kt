@@ -3,7 +3,6 @@ package com.hyoseok.config.redis
 import io.lettuce.core.ClientOptions
 import io.lettuce.core.ReadFrom.REPLICA_PREFERRED
 import io.lettuce.core.TimeoutOptions
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
@@ -13,8 +12,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
-import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.data.redis.serializer.StringRedisSerializer
 import java.time.Duration
 
 @Configuration
@@ -37,18 +34,6 @@ class RedisStandaloneConfig(
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory =
         LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig())
-
-    @Bean
-    fun redisTemplate(): RedisTemplate<String, String?> {
-        val stringRedisSerializer = StringRedisSerializer()
-        return RedisTemplate<String, String?>().apply {
-            setConnectionFactory(redisConnectionFactory())
-            keySerializer = stringRedisSerializer
-            valueSerializer = stringRedisSerializer
-            hashKeySerializer = stringRedisSerializer
-            hashValueSerializer = stringRedisSerializer
-        }
-    }
 
     private fun lettuceClientConfig(): LettuceClientConfiguration =
         LettuceClientConfiguration.builder()
