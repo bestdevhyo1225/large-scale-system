@@ -36,7 +36,7 @@ class UrlService(
         val url: Url = urlRepository.findByShortUrl(shortUrl = shortUrl)
             ?: throw NoSuchElementException(ServerExceptionMessage.URL_NOT_FOUND)
 
-        logger.info { "find Url: $url" }
+        logger.info { "longUrl: ${url.longUrl}" }
 
         return url.longUrl
     }

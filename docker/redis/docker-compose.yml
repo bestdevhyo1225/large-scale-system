@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  large-scale-system-redis:
+    image: redis:latest
+    container_name: large-scale-system-redis
+    command: redis-server --port 6379
+    ports:
+      - '6379:6379'
+    restart: always
