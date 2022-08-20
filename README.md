@@ -46,19 +46,26 @@ chmod +x ./shortened-url-server/stop.sh
 ./shortened-url-server/stop.sh
 ```
 
-### 부하 테스트 결과
+### 부하 테스트 결과 (JMeter)
 
-- `Total Vusers`: 동시에 접속하는 가상 사용자의 수
-- `TPS` : 초당 트랜잭션의 수(HTTP request가 성공할 때마다 트랜잭션 수 1씩 증가) , 초당 처리 수
+- `Samples`: 테스트 서버로 보낸 요청의 수
+- `Average` : 평균 응답 시간(ms)
+- `Min` : 최소 응답 시간(ms)
+- `Max` : 최대 응답 시간(ms)
+- `Throughput` : 단위 시간당 대상 서버에서 처리되는 요청의 수 (JMeter에서는 시간 단위를 보통 `TPS(Transaction Per Second)` 로 표현)
 
 > Cache 적용 전, 결과 (MySQL 사용)
 
-| Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
+- `60초` 동안 `1초` 에 `1,000명` 의 유저가 요청을 보낸 상황
+
+| Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| | | | | | |
+| 26,935회 | 2,250ms | 41ms | 4012ms | 0.00% | 434.4/sec |
 
 > Cache 적용 후, 결과 (MySQL, Redis 사용)
 
-| Total Vusers | TPS | Peak TPS | Excuted Tests | Successful Tests | Erros |
+- `60초` 동안 `1초` 에 `1,000명` 의 유저가 요청을 보낸 상황
+
+| Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| | | | | | |
+| 443,332회 | 134ms | 15ms | 1193ms | 0.01% | 7373.3/sec |
