@@ -60,7 +60,7 @@ chmod +x ./shortened-url-server/stop.sh
 
 | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| 26,935회 | 2,250ms | 41ms | 4012ms | 0.00% | 434.4/sec |
+| 26,935회 | 2,250ms | 41ms | 4,012ms | 0.00% | 434.4/sec |
 
 > Cache 적용 후, 결과 (MySQL, Redis 사용)
 
@@ -68,4 +68,5 @@ chmod +x ./shortened-url-server/stop.sh
 
 | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
-| 443,332회 | 134ms | 15ms | 1193ms | 0.01% | 7373.3/sec |
+| 443,332회 | 134ms | 15ms | 1,193ms | 0.01% | 7,373.3/sec |
+| 460,072회 | 129ms | 15ms | 1,178ms | 0.02% | 7,630.7/sec |
