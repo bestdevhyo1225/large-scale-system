@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+  large-scale-system-write-mysql:
+    image: large-scale-system-write-mysql
+    container_name: large-scale-system-write-mysql
+    volumes:
+      - ./write/mysql-init-files/:/docker-entrypoint-initdb.d/
+      - ./write/mysql-config-files/:/etc/mysql/conf.d
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD="true"
+    ports:
+      - '9770:3306'
+    networks:
+      large-scale-system:
+        ipv4_address: 172.16.0.10
+
+  large-scale-system-read-mysql:
+    image: large-scale-system-read-mysql
+    container_name: large-scale-system-read-mysql
+    volumes:
+      - ./read/mysql-init-files/:/docker-entrypoint-initdb.d/
+      - ./read/mysql-config-files/:/etc/mysql/conf.d
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD="true"
+    ports:
+      - '9771:3306'
+    networks:
+      large-scale-system:
+        ipv4_address: 172.16.0.11
+    depends_on:
+      - 'large-scale-system-write-mysql'
+
+networks:
+  large-scale-system:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/16
