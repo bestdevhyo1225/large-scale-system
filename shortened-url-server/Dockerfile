@@ -8,6 +8,7 @@ ENV HOME=/home/shortened-url-server
 ENV JAR=shortened-url-server-0.0.1-SNAPSHOT.jar
 
 RUN useradd shortened-url-server -d $HOME
+
 USER shortened-url-server
 
 WORKDIR $HOME
