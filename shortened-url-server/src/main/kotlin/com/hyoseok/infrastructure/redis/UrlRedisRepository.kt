@@ -35,8 +35,8 @@ class UrlRedisRepository(
 
     private fun shouldRefreshKey(key: String, expireTimeGapMs: Long = 3_000L): Boolean {
         val remainingExpiryTimeMS = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS)
-        return remainingExpiryTimeMS >= 0
-            && getExpiryTimeBasedOnPER(remainingExpiryTimeMS = remainingExpiryTimeMS, delta = expireTimeGapMs) <= 0.0f
+        return remainingExpiryTimeMS >= 0 &&
+            getExpiryTimeBasedOnPER(remainingExpiryTimeMS = remainingExpiryTimeMS, delta = expireTimeGapMs) <= 0.0f
     }
 
     /**
