@@ -77,3 +77,10 @@ chmod +x ./shortened-url-server/stop.sh
 | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: |
 | 528,573회 | 112ms | 5ms | 1,251ms | 0.00% | 8,790.2/sec |
+
+- `60초` 동안, `1초` 마다 `1,500명` 의 유저가 요청을 보낸 상황
+- `command timeout`, `shutdown timeout` 옵션을 디폴트 값으로 설정
+
+| Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: |
+| 641,980회 | 138ms | 7ms | 1,162ms | 0.00% | 10,660.4/sec |
