@@ -38,7 +38,7 @@ chmod +x ./shortened-url-server/stop.sh
 ./shortened-url-server/start.sh
 ```
 
-> 종료
+> 서버 종료
 
 - 도커 컨테이너의 `URL 단축 서버` 를 종료하고, `도커 컨테이너, 이미지, 볼륨, 이미지` 를 모두 삭제한다.
 
