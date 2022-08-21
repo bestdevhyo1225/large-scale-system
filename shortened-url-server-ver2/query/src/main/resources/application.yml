@@ -1,0 +1,96 @@
+server:
+  port: 9001
+  tomcat:
+    threads:
+      min-spare: 20
+
+spring:
+  profiles:
+    active: dev
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:issue-service
+      username: sa
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
+    io.lettuce.core: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    hikari:
+      write:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://masteruser:masterpassword@localhost:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 10
+        maximum-pool-size: 10
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+      read:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://slaveuser:slavepassword@localhost:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 20
+        maximum-pool-size: 20
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod-docker
+
+  datasource:
+    hikari:
+      write:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://masteruser:masterpassword@host.docker.internal:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 10
+        maximum-pool-size: 10
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+      read:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://slaveuser:slavepassword@host.docker.internal:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 20
+        maximum-pool-size: 20
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
