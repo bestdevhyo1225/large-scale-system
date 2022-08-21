@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Profile
 @ConfigurationProperties(prefix = "spring.data.redis")
 @Profile(value = ["dev", "prod"])
 data class RedisServers(
-    val nodes: Map<String, List<String>>
+    val nodes: Map<String, List<String>>,
 )

@@ -15,7 +15,7 @@ class RedisMultipleStandaloneTemplateConfig {
     @Bean
     fun redisMultipleTemplate1(
         @Qualifier("redisMultipleConnectionFactory1")
-        redisConnectionFactory: RedisConnectionFactory
+        redisConnectionFactory: RedisConnectionFactory,
     ): RedisTemplate<String, String?> {
         val stringRedisSerializer = StringRedisSerializer()
         return RedisTemplate<String, String?>().apply {
@@ -30,7 +30,7 @@ class RedisMultipleStandaloneTemplateConfig {
     @Bean
     fun redisMultipleTemplate2(
         @Qualifier("redisMultipleConnectionFactory2")
-        redisConnectionFactory: RedisConnectionFactory
+        redisConnectionFactory: RedisConnectionFactory,
     ): RedisTemplate<String, String?> {
         val stringRedisSerializer = StringRedisSerializer()
         return RedisTemplate<String, String?>().apply {
@@ -45,7 +45,7 @@ class RedisMultipleStandaloneTemplateConfig {
     @Bean
     fun redisMultipleTemplate3(
         @Qualifier("redisMultipleConnectionFactory3")
-        redisConnectionFactory: RedisConnectionFactory
+        redisConnectionFactory: RedisConnectionFactory,
     ): RedisTemplate<String, String?> {
         val stringRedisSerializer = StringRedisSerializer()
         return RedisTemplate<String, String?>().apply {

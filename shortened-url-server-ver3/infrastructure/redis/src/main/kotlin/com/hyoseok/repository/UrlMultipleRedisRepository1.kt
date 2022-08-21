@@ -32,7 +32,6 @@ class UrlMultipleRedisRepository1(
         return jacksonObjectMapper().readValue(value, clazz)
     }
 
-
     private fun shouldRefreshKey(key: String, expireTimeGapMs: Long = 3_000L): Boolean {
         val remainingExpiryTimeMS = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS)
         return remainingExpiryTimeMS >= 0 &&

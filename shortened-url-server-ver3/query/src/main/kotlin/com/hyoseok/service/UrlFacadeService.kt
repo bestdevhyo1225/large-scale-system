@@ -3,9 +3,6 @@ package com.hyoseok.service
 import com.hyoseok.config.RedisExpireTimes
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.repository.UrlCacheRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
