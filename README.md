@@ -54,6 +54,8 @@ chmod +x ./shortened-url-server/stop.sh
 - `Max` : 최대 응답 시간(ms)
 - `Throughput` : 단위 시간당 대상 서버에서 처리되는 요청의 수 (JMeter에서는 시간 단위를 보통 `TPS(Transaction Per Second)` 로 표현)
 
+> 단일 모듈 서버에서 실행한 결과
+
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 25,003회 | 990ms | 11ms | 2,379ms | 0.00% | 411.6/sec |
