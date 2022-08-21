@@ -60,3 +60,10 @@ chmod +x ./shortened-url-server/stop.sh
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 25,003회 | 990ms | 11ms | 2,379ms | 0.00% | 411.6/sec |
 | URL 생성 요청 | 24,495회 | 1,439ms | 409ms | 3,714ms | 0.00% | 408.1/sec |
+
+> Command, Query 모듈 서버를 분리한 결과
+
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| URL 조회 요청 | 644,924회 | 89ms | 9ms | 1,109ms | 0.00% | 10723.4/sec |
+| URL 생성 요청 | 50,774회 | 1,182ms | 20ms | 2,743ms | 0.00% | 830.1/sec |
