@@ -1,6 +1,5 @@
 package com.hyoseok.service
 
-import com.hyoseok.constants.ServerExceptionMessage
 import com.hyoseok.entity.Url
 import com.hyoseok.repository.UrlRepository
 import mu.KotlinLogging
