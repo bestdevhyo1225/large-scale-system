@@ -54,33 +54,7 @@ chmod +x ./shortened-url-server/stop.sh
 - `Max` : 최대 응답 시간(ms)
 - `Throughput` : 단위 시간당 대상 서버에서 처리되는 요청의 수 (JMeter에서는 시간 단위를 보통 `TPS(Transaction Per Second)` 로 표현)
 
-> Cache 적용 전, 결과 (MySQL 사용)
-
-- `60초` 동안, `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
-
-| Samples | Average | Min | Max | Erros (%) | Throughput |
-| :-: | :-: | :-: | :-: | :-: | :-: |
-| 26,935회 | 2,250ms | 41ms | 4,012ms | 0.00% | 434.4/sec |
-
-> Cache 적용 후, 결과 (MySQL, Redis 사용)
-
-- `60초` 동안, `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
-
-| Samples | Average | Min | Max | Erros (%) | Throughput |
-| :-: | :-: | :-: | :-: | :-: | :-: |
-| 443,332회 | 134ms | 15ms | 1,193ms | 0.01% | 7,373.3/sec |
-| 460,072회 | 129ms | 15ms | 1,178ms | 0.02% | 7,630.7/sec |
-
-- `60초` 동안, `1초` 마다 `1,000명` 의 유저가 요청을 보낸 상황
-- `command timeout`, `shutdown timeout` 옵션을 디폴트 값으로 설정
-
-| Samples | Average | Min | Max | Erros (%) | Throughput |
-| :-: | :-: | :-: | :-: | :-: | :-: |
-| 528,573회 | 112ms | 5ms | 1,251ms | 0.00% | 8,790.2/sec |
-
-- `60초` 동안, `1초` 마다 `1,500명` 의 유저가 요청을 보낸 상황
-- `command timeout`, `shutdown timeout` 옵션을 디폴트 값으로 설정
-
-| Samples | Average | Min | Max | Erros (%) | Throughput |
-| :-: | :-: | :-: | :-: | :-: | :-: |
-| 641,980회 | 138ms | 7ms | 1,162ms | 0.00% | 10,660.4/sec |
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| URL 조회 요청 | 25,003회 | 990ms | 11ms | 2,379ms | 0.00% | 411.6/sec |
+| URL 생성 요청 | 24,495회 | 1,439ms | 409ms | 3,714ms | 0.00% | 408.1/sec |
