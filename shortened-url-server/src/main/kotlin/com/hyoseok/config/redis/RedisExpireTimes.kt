@@ -1,5 +1,5 @@
 package com.hyoseok.config.redis
 
 object RedisExpireTimes {
-    const val URLS: Long = 60 * 60 * 24 // 24시간
+    const val URLS: Long = 60 * 60 * 3 // 3시간
 }
