@@ -15,4 +15,10 @@ include(
     "shortened-url-server-ver3:infrastructure:redis",
     "shortened-url-server-ver3:infrastructure:jpa",
     "shortened-url-server-ver3:query",
+    // order-payment-server
+    "order-payment-server",
+    "order-payment-server:api",
+    "order-payment-server:common",
+    "order-payment-server:domain",
+    "order-payment-server:infrastructure:jpa",
 )
