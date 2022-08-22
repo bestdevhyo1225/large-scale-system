@@ -48,6 +48,10 @@ class OrderJpaEntity private constructor(
         return this.id == otherOrderJpaEntity.id
     }
 
+    fun changeStatus(status: OrderStatus) {
+        this.status = status
+    }
+
     fun toDomainEntity() =
         with(receiver = this) { Order(id = id, status = status, orderedAt = orderedAt, updatedAt = updatedAt) }
 

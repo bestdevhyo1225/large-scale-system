@@ -36,7 +36,7 @@ internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, Des
         }
 
         this.describe("updateStatus 메서드는") {
-            it("Order 엔티티의 status를 수정한다.") {
+            it("[1] Order 엔티티의 status를 수정한다.") {
                 // given
                 val order = Order()
                 orderRepository.save(order = order)
@@ -50,6 +50,22 @@ internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, Des
 
                 findOrder.shouldNotBeNull()
                 findOrder.shouldBe(order)
+            }
+
+            it("[2] Order 엔티티의 status를 수정한다.") {
+                // given
+                val status = OrderStatus.COMPLETE
+                val order = Order()
+                orderRepository.save(order = order)
+
+                // when
+                orderRepository.updateStatus(id = order.id, status = status)
+
+                // then
+                val findOrder = orderRepository.find(id = order.id)
+
+                findOrder.shouldNotBeNull()
+                findOrder.status.shouldBe(status)
             }
         }
     }
