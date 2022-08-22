@@ -4,6 +4,7 @@ import com.bestdev.order.entity.interfaces.Cancelable
 import com.bestdev.order.entity.interfaces.Failable
 
 enum class OrderStatus(val label: String) : Cancelable, Failable {
+
     WAIT("주문 대기") {
         override fun isCanceled() = false
         override fun isFailed() = false
@@ -24,6 +25,7 @@ enum class OrderStatus(val label: String) : Cancelable, Failable {
         override fun isCanceled() = false
         override fun isFailed() = true
     };
+
     companion object {
         operator fun invoke(value: String) = OrderStatus.valueOf(value.uppercase())
     }
