@@ -24,7 +24,6 @@ enum class OrderStatus(val label: String) : Cancelable, Failable {
         override fun isCanceled() = false
         override fun isFailed() = true
     };
-
     companion object {
         operator fun invoke(value: String) = OrderStatus.valueOf(value.uppercase())
     }
