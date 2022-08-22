@@ -23,5 +23,5 @@ enum class OrderStatus(val label: String) : Cancelable, Failable {
     FAIL("주문 실패") {
         override fun isCanceled() = false
         override fun isFailed() = true
-    };
+    }
 }
