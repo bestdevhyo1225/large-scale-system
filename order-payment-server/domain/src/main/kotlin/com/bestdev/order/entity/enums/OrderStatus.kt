@@ -20,11 +20,11 @@ enum class OrderStatus(val label: String) : Cancelable, Failable {
     REFUND("주문 환불") {
         override fun isCanceled() = false
         override fun isFailed() = false
-    },
-    FAIL("주문 실패") {
-        override fun isCanceled() = false
-        override fun isFailed() = true
     };
+//    FAIL("주문 실패") {
+//        override fun isCanceled() = false
+//        override fun isFailed() = true
+//    };
 
     companion object {
         operator fun invoke(value: String) = OrderStatus.valueOf(value.uppercase())
