@@ -7,12 +7,16 @@ import java.util.Objects
 
 class Order private constructor(
     id: Long = 0,
+    memberId: Long,
     status: OrderStatus,
     orderedAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
 
     var id: Long = id
+        private set
+
+    var memberId: Long = memberId
         private set
 
     var status: OrderStatus = status
@@ -26,12 +30,13 @@ class Order private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "Order(id=$id, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
+        "Order(id=$id, memberId=$memberId, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherOrder = (other as? Order) ?: return false
         return this.id == otherOrder.id &&
+            this.memberId == otherOrder.memberId &&
             this.status == otherOrder.status &&
             this.orderedAt == otherOrder.orderedAt &&
             this.updatedAt == otherOrder.updatedAt
@@ -51,12 +56,22 @@ class Order private constructor(
     }
 
     companion object {
-        operator fun invoke(): Order {
+        operator fun invoke(memberId: Long): Order {
             val nowDateTime = LocalDateTime.now().withNano(0)
-            return Order(status = OrderStatus.WAIT, orderedAt = nowDateTime, updatedAt = nowDateTime)
+            return Order(
+                memberId = memberId,
+                status = OrderStatus.WAIT,
+                orderedAt = nowDateTime,
+                updatedAt = nowDateTime,
+            )
         }
 
-        operator fun invoke(id: Long, status: OrderStatus, orderedAt: LocalDateTime, updatedAt: LocalDateTime) =
-            Order(id = id, status = status, orderedAt = orderedAt, updatedAt = updatedAt)
+        operator fun invoke(
+            id: Long,
+            memberId: Long,
+            status: OrderStatus,
+            orderedAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = Order(id = id, memberId = memberId, status = status, orderedAt = orderedAt, updatedAt = updatedAt)
     }
 }

@@ -22,7 +22,7 @@ internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, Des
         this.describe("save 메서드는") {
             it("Order 엔티티를 저장한다.") {
                 // given
-                val order = Order()
+                val order = Order(memberId = 1823L)
 
                 // when
                 orderRepository.save(order = order)
@@ -38,7 +38,7 @@ internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, Des
         this.describe("updateStatus 메서드는") {
             it("[1] Order 엔티티의 status를 수정한다.") {
                 // given
-                val order = Order()
+                val order = Order(memberId = 19273L)
                 orderRepository.save(order = order)
 
                 // when
@@ -55,7 +55,7 @@ internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, Des
             it("[2] Order 엔티티의 status를 수정한다.") {
                 // given
                 val status = OrderStatus.COMPLETE
-                val order = Order()
+                val order = Order(memberId = 1923L)
                 orderRepository.save(order = order)
 
                 // when
