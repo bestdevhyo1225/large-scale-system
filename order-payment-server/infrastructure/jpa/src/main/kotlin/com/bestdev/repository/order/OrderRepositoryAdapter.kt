@@ -24,19 +24,18 @@ class OrderRepositoryAdapter(
         order.changeId(orderJpaEntity.id)
     }
 
-    override fun updateStatus(order: Order) {
-        if (orderJpaRepository.updateStatus(status = order.status, id = order.id) <= 0) {
-            logger.error { InfrastructureExceptionMessage.FAIL_CHANGE_ORDER_STATUS }
+    override fun updateStatus(order: Order) =
+        with(receiver = order) {
+            if (orderJpaRepository.updateStatus(status = status, updatedAt = updatedAt, id = id) <= 0) {
+                logger.error { InfrastructureExceptionMessage.FAIL_CHANGE_ORDER_STATUS }
+            }
         }
-    }
 
     override fun updateStatus(id: Long, status: OrderStatus) {
-        println("----------------------------")
         val orderJpaEntity = findEntityById(id = id)
         val orderDomainEntity = orderJpaEntity.toDomainEntity()
         orderDomainEntity.changeStatus(status = status)
         orderJpaEntity.changeStatus(status = orderDomainEntity.status)
-        println("----------------------------")
     }
 
     override fun find(id: Long): Order =

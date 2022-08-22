@@ -16,6 +16,11 @@ spring:
         default_batch_fetch_size: 1000
     open-in-view: false
 
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
+
 ---
 spring:
   config:
@@ -27,11 +32,6 @@ spring:
       driver-class-name: org.h2.Driver
       jdbc-url: jdbc:h2:mem:order-payment-dev-db
       username: sa
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.springframework.orm.jpa: debug
 
 ---
 spring:

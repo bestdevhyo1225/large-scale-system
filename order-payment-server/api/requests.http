@@ -1,0 +1,10 @@
+### 주문 생성
+POST localhost:9000/api/v1/orders
+Content-Type: application/json
+
+{
+  "memberId": 10542
+}
+
+### 주문 '완료' 상태로 변경
+PATCH localhost:9000/api/v1/orders/1?status=COMPLETE

@@ -7,6 +7,8 @@ import java.time.LocalDateTime
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -16,6 +18,7 @@ import javax.persistence.Table
 @Table(name = "orders")
 @DynamicUpdate
 class OrderJpaEntity private constructor(
+    memberId: Long,
     status: OrderStatus,
     orderedAt: LocalDateTime,
     updatedAt: LocalDateTime,
@@ -26,6 +29,11 @@ class OrderJpaEntity private constructor(
     var id: Long = 0
         protected set
 
+    @Column(nullable = false)
+    var memberId: Long = memberId
+        protected set
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var status: OrderStatus = status
         protected set
@@ -40,7 +48,7 @@ class OrderJpaEntity private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "OrderJpaEntity(id=$id, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
+        "OrderJpaEntity(id=$id, memberId=$memberId, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -52,11 +60,24 @@ class OrderJpaEntity private constructor(
         this.status = status
     }
 
-    fun toDomainEntity() =
-        with(receiver = this) { Order(id = id, status = status, orderedAt = orderedAt, updatedAt = updatedAt) }
+    fun toDomainEntity() = with(receiver = this) {
+        Order(
+            id = id,
+            memberId = memberId,
+            status = status,
+            orderedAt = orderedAt,
+            updatedAt = updatedAt,
+        )
+    }
 
     companion object {
-        operator fun invoke(order: Order) =
-            with(receiver = order) { OrderJpaEntity(status = status, orderedAt = orderedAt, updatedAt = updatedAt) }
+        operator fun invoke(order: Order) = with(receiver = order) {
+            OrderJpaEntity(
+                memberId = memberId,
+                status = status,
+                orderedAt = orderedAt,
+                updatedAt = updatedAt,
+            )
+        }
     }
 }
