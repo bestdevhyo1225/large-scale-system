@@ -1,4 +1,3 @@
-apply(plugin = "org.springframework.boot")
 apply(plugin = "kotlin-jpa")
 apply(plugin = "kotlin-allopen")
 
