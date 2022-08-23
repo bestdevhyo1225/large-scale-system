@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Build
         run: |
-          ./gradlew clean build --exclude-task test
+          ./gradlew build --exclude-task test
 
       - name: Run Test
         run: |
