@@ -6,4 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class PayService {
+
+    fun create() {
+        TODO("Impl")
+    }
 }
