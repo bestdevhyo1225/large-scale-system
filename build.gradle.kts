@@ -10,6 +10,10 @@ plugins {
     kotlin("plugin.allopen") version "1.6.21"
 }
 
+repositories {
+    mavenCentral()
+}
+
 allprojects {
     apply(plugin = "java")
 
