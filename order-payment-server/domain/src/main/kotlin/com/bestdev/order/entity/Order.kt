@@ -83,5 +83,23 @@ class Order private constructor(
             orderedAt: LocalDateTime,
             updatedAt: LocalDateTime,
         ) = Order(id = id, memberId = memberId, status = status, orderedAt = orderedAt, updatedAt = updatedAt)
+
+        operator fun invoke(
+            id: Long,
+            memberId: Long,
+            orderItems: List<OrderItem>,
+            orderPayments: List<OrderPayment>,
+            status: OrderStatus,
+            orderedAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = Order(
+            id = id,
+            memberId = memberId,
+            orderItems = orderItems,
+            orderPayments = orderPayments,
+            status = status,
+            orderedAt = orderedAt,
+            updatedAt = updatedAt,
+        )
     }
 }

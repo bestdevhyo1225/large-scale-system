@@ -53,5 +53,17 @@ class OrderItem private constructor(
                 updatedAt = nowDateTime,
             )
         }
+
+        operator fun invoke(
+            itemCategory: String,
+            itemName: String,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = OrderItem(
+            itemCategory = OrderItemCategory(value = itemCategory),
+            itemName = itemName,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+        )
     }
 }

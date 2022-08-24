@@ -53,5 +53,17 @@ class OrderPayment private constructor(
                 updatedAt = nowDateTime,
             )
         }
+
+        operator fun invoke(
+            paymentMethod: String,
+            price: Float,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = OrderPayment(
+            paymentMethod = OrderPaymentMethod(value = paymentMethod),
+            price = price,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+        )
     }
 }
