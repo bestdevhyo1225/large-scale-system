@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.shouldBe
 
-internal class PayTests : DescribeSpec(
+internal class PaymentTests : DescribeSpec(
     {
         describe("operator invoke 메서드는") {
             it("Payment 엔티티를 생성한다.") {
