@@ -18,7 +18,7 @@ class PaymentApplicationEventConsumer(
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     fun handle(event: CreatedPaymentEventDto) = runBlocking {
         launch(context = Dispatchers.IO) {
-            orderService.createSubInfoOfOrder(dto = CreateSubInfoOfOrderDto(orderId = event.orderId))
+            orderService.createOrderShipping(dto = CreateSubInfoOfOrderDto(orderId = event.orderId))
         }
     }
 }
