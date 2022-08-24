@@ -1,7 +1,8 @@
 package com.bestdev.repository.order
 
 import com.bestdev.entity.order.OrderJpaEntity
-import com.bestdev.exception.InfrastructureExceptionMessage
+import com.bestdev.exception.InfrastructureExceptionMessage.FAIL_CHANGE_ORDER_STATUS
+import com.bestdev.exception.InfrastructureExceptionMessage.NOT_FOUND_ORDER
 import com.bestdev.order.entity.Order
 import com.bestdev.order.entity.enums.OrderStatus
 import com.bestdev.order.repository.OrderRepository
@@ -29,7 +30,7 @@ class OrderJpaRepositoryAdapter(
     override fun updateStatus(order: Order) =
         with(receiver = order) {
             if (orderJpaRepository.updateStatus(status = status, updatedAt = updatedAt, id = id) <= 0) {
-                logger.error { InfrastructureExceptionMessage.FAIL_CHANGE_ORDER_STATUS }
+                logger.error { FAIL_CHANGE_ORDER_STATUS }
             }
         }
 
@@ -44,6 +45,6 @@ class OrderJpaRepositoryAdapter(
     override fun find(id: Long): Order =
         with(receiver = findEntityById(id = id)) { toDomainEntity() }
 
-    private fun findEntityById(id: Long): OrderJpaEntity = orderJpaRepository.findByIdOrNull(id = id)
-        ?: throw NoSuchElementException(InfrastructureExceptionMessage.NOT_FOUND_ORDER)
+    private fun findEntityById(id: Long): OrderJpaEntity =
+        orderJpaRepository.findByIdOrNull(id = id) ?: throw NoSuchElementException(NOT_FOUND_ORDER)
 }
