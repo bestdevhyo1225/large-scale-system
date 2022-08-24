@@ -1,6 +1,6 @@
 package com.bestdev.entity.pay
 
-import com.bestdev.pay.entity.Payment
+import com.bestdev.payment.entity.Payment
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import java.util.Objects

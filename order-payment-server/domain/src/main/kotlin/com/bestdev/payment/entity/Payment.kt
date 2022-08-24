@@ -1,4 +1,4 @@
-package com.bestdev.pay.entity
+package com.bestdev.payment.entity
 
 import java.time.LocalDateTime
 import java.util.Objects

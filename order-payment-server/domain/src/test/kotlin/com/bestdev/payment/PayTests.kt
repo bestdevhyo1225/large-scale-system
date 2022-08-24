@@ -1,6 +1,6 @@
-package com.bestdev.pay
+package com.bestdev.payment
 
-import com.bestdev.pay.entity.Payment
+import com.bestdev.payment.entity.Payment
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.shouldBe
