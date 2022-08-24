@@ -69,6 +69,14 @@ class OrderItemJpaEntity private constructor(
         this.orderJpaEntity = orderJpaEntity
     }
 
+    fun toDomainEntity() = OrderItem(
+        id = id,
+        itemCategory = itemCategory,
+        itemName = itemName,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+    )
+
     companion object {
         operator fun invoke(orderItem: OrderItem) = with(receiver = orderItem) {
             OrderItemJpaEntity(

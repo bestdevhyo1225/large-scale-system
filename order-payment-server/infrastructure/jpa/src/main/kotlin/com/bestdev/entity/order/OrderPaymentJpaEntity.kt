@@ -69,6 +69,14 @@ class OrderPaymentJpaEntity private constructor(
         this.orderJpaEntity = orderJpaEntity
     }
 
+    fun toDomainEntity() = OrderPayment(
+        id = id,
+        paymentMethod = paymentMethod,
+        price = price,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+    )
+
     companion object {
         operator fun invoke(orderPayment: OrderPayment) = with(receiver = orderPayment) {
             OrderPaymentJpaEntity(

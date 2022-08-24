@@ -4,10 +4,13 @@ import com.bestdev.order.entity.Order
 import com.bestdev.order.entity.OrderItem
 import com.bestdev.order.entity.OrderPayment
 import com.bestdev.order.entity.enums.OrderStatus
+import com.bestdev.order.repository.read.OrderReadRepository
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +22,9 @@ internal class OrderJpaRepositoryAdapterTests : OrderJpaRepositoryAdapterTestabl
 
     @Autowired
     private lateinit var orderRepository: OrderRepository
+
+    @Autowired
+    private lateinit var orderReadRepository: OrderReadRepository
 
     init {
         this.describe("save 메서드는") {
@@ -38,10 +44,30 @@ internal class OrderJpaRepositoryAdapterTests : OrderJpaRepositoryAdapterTestabl
                 orderRepository.save(order = order)
 
                 // then
-                val findOrder = orderRepository.find(id = order.id)
+                order.id.shouldNotBeZero()
+                order.orderItems.forEach { it.id.shouldNotBeZero() }
+                order.orderPayments.forEach { it.id.shouldNotBeZero() }
+
+                val findOrder = orderReadRepository.findWithItemsAndPayments(id = order.id)
 
                 findOrder.shouldNotBeNull()
                 findOrder.shouldBe(order)
+                findOrder.orderItems.shouldNotBeEmpty()
+                findOrder.orderPayments.shouldNotBeEmpty()
+
+                val findOrderItems = findOrder.orderItems.sortedBy { it.id }
+                val findOrderPayments = findOrder.orderPayments.sortedBy { it.id }
+
+                findOrderItems.forEachIndexed { index, orderItem ->
+                    orderItem.id.shouldNotBeZero()
+                    orderItem.id.shouldBe(orderItems[index].id)
+                    orderItem.shouldBe(orderItems[index])
+                }
+                findOrderPayments.forEachIndexed { index, orderPayment ->
+                    orderPayment.id.shouldNotBeZero()
+                    orderPayment.id.shouldBe(orderPayments[index].id)
+                    orderPayment.shouldBe(orderPayments[index])
+                }
             }
         }
 

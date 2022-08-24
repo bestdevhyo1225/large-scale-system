@@ -88,6 +88,53 @@ class OrderJpaEntity private constructor(
         )
     }
 
+    fun toDomainEntityWithItems() = with(receiver = this) {
+        Order(
+            id = id,
+            memberId = memberId,
+            orderItems = orderItemJpaEntities.map { it.toDomainEntity() },
+            orderPayments = listOf(),
+            status = status,
+            orderedAt = orderedAt,
+            updatedAt = updatedAt,
+        )
+    }
+
+    fun toDomainEntityWithPayments() = with(receiver = this) {
+        Order(
+            id = id,
+            memberId = memberId,
+            orderItems = listOf(),
+            orderPayments = orderPaymentJpaEntities.map { it.toDomainEntity() },
+            status = status,
+            orderedAt = orderedAt,
+            updatedAt = updatedAt,
+        )
+    }
+
+    fun toDomainEntityWithAll(orderPaymentJpaEntities: List<OrderPaymentJpaEntity>) =
+        with(receiver = this) {
+            Order(
+                id = id,
+                memberId = memberId,
+                orderItems = orderItemJpaEntities.map { it.toDomainEntity() },
+                orderPayments = orderPaymentJpaEntities.map { it.toDomainEntity() },
+                status = status,
+                orderedAt = orderedAt,
+                updatedAt = updatedAt,
+            )
+        }
+
+    fun mapDomainEntityId(order: Order) {
+        order.changeId(id = id)
+        order.orderItems.forEachIndexed { index, orderItem ->
+            orderItem.changeId(id = orderItemJpaEntities[index].id)
+        }
+        order.orderPayments.forEachIndexed { index, orderPayment ->
+            orderPayment.changeId(id = orderPaymentJpaEntities[index].id)
+        }
+    }
+
     companion object {
         operator fun invoke(order: Order) = with(receiver = order) {
             val orderJpaEntity = OrderJpaEntity(
