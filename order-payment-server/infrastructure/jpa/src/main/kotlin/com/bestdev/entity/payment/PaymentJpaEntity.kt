@@ -1,4 +1,4 @@
-package com.bestdev.entity.pay
+package com.bestdev.entity.payment
 
 import com.bestdev.payment.entity.Payment
 import org.hibernate.annotations.DynamicUpdate
