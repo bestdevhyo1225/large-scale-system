@@ -2,6 +2,7 @@ package com.bestdev.order.entity
 
 import com.bestdev.exception.DomainExceptionMessage
 import com.bestdev.order.entity.enums.OrderStatus
+import com.bestdev.shipping.entity.Shipping
 import java.time.LocalDateTime
 import java.util.Objects
 
@@ -62,6 +63,8 @@ class Order private constructor(
         this.status = status
         this.updatedAt = LocalDateTime.now().withNano(0)
     }
+
+    fun createShippings(): List<Shipping> = orderItems.map { Shipping(orderId = id, orderItemId = it.id) }
 
     companion object {
         operator fun invoke(memberId: Long, orderItems: List<OrderItem>, orderPayments: List<OrderPayment>): Order {

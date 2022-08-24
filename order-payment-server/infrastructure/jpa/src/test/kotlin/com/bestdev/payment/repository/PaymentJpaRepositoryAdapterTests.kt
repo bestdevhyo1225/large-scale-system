@@ -1,5 +1,6 @@
 package com.bestdev.payment.repository
 
+import com.bestdev.JpaRepositoryAdapterTestable
 import com.bestdev.payment.entity.Payment
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -9,7 +10,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class PaymentJpaRepositoryAdapterTests : PaymentJpaRepositoryAdapterTestable, DescribeSpec() {
+internal class PaymentJpaRepositoryAdapterTests : JpaRepositoryAdapterTestable, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf

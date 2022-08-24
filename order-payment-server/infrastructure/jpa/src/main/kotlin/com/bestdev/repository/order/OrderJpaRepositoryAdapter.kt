@@ -23,7 +23,7 @@ class OrderJpaRepositoryAdapter(
     override fun save(order: Order) {
         val orderJpaEntity = OrderJpaEntity(order = order)
         orderJpaRepository.save(orderJpaEntity)
-        order.changeId(orderJpaEntity.id)
+        orderJpaEntity.mapDomainEntityId(order = order)
     }
 
     @Transactional

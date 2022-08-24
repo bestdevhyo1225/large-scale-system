@@ -41,7 +41,7 @@ class JpaConfig(
         val entityManagerFactoryBean = LocalContainerEntityManagerFactoryBean()
         entityManagerFactoryBean.dataSource = dataSource
         entityManagerFactoryBean.jpaVendorAdapter = HibernateJpaVendorAdapter()
-        entityManagerFactoryBean.persistenceUnitName = "CustomEntityManager"
+        entityManagerFactoryBean.persistenceUnitName = "customEntityManager"
         entityManagerFactoryBean.setPackagesToScan("com.bestdev")
         entityManagerFactoryBean.setJpaProperties(properties)
 

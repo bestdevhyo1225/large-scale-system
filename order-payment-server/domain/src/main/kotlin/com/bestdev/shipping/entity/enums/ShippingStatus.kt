@@ -1,6 +1,6 @@
-package com.bestdev.order.entity.enums
+package com.bestdev.shipping.entity.enums
 
-enum class OrderShippingStatus(val label: String) {
+enum class ShippingStatus(val label: String) {
     SHIPPING_WAIT("배송 대기"),
     SHIPPING("배송 중"),
     SHIPPING_COMPLETE("배송 완료"),
