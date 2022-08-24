@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional
-class OrderRepositoryAdapter(
+class OrderJpaRepositoryAdapter(
     private val orderJpaRepository: OrderJpaRepository,
 ) : OrderRepository {
 
