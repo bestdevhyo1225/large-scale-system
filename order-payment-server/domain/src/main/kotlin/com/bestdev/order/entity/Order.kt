@@ -38,8 +38,7 @@ class Order private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "Order(id=$id, memberId=$memberId, status=$status, orderItems=$orderItems, orderPayments=$orderPayments, " +
-            "orderedAt=$orderedAt, updatedAt=$updatedAt)"
+        "Order(id=$id, memberId=$memberId, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
