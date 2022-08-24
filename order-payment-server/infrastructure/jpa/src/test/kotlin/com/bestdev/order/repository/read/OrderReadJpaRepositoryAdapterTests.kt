@@ -1,9 +1,9 @@
 package com.bestdev.order.repository.read
 
+import com.bestdev.JpaRepositoryAdapterTestable
 import com.bestdev.order.entity.Order
 import com.bestdev.order.entity.OrderItem
 import com.bestdev.order.entity.OrderPayment
-import com.bestdev.order.repository.OrderJpaRepositoryAdapterTestable
 import com.bestdev.order.repository.OrderRepository
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -16,7 +16,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class OrderReadJpaRepositoryAdapterTests : OrderJpaRepositoryAdapterTestable, DescribeSpec() {
+internal class OrderReadJpaRepositoryAdapterTests : JpaRepositoryAdapterTestable, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
