@@ -1,6 +1,5 @@
 package com.bestdev.config.jpa
 
-import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
@@ -13,8 +12,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter
 import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
 import javax.sql.DataSource
 
 @Configuration
