@@ -100,7 +100,9 @@ class OrderJpaEntity private constructor(
                 orderJpaEntity.addOrderItemJpaEntity(orderItemJpaEntity = OrderItemJpaEntity(orderItem = it))
             }
             order.orderPayments.map {
-                orderJpaEntity.addOrderPaymentJpaEntity(orderPaymentJpaEntity = OrderPaymentJpaEntity(orderPayment = it))
+                orderJpaEntity.addOrderPaymentJpaEntity(
+                    orderPaymentJpaEntity = OrderPaymentJpaEntity(orderPayment = it),
+                )
             }
             orderJpaEntity
         }

@@ -56,7 +56,8 @@ class OrderPaymentJpaEntity private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "OrderPaymentJpaEntity(id=$id, paymentMethod=$paymentMethod, price=$price, createdAt=$createdAt, updatedAt=$updatedAt)"
+        "OrderPaymentJpaEntity(id=$id, paymentMethod=$paymentMethod, price=$price, " +
+            "createdAt=$createdAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
