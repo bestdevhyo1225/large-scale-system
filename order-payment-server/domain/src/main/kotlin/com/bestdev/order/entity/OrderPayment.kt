@@ -7,7 +7,6 @@ import java.util.Objects
 class OrderPayment private constructor(
     paymentMethod: OrderPaymentMethod,
     price: Float,
-    orderId: Long,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -21,9 +20,6 @@ class OrderPayment private constructor(
     var price: Float = price
         private set
 
-    var orderId: Long = orderId
-        private set
-
     var createdAt: LocalDateTime = createdAt
         private set
 
@@ -32,20 +28,42 @@ class OrderPayment private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "OrderPayment(id=$id, paymentMethod=$paymentMethod, price=$price, orderId=$orderId, " +
-            "createdAt=$createdAt, updatedAt=$updatedAt)"
+        "OrderPayment(id=$id, paymentMethod=$paymentMethod, price=$price, createdAt=$createdAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherOrderPayment = (other as? OrderPayment) ?: return false
         return this.id == otherOrderPayment.id &&
             this.paymentMethod == otherOrderPayment.paymentMethod &&
-            this.orderId == otherOrderPayment.orderId &&
             this.createdAt == otherOrderPayment.createdAt &&
             this.updatedAt == otherOrderPayment.updatedAt
     }
 
     fun changeId(id: Long) {
         this.id = id
+    }
+
+    companion object {
+        operator fun invoke(paymentMethod: String, price: Float): OrderPayment {
+            val nowDateTime = LocalDateTime.now().withNano(0)
+            return OrderPayment(
+                paymentMethod = OrderPaymentMethod(value = paymentMethod),
+                price = price,
+                createdAt = nowDateTime,
+                updatedAt = nowDateTime,
+            )
+        }
+
+        operator fun invoke(
+            paymentMethod: String,
+            price: Float,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = OrderPayment(
+            paymentMethod = OrderPaymentMethod(value = paymentMethod),
+            price = price,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+        )
     }
 }

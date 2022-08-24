@@ -9,6 +9,8 @@ class Order private constructor(
     id: Long = 0,
     memberId: Long,
     status: OrderStatus,
+    orderItems: List<OrderItem> = listOf(),
+    orderPayments: List<OrderPayment> = listOf(),
     orderedAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -20,6 +22,12 @@ class Order private constructor(
         private set
 
     var status: OrderStatus = status
+        private set
+
+    var orderItems: List<OrderItem> = orderItems
+        private set
+
+    var orderPayments: List<OrderPayment> = orderPayments
         private set
 
     var orderedAt: LocalDateTime = orderedAt
@@ -56,11 +64,13 @@ class Order private constructor(
     }
 
     companion object {
-        operator fun invoke(memberId: Long): Order {
+        operator fun invoke(memberId: Long, orderItems: List<OrderItem>, orderPayments: List<OrderPayment>): Order {
             val nowDateTime = LocalDateTime.now().withNano(0)
             return Order(
                 memberId = memberId,
                 status = OrderStatus.WAIT,
+                orderItems = orderItems,
+                orderPayments = orderPayments,
                 orderedAt = nowDateTime,
                 updatedAt = nowDateTime,
             )
@@ -73,5 +83,23 @@ class Order private constructor(
             orderedAt: LocalDateTime,
             updatedAt: LocalDateTime,
         ) = Order(id = id, memberId = memberId, status = status, orderedAt = orderedAt, updatedAt = updatedAt)
+
+        operator fun invoke(
+            id: Long,
+            memberId: Long,
+            orderItems: List<OrderItem>,
+            orderPayments: List<OrderPayment>,
+            status: OrderStatus,
+            orderedAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = Order(
+            id = id,
+            memberId = memberId,
+            orderItems = orderItems,
+            orderPayments = orderPayments,
+            status = status,
+            orderedAt = orderedAt,
+            updatedAt = updatedAt,
+        )
     }
 }

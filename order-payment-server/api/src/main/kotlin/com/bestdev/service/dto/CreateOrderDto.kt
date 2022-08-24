@@ -1,11 +1,33 @@
 package com.bestdev.service.dto
 
 import com.bestdev.order.entity.Order
+import com.bestdev.order.entity.OrderItem
+import com.bestdev.order.entity.OrderPayment
 
 data class CreateOrderDto(
     val memberId: Long,
+    val orderItemDtos: List<CreateOrderItemDto>,
+    val orderPaymentDtos: List<CreateOrderPaymentDto>,
 ) {
-    fun toDomainEntity() = Order(memberId = memberId)
+    fun toDomainEntity() = Order(
+        memberId = memberId,
+        orderItems = orderItemDtos.map { it.toDomainEntity() },
+        orderPayments = orderPaymentDtos.map { it.toDomainEntity() },
+    )
+}
+
+data class CreateOrderItemDto(
+    val itemCategory: String,
+    val itemName: String,
+) {
+    fun toDomainEntity() = OrderItem(itemCategory = itemCategory, itemName = itemName)
+}
+
+data class CreateOrderPaymentDto(
+    val paymentMethod: String,
+    val price: Float,
+) {
+    fun toDomainEntity() = OrderPayment(paymentMethod = paymentMethod, price = price)
 }
 
 data class CreateOrderResultDto(
