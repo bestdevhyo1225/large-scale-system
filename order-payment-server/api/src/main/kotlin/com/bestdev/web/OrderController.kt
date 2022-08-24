@@ -1,7 +1,7 @@
 package com.bestdev.web
 
-import com.bestdev.service.OrderService
 import com.bestdev.service.dto.CreateOrderResultDto
+import com.bestdev.service.order.OrderService
 import com.bestdev.web.request.CreateOrderRequest
 import com.bestdev.web.response.SuccessResponse
 import org.springframework.http.HttpStatus
@@ -30,7 +30,7 @@ class OrderController(
         request: CreateOrderRequest,
     ): ResponseEntity<SuccessResponse<CreateOrderResultDto>> {
         val createOrderResultDto: CreateOrderResultDto = orderService.create(dto = request.toServiceDto())
-        return created(URI.create("/orders/${createOrderResultDto.id}"))
+        return created(URI.create("/api/v1/orders/${createOrderResultDto.id}"))
             .body(SuccessResponse(data = createOrderResultDto))
     }
 

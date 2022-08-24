@@ -15,3 +15,7 @@ data class CreateOrderResultDto(
         operator fun invoke(order: Order) = with(receiver = order) { CreateOrderResultDto(id = id) }
     }
 }
+
+data class CreateSubInfoOfOrderDto(
+    val orderId: Long,
+)
