@@ -55,6 +55,10 @@ class PaymentJpaEntity private constructor(
     fun toDomainEntity() =
         Payment(id = id, orderId = orderId, pgUniqueId = pgUniqueId, createdAt = createdAt, updatedAt = updatedAt)
 
+    fun mapDomainEntityId(payment: Payment) {
+        payment.changeId(id = id)
+    }
+
     companion object {
         operator fun invoke(payment: Payment) = with(receiver = payment) {
             PaymentJpaEntity(

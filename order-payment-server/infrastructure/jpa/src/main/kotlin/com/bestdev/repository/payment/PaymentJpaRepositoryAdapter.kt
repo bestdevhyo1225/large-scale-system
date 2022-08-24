@@ -17,7 +17,7 @@ class PaymentJpaRepositoryAdapter(
     override fun save(payment: Payment) {
         val paymentJpaEntity = PaymentJpaEntity(payment = payment)
         paymentJpaRepository.save(paymentJpaEntity)
-        payment.changeId(id = paymentJpaEntity.id)
+        paymentJpaEntity.mapDomainEntityId(payment = payment)
     }
 
     override fun find(id: Long): Payment = with(receiver = findEntityById(id = id)) { toDomainEntity() }
