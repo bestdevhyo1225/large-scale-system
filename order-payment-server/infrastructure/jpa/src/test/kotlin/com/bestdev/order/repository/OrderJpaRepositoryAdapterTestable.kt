@@ -15,4 +15,4 @@ import org.springframework.test.context.ContextConfiguration
         OrderRepository::class,
     ],
 )
-internal interface OrderRepositoryAdapterTestable
+internal interface OrderJpaRepositoryAdapterTestable
