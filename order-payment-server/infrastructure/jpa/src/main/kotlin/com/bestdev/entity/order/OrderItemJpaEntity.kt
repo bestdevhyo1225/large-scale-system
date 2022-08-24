@@ -56,7 +56,8 @@ class OrderItemJpaEntity private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "OrderJpaItemEntity(id=$id, itemCategory=$itemCategory, itemName=$itemName, createdAt=$createdAt, updatedAt=$updatedAt)"
+        "OrderJpaItemEntity(id=$id, itemCategory=$itemCategory, itemName=$itemName, " +
+            "createdAt=$createdAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
