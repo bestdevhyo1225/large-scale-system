@@ -5,13 +5,14 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class OrderItem private constructor(
+    id: Long = 0,
     itemCategory: OrderItemCategory,
     itemName: String,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
 
-    var id: Long = 0
+    var id: Long = id
         private set
 
     var itemCategory: OrderItemCategory = itemCategory
@@ -55,12 +56,14 @@ class OrderItem private constructor(
         }
 
         operator fun invoke(
-            itemCategory: String,
+            id: Long,
+            itemCategory: OrderItemCategory,
             itemName: String,
             createdAt: LocalDateTime,
             updatedAt: LocalDateTime,
         ) = OrderItem(
-            itemCategory = OrderItemCategory(value = itemCategory),
+            id = id,
+            itemCategory = itemCategory,
             itemName = itemName,
             createdAt = createdAt,
             updatedAt = updatedAt,

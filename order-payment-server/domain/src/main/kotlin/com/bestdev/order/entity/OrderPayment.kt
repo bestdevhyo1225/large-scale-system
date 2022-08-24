@@ -5,13 +5,14 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class OrderPayment private constructor(
+    id: Long = 0,
     paymentMethod: OrderPaymentMethod,
     price: Float,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
 
-    var id: Long = 0
+    var id: Long = id
         private set
 
     var paymentMethod: OrderPaymentMethod = paymentMethod
@@ -55,12 +56,14 @@ class OrderPayment private constructor(
         }
 
         operator fun invoke(
-            paymentMethod: String,
+            id: Long,
+            paymentMethod: OrderPaymentMethod,
             price: Float,
             createdAt: LocalDateTime,
             updatedAt: LocalDateTime,
         ) = OrderPayment(
-            paymentMethod = OrderPaymentMethod(value = paymentMethod),
+            id = id,
+            paymentMethod = paymentMethod,
             price = price,
             createdAt = createdAt,
             updatedAt = updatedAt,
