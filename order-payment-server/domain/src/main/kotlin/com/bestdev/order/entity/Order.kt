@@ -9,6 +9,8 @@ class Order private constructor(
     id: Long = 0,
     memberId: Long,
     status: OrderStatus,
+    orderItems: List<OrderItem> = listOf(),
+    orderPayments: List<OrderPayment> = listOf(),
     orderedAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -22,6 +24,12 @@ class Order private constructor(
     var status: OrderStatus = status
         private set
 
+    var orderItems: List<OrderItem> = orderItems
+        private set
+
+    var orderPayments: List<OrderPayment> = orderPayments
+        private set
+
     var orderedAt: LocalDateTime = orderedAt
         private set
 
@@ -30,7 +38,8 @@ class Order private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "Order(id=$id, memberId=$memberId, status=$status, orderedAt=$orderedAt, updatedAt=$updatedAt)"
+        "Order(id=$id, memberId=$memberId, status=$status, orderItems=$orderItems, orderPayments=$orderPayments, " +
+            "orderedAt=$orderedAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -56,11 +65,13 @@ class Order private constructor(
     }
 
     companion object {
-        operator fun invoke(memberId: Long): Order {
+        operator fun invoke(memberId: Long, orderItems: List<OrderItem>, orderPayments: List<OrderPayment>): Order {
             val nowDateTime = LocalDateTime.now().withNano(0)
             return Order(
                 memberId = memberId,
                 status = OrderStatus.WAIT,
+                orderItems = orderItems,
+                orderPayments = orderPayments,
                 orderedAt = nowDateTime,
                 updatedAt = nowDateTime,
             )

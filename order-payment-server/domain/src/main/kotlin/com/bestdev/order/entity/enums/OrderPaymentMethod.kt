@@ -6,4 +6,9 @@ enum class OrderPaymentMethod(val label: String) {
     NAVER_PAY("네이버 페이"),
     COUPON("쿠폰"),
     POINT("포인트"),
+    ;
+
+    companion object {
+        operator fun invoke(value: String) = OrderPaymentMethod.valueOf(value.uppercase())
+    }
 }

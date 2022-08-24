@@ -1,11 +1,12 @@
 package com.bestdev.order.entity
 
+import com.bestdev.order.entity.enums.OrderItemCategory
 import java.time.LocalDateTime
 import java.util.Objects
 
 class OrderItem private constructor(
+    itemCategory: OrderItemCategory,
     itemName: String,
-    orderId: Long,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
 ) {
@@ -13,10 +14,10 @@ class OrderItem private constructor(
     var id: Long = 0
         private set
 
-    var itemName: String = itemName
+    var itemCategory: OrderItemCategory = itemCategory
         private set
 
-    var orderId: Long = orderId
+    var itemName: String = itemName
         private set
 
     var createdAt: LocalDateTime = createdAt
@@ -27,19 +28,30 @@ class OrderItem private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "OrderItem(id=$id, itemName=$itemName, orderId=$orderId, createdAt=$createdAt, updatedAt=$updatedAt)"
+        "OrderItem(id=$id, itemCategory=$itemCategory, itemName=$itemName, createdAt=$createdAt, updatedAt=$updatedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherOrderItem = (other as? OrderItem) ?: return false
         return this.id == otherOrderItem.id &&
             this.itemName == otherOrderItem.itemName &&
-            this.orderId == otherOrderItem.orderId &&
             this.createdAt == otherOrderItem.createdAt &&
             this.updatedAt == otherOrderItem.updatedAt
     }
 
     fun changeId(id: Long) {
         this.id = id
+    }
+
+    companion object {
+        operator fun invoke(itemCategory: String, itemName: String): OrderItem {
+            val nowDateTime = LocalDateTime.now().withNano(0)
+            return OrderItem(
+                itemCategory = OrderItemCategory(value = itemCategory),
+                itemName = itemName,
+                createdAt = nowDateTime,
+                updatedAt = nowDateTime,
+            )
+        }
     }
 }
