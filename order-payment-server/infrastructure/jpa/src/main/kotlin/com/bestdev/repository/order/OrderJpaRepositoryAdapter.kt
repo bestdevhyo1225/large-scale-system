@@ -42,8 +42,7 @@ class OrderJpaRepositoryAdapter(
         orderJpaEntity.changeStatus(status = orderDomainEntity.status)
     }
 
-    override fun find(id: Long): Order =
-        with(receiver = findEntityById(id = id)) { toDomainEntity() }
+    override fun find(id: Long): Order = findEntityById(id = id).toDomainEntity()
 
     private fun findEntityById(id: Long): OrderJpaEntity =
         orderJpaRepository.findByIdOrNull(id = id) ?: throw NoSuchElementException(NOT_FOUND_ORDER)
