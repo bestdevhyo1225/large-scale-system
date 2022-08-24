@@ -49,5 +49,13 @@ class Payment private constructor(
             val nowDateTime = LocalDateTime.now().withNano(0)
             return Payment(orderId = orderId, pgUniqueId = pgUniqueId, createdAt = nowDateTime, updatedAt = nowDateTime)
         }
+
+        operator fun invoke(
+            id: Long,
+            orderId: Long,
+            pgUniqueId: String,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+        ) = Payment(id = id, orderId = orderId, pgUniqueId = pgUniqueId, createdAt = createdAt, updatedAt = updatedAt)
     }
 }

@@ -10,7 +10,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 
-internal class OrderRepositoryAdapterTests : OrderRepositoryAdapterTestable, DescribeSpec() {
+internal class OrderJpaRepositoryAdapterTests : OrderJpaRepositoryAdapterTestable, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
