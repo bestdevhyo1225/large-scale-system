@@ -16,6 +16,18 @@ spring:
         default_batch_fetch_size: 1000
     open-in-view: false
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        # 최소요청 횟수 3회 이후, 통계 건수 최근 10건을 평가했을때,
+        # 실패율 60% 이상이 되면, Circuit Breaker가 Open되고, Circuit Breaker 지속시간은 10초동안 유지된다.
+        slidingWindowType: COUNT_BASED # 통계 건수로 측정 (TIME_BASED -> 시간 통계로 측정)
+        slidingWindowSize: 10 # 가장 최근의 통계 건수
+        minimumNumberOfCalls: 3 # 최소 요청 횟수
+        failureRateThreshold: 60 # 실패율
+        waitDurationInOpenState: 10000 # Circuit Breaker 지속 시간 (지속 시간동안 Backend Service를 호출하지 않는다.)
+
 ---
 spring:
   config:

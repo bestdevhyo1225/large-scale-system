@@ -13,8 +13,9 @@ include(
     "shortened-url-server-ver3:command",
     "shortened-url-server-ver3:common",
     "shortened-url-server-ver3:domain",
-    "shortened-url-server-ver3:infrastructure:redis",
     "shortened-url-server-ver3:infrastructure:jpa",
+    "shortened-url-server-ver3:infrastructure:redis",
+    "shortened-url-server-ver3:infrastructure:resilience4j",
     "shortened-url-server-ver3:query",
     // order-payment-server
     "order-payment-server",

@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 class UrlFacadeService(
     @Qualifier("urlRedisRepository")
     private val urlCacheRepository: UrlCacheRepository,
+    private val urlService: UrlService,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -24,8 +25,7 @@ class UrlFacadeService(
 
         logger.info { "cache miss!" }
 
-//        val longUrl: String = urlService.find(shortUrl = shortUrl)
-        val longUrl = "https://hyos-dev-log.tistory.com/"
+        val longUrl: String = urlService.findLongUrl(shortUrl = shortUrl)
 
         urlCacheRepository.set(
             key = key,

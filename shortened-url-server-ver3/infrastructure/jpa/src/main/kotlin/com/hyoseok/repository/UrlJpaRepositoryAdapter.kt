@@ -17,4 +17,7 @@ class UrlJpaRepositoryAdapter(
 
     override fun findByLongUrl(longUrl: String): Url? =
         urlJpaRepository.findByLongUrl(longUrl = longUrl)?.toDomainEntity()
+
+    override fun findByShortUrl(shortUrl: String): Url? =
+        urlJpaRepository.findByShortUrl(shortUrl = shortUrl)?.toDomainEntity()
 }
