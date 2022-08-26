@@ -34,7 +34,7 @@ class UrlRedisRepository(
             0 -> urlCacheRepository1.get(key = key, clazz = clazz)
             1 -> urlCacheRepository2.get(key = key, clazz = clazz)
             2 -> urlCacheRepository3.get(key = key, clazz = clazz)
-            else -> throw RuntimeException("해당 노드 인덱스의 RedisTemplate를 추가하세요. (nodeIndex: ${getNodeIndex()}")
+            else -> urlCacheRepository1.get(key = key, clazz = clazz)
         }
 
     private fun getNodeIndex(): Int = ((minRedisServerCount..redisServers.nodes.size).random()).minus(1)
