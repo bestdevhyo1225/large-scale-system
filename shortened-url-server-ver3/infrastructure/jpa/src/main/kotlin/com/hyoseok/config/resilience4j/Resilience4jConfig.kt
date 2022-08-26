@@ -1,4 +1,4 @@
-package com.hyoseok.config
+package com.hyoseok.config.resilience4j
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
@@ -30,11 +30,6 @@ class Resilience4jConfig(
     private val waitDurationInOpenState: Long,
 ) {
 
-    object Database {
-        const val MySQL = "MySQL"
-        const val Redis = "Redis"
-    }
-
     @Bean
     fun circuitBreakerRegistry(): CircuitBreakerRegistry {
         return CircuitBreakerRegistry.of(
@@ -50,8 +45,5 @@ class Resilience4jConfig(
     }
 
     @Bean
-    fun mysqlCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker(Database.MySQL)
-
-    @Bean
-    fun redisCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker(Database.Redis)
+    fun mysqlCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker("RDBMS")
 }
