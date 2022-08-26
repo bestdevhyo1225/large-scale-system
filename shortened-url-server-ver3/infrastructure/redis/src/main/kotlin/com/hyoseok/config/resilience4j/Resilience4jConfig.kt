@@ -1,5 +1,6 @@
 package com.hyoseok.config.resilience4j
 
+import com.hyoseok.constants.CircuitBreakerName
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType
@@ -45,5 +46,5 @@ class Resilience4jConfig(
     }
 
     @Bean
-    fun redisCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker("Redis")
+    fun redisCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker(CircuitBreakerName.NOSQL_REDIS)
 }
