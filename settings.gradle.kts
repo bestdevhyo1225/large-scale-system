@@ -10,6 +10,7 @@ include(
     "shortened-url-server-ver2:domain:nosql",
     "shortened-url-server-ver2:query",
     // shortened-url-server-ver3
+    "shortened-url-server-ver3:command",
     "shortened-url-server-ver3:common",
     "shortened-url-server-ver3:domain",
     "shortened-url-server-ver3:infrastructure:redis",
