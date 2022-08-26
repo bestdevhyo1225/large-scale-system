@@ -1,0 +1,7 @@
+### 단축 URL 생성
+POST localhost:9000/api/v1/url/shorten
+Content-Type: application/json
+
+{
+  "longUrl": "https://hyos-dev-log.tistory.com/"
+}
