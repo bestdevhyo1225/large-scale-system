@@ -42,8 +42,8 @@ class UrlRedisRepository(
             else -> urlCacheRepository1.get(key = key, clazz = clazz)
         }
 
-    private fun <T : Any> getNull(key: String, clazz: Class<T>, exception: Exception): T? {
-        logger.info { "fallback exception message: ${exception.localizedMessage}" }
+    private fun <T : Any> getNull(exception: Exception): T? {
+        logger.info { "fallback: ${exception.localizedMessage}" }
         return null
     }
 
