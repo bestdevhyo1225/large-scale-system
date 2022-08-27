@@ -3,7 +3,6 @@ package com.hyoseok.service
 import com.hyoseok.entity.Url
 import com.hyoseok.repository.UrlRepository
 import com.hyoseok.utils.Base62Util
-import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
