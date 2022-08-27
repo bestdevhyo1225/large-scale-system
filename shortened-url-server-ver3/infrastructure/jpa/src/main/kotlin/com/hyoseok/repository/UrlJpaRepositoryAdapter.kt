@@ -15,7 +15,9 @@ class UrlJpaRepositoryAdapter(
     private val logger = KotlinLogging.logger {}
 
     override fun save(url: Url) {
-        urlJpaRepository.save(UrlJpaEntity(url = url))
+        val urlJpaEntity = UrlJpaEntity(url = url)
+        urlJpaRepository.save(urlJpaEntity)
+        urlJpaEntity.mapDomainEntity(url = url)
     }
 
     override fun findByLongUrl(longUrl: String): Url? =

@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class Url private constructor(
-    id: Long,
+    id: Long = 0,
     shortUrl: String,
     longUrl: String,
     createdAt: LocalDateTime,
@@ -33,9 +33,13 @@ class Url private constructor(
             this.createdAt == otherUrl.createdAt
     }
 
+    fun changeId(id: Long) {
+        this.id = id
+    }
+
     companion object {
-        operator fun invoke(id: Long, shortUrl: String, longUrl: String) =
-            Url(id = id, shortUrl = shortUrl, longUrl = longUrl, createdAt = LocalDateTime.now().withNano(0))
+        operator fun invoke(shortUrl: String, longUrl: String) =
+            Url(shortUrl = shortUrl, longUrl = longUrl, createdAt = LocalDateTime.now().withNano(0))
 
         operator fun invoke(id: Long, shortUrl: String, longUrl: String, createdAt: LocalDateTime) =
             Url(id = id, shortUrl = shortUrl, longUrl = longUrl, createdAt = createdAt)

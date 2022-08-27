@@ -5,6 +5,8 @@ import java.time.LocalDateTime
 import java.util.Objects
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
@@ -12,14 +14,14 @@ import javax.persistence.Table
 @Table(name = "urls")
 @DynamicUpdate
 class UrlJpaEntity private constructor(
-    id: Long,
     shortUrl: String,
     longUrl: String,
     createdAt: LocalDateTime,
 ) {
 
     @Id
-    var id: Long = id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = 0
         protected set
 
     @Column(name = "short_url", nullable = false)
@@ -42,13 +44,15 @@ class UrlJpaEntity private constructor(
         return this.id == otherUrlJpaEntity.id
     }
 
+    fun mapDomainEntity(url: Url) {
+        url.changeId(id = id)
+    }
+
     fun toDomainEntity() = Url(id = id, shortUrl = shortUrl, longUrl = longUrl, createdAt = createdAt)
 
     companion object {
         operator fun invoke(url: Url) = with(receiver = url) {
-            println("current: $this")
             UrlJpaEntity(
-                id = id,
                 shortUrl = shortUrl,
                 longUrl = longUrl,
                 createdAt = createdAt,
