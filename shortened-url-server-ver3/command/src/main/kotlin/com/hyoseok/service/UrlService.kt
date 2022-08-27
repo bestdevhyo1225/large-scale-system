@@ -15,22 +15,13 @@ class UrlService(
     private val urlRepository: UrlRepository,
 ) {
 
-    private val logger = KotlinLogging.logger {}
-
     @Transactional
     fun create(longUrl: String): String {
-        urlRepository.findByLongUrl(longUrl = longUrl)
-            ?.let {
-                logger.info { "is Exist Url: $it" }
-                return it.shortUrl
-            }
+        urlRepository.findByLongUrl(longUrl = longUrl)?.let { return it.shortUrl }
 
-        val shortUrl = Base62Util.encode(value = System.currentTimeMillis())
-        val url = Url(shortUrl = shortUrl, longUrl = longUrl)
+        val url = Url(shortUrl = Base62Util.encode(value = System.currentTimeMillis()), longUrl = longUrl)
 
         urlRepository.save(url)
-
-        logger.info { "saved Url: $url" }
 
         return url.shortUrl
     }
