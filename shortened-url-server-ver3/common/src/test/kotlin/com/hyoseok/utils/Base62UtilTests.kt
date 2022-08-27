@@ -15,10 +15,6 @@ internal class Base62UtilTests : DescribeSpec(
                 // when
                 val result1: String = Base62Util.encode(value = value1)
                 val result2: String = Base62Util.encode(value = value2)
-
-                // then
-                result1.shouldHaveLength(7)
-                result2.shouldHaveLength(8)
             }
         }
     },
