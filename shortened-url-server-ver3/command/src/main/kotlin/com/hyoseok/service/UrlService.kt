@@ -25,9 +25,8 @@ class UrlService(
                 return it.shortUrl
             }
 
-        val id = System.currentTimeMillis()
-        val shortUrl = Base62Util.encode(value = id)
-        val url = Url(id = id, shortUrl = shortUrl, longUrl = longUrl)
+        val shortUrl = Base62Util.encode(value = System.currentTimeMillis())
+        val url = Url(shortUrl = shortUrl, longUrl = longUrl)
 
         urlRepository.save(url)
 
