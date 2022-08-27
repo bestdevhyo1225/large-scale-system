@@ -52,12 +52,16 @@
 | URL 조회 요청 | 644,924회 | 89ms | 9ms | 1,109ms | 0.00% | 10723.4/sec |
 | URL 생성 요청 | 50,774회 | 1,182ms | 20ms | 2,743ms | 0.00% | 830.1/sec |
 
+> Query 모듈 서버 결과
+
 - `Number Of Threads (users)` : 2,000명, `Ramp-up Period (seoncds)` : 1초
 - Redis 요청시, `Circuit Breaker` 적용 (fallback 처리)
 
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 1,294,603회 | 184ms | 9ms | 1,469ms | 0.00% | 10742.2/sec |
+
+> Command 모듈 서버 결과
 
 - `Number Of Threads (users)` : 1,500명, `Ramp-up Period (seoncds)` : 1초
 - 단축 URL이 중복으로 생성되는 문제가 있음.
