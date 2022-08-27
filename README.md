@@ -21,31 +21,6 @@
 - 10년간 `URL` 단축 서버 운영하게 된다면, `1억 x 356일 x 10년 = 3,650억` 개의 레코드를 보관해야 한다.
 - 단축 전 `URL` 의 평균 길이를 `100` 이라 가정했을때, 10년 동안 필요한 저장 용량은 `3,650억 x 100바이트 = 36.5TB` 이다.
 
-### 서버 실행 및 종료
-
-> 권한 관련 명령어 실행
-
-```shell
-chmod +x ./shortened-url-server/start.sh
-chmod +x ./shortened-url-server/stop.sh
-```
-
-> 서버 실행
-
-- 도커 컨테이너 기반의 `URL 단축 서버` 가 실행된다.
-
-```shell
-./shortened-url-server/start.sh
-```
-
-> 서버 종료
-
-- 도커 컨테이너의 `URL 단축 서버` 를 종료하고, `도커 컨테이너, 이미지, 볼륨, 이미지` 를 모두 삭제한다.
-
-```shell
-./shortened-url-server/stop.sh
-```
-
 ### 부하 테스트 결과 (JMeter)
 
 - `Number Of Threads (users)` : 접근할 사용자의 수 (스레드 수)
