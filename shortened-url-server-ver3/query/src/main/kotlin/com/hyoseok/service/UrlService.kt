@@ -12,6 +12,6 @@ class UrlService(
     private val urlRepository: UrlRepository,
 ) {
 
-    fun findLongUrl(shortUrl: String): String =
-        (urlRepository.findByShortUrl(shortUrl = shortUrl) ?: throw NoSuchElementException("Not Found!")).longUrl
+    fun findLongUrl(encodedUrl: String): String =
+        (urlRepository.findByEncodedUrl(encodedUrl = encodedUrl) ?: throw NoSuchElementException("Not Found!")).longUrl
 }

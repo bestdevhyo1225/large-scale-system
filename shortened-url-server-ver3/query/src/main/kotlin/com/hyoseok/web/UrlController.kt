@@ -15,7 +15,7 @@ class UrlController(
     private val urlFacadeService: UrlFacadeService,
 ) {
 
-    @GetMapping("/{shortUrl}")
-    fun get(@PathVariable shortUrl: String): ResponseEntity<SuccessResponse<Map<String, String>>> =
-        ok(SuccessResponse(data = mapOf("longUrl" to urlFacadeService.find(shortUrl = shortUrl))))
+    @GetMapping("/{encodedUrl}")
+    fun get(@PathVariable encodedUrl: String): ResponseEntity<SuccessResponse<Map<String, String>>> =
+        ok(SuccessResponse(data = mapOf("longUrl" to urlFacadeService.find(encodedUrl = encodedUrl))))
 }

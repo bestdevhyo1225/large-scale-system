@@ -18,11 +18,11 @@ class UrlService(
 
     @Transactional
     fun create(longUrl: String): String {
-        val shortUrl = Sha256Util.encode(value = longUrl)
-        return distributedLockService.executeWithLock(value = shortUrl, useType = RedissonUseType.URL) {
-            urlRepository.findByShortUrl(shortUrl = shortUrl)?.let { return@executeWithLock it.shortUrl }
-            urlRepository.save(url = Url(shortUrl = shortUrl, longUrl = longUrl))
-            shortUrl
+        val encodedUrl = Sha256Util.encode(value = longUrl)
+        return distributedLockService.executeWithLock(value = encodedUrl, useType = RedissonUseType.URL) {
+            urlRepository.findByEncodedUrl(encodedUrl = encodedUrl)?.let { return@executeWithLock it.encodedUrl }
+            urlRepository.save(url = Url(encodedUrl = encodedUrl, longUrl = longUrl))
+            encodedUrl
         }
     }
 }

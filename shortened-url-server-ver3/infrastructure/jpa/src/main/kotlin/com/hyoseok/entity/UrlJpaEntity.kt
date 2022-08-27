@@ -15,13 +15,13 @@ import javax.persistence.Table
 @Table(
     name = "urls",
     indexes = [
-        Index(name = "ix_urls_short_url", columnList = "short_url"),
+        Index(name = "ix_urls_encodedUrl", columnList = "encoded_url"),
         Index(name = "ix_urls_long_url", columnList = "long_url"),
     ],
 )
 @DynamicUpdate
 class UrlJpaEntity private constructor(
-    shortUrl: String,
+    encodedUrl: String,
     longUrl: String,
     createdAt: LocalDateTime,
 ) {
@@ -31,8 +31,8 @@ class UrlJpaEntity private constructor(
     var id: Long = 0
         protected set
 
-    @Column(name = "short_url", nullable = false)
-    var shortUrl: String = shortUrl
+    @Column(name = "encoded_url", nullable = false)
+    var encodedUrl: String = encodedUrl
         protected set
 
     @Column(name = "long_url", nullable = false)
@@ -44,7 +44,9 @@ class UrlJpaEntity private constructor(
         protected set
 
     override fun hashCode(): Int = Objects.hash(id)
-    override fun toString(): String = "UrlJpaEntity(id=$id, shortUrl=$shortUrl, longUrl=$longUrl, createdAt=$createdAt)"
+    override fun toString(): String =
+        "UrlJpaEntity(id=$id, encodedUrl=$encodedUrl, longUrl=$longUrl, createdAt=$createdAt)"
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherUrlJpaEntity = (other as? UrlJpaEntity) ?: return false
@@ -55,12 +57,12 @@ class UrlJpaEntity private constructor(
         url.changeId(id = id)
     }
 
-    fun toDomainEntity() = Url(id = id, shortUrl = shortUrl, longUrl = longUrl, createdAt = createdAt)
+    fun toDomainEntity() = Url(id = id, encodedUrl = encodedUrl, longUrl = longUrl, createdAt = createdAt)
 
     companion object {
         operator fun invoke(url: Url) = with(receiver = url) {
             UrlJpaEntity(
-                shortUrl = shortUrl,
+                encodedUrl = encodedUrl,
                 longUrl = longUrl,
                 createdAt = createdAt,
             )

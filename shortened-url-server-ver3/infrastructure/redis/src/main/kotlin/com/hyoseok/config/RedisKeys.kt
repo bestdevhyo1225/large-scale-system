@@ -1,5 +1,5 @@
 package com.hyoseok.config
 
 object RedisKeys {
-    fun getUrlsKey(shortUrl: String) = "urls:$shortUrl"
+    fun getUrlKey(encodedUrl: String) = "url:$encodedUrl"
 }

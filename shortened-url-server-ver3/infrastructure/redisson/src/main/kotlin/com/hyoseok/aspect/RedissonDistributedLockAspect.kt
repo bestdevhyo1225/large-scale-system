@@ -52,7 +52,7 @@ class RedissonDistributedLockAspect(
     private fun getLockName(joinPoint: ProceedingJoinPoint): String {
         val (first, second) = joinPoint.args
         return when (second as RedissonUseType) {
-            RedissonUseType.URL -> RedissonKeys.getUrlKey(value = first.toString())
+            RedissonUseType.URL -> RedissonKeys.getLockUrlKey(value = first.toString())
         }
     }
 

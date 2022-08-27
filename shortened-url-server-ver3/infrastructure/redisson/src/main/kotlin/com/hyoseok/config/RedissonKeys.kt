@@ -1,5 +1,5 @@
 package com.hyoseok.config
 
 object RedissonKeys {
-    fun getUrlKey(value: String) = "url:$value"
+    fun getLockUrlKey(value: String) = "lock-url:$value"
 }
