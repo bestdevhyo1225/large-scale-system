@@ -12,18 +12,21 @@ import org.springframework.transaction.annotation.Transactional
 class UrlService(
     @Qualifier("urlJpaRepositoryAdapter")
     private val urlRepository: UrlRepository,
+    private val distributedLockService: RedissonDistributedLockService,
 ) {
 
     @Transactional
     fun create(longUrl: String): String {
         val shortUrl = Base62Util.encode(value = System.currentTimeMillis())
 
-        urlRepository.findByLongUrl(longUrl = longUrl)?.let { return it.shortUrl }
+        return distributedLockService.executeWithLock(shortUrl = shortUrl) {
+            urlRepository.findByLongUrl(longUrl = longUrl)?.let { return@executeWithLock it.shortUrl }
 
-        val url = Url(shortUrl = shortUrl, longUrl = longUrl)
+            val url = Url(shortUrl = shortUrl, longUrl = longUrl)
 
-        urlRepository.save(url)
+            urlRepository.save(url)
 
-        return url.shortUrl
+            url.shortUrl
+        }
     }
 }
