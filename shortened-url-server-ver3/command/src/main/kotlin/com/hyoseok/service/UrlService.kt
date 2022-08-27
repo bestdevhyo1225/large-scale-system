@@ -16,9 +16,11 @@ class UrlService(
 
     @Transactional
     fun create(longUrl: String): String {
+        val shortUrl = Base62Util.encode(value = System.currentTimeMillis())
+
         urlRepository.findByLongUrl(longUrl = longUrl)?.let { return it.shortUrl }
 
-        val url = Url(shortUrl = Base62Util.encode(value = System.currentTimeMillis()), longUrl = longUrl)
+        val url = Url(shortUrl = shortUrl, longUrl = longUrl)
 
         urlRepository.save(url)
 
