@@ -2,6 +2,7 @@ package com.hyoseok.aspect
 
 import com.hyoseok.aspect.annotation.RedissonDistributedLock
 import com.hyoseok.config.RedissonKeys
+import com.hyoseok.config.RedissonUseType
 import com.hyoseok.exception.DistributedLockAcquisitionTimeoutException
 import com.hyoseok.exception.RedissonDistributedLockExceptionMessage
 import mu.KotlinLogging
@@ -41,8 +42,12 @@ class RedissonDistributedLockAspect(
         }
     }
 
-    private fun getLockName(joinPoint: ProceedingJoinPoint) =
-        RedissonKeys.getShortUrlKey(shortUrl = joinPoint.args.first().toString())
+    private fun getLockName(joinPoint: ProceedingJoinPoint): String {
+        val (first, second) = joinPoint.args
+        return when (second as RedissonUseType) {
+            RedissonUseType.SHORT_URL -> RedissonKeys.getShortUrlKey(shortUrl = first.toString())
+        }
+    }
 
     private fun getLock(lockName: String): RLock {
         return redissonClient.getLock(lockName)
