@@ -1,4 +1,5 @@
 dependencies {
+    implementation(project(":shortened-url-server-ver3:common"))
     implementation(project(":shortened-url-server-ver3:domain"))
 
     // spring data redis

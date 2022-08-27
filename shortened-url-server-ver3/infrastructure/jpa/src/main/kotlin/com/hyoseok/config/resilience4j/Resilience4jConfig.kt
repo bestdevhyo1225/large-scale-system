@@ -1,16 +1,15 @@
 package com.hyoseok.config.resilience4j
 
+import com.hyoseok.constants.CircuitBreakerName
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry
+import org.hibernate.exception.JDBCConnectionException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.io.IOException
-import java.net.ConnectException
 import java.time.Duration
-import java.util.concurrent.TimeoutException
 
 @Configuration
 class Resilience4jConfig(
@@ -39,11 +38,11 @@ class Resilience4jConfig(
                 .minimumNumberOfCalls(minimumNumberOfCalls)
                 .failureRateThreshold(failureRateThreshold)
                 .waitDurationInOpenState(Duration.ofMillis(waitDurationInOpenState))
-                .recordExceptions(IOException::class.java, ConnectException::class.java, TimeoutException::class.java)
+                .recordExceptions(JDBCConnectionException::class.java)
                 .build(),
         )
     }
 
     @Bean
-    fun mysqlCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker("RDBMS")
+    fun mysqlCircuitBreaker(): CircuitBreaker = circuitBreakerRegistry().circuitBreaker(CircuitBreakerName.RDBMS_MYSQL)
 }
