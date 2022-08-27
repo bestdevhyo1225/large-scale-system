@@ -1,5 +1,7 @@
 package com.hyoseok.aspect
 
+import com.hyoseok.aspect.RedissonDistributedLockAspect.PointcutExpressions.SIGNATURE_1
+import com.hyoseok.aspect.RedissonDistributedLockAspect.PointcutExpressions.SIGNATURE_2
 import com.hyoseok.aspect.annotation.RedissonDistributedLock
 import com.hyoseok.config.RedissonKeys
 import com.hyoseok.config.RedissonUseType
@@ -22,7 +24,12 @@ class RedissonDistributedLockAspect(
 
     private val logger = KotlinLogging.logger {}
 
-    @Around("execution(* com.hyoseok.service.RedissonDistributedLockService.executeWithLock(..)) && @annotation(distributedLock)")
+    object PointcutExpressions {
+        const val SIGNATURE_1 = "execution(* com.hyoseok.service.RedissonDistributedLockService.executeWithLock(..))"
+        const val SIGNATURE_2 = "@annotation(distributedLock)"
+    }
+
+    @Around("$SIGNATURE_1 && $SIGNATURE_2")
     fun execute(joinPoint: ProceedingJoinPoint, distributedLock: RedissonDistributedLock): Any {
         val lockName = getLockName(joinPoint = joinPoint)
         val rLock = getLock(lockName = lockName)
