@@ -1,9 +1,7 @@
 package com.hyoseok.repository
 
-import com.hyoseok.constants.CircuitBreakerName
 import com.hyoseok.entity.Url
 import com.hyoseok.entity.UrlJpaEntity
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
