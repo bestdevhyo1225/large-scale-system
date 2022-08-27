@@ -60,6 +60,7 @@
 | URL 조회 요청 | 1,294,603회 | 184ms | 9ms | 1,469ms | 0.00% | 10742.2/sec |
 
 - `Number Of Threads (users)` : 1,500명, `Ramp-up Period (seoncds)` : 1초
+- 단축 URL이 중복으로 생성되는 문제가 있음.
 
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
