@@ -76,4 +76,4 @@ spring:
   redisson:
     mode: single
     nodes:
-      - redis://localhost:6379
+      - redis://localhost:6382
