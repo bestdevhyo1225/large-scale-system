@@ -48,6 +48,10 @@ chmod +x ./shortened-url-server/stop.sh
 
 ### 부하 테스트 결과 (JMeter)
 
+- `Number Of Threads (users)` : 접근할 사용자의 수 (스레드 수)
+- `Ramp-up Period (seoncds)` : 위에서 설정한 사용자 수의 도달할 때까지 걸리는 시간
+    - 예를 들어, `Number of Threads` 값이 `1,000` 이고, `Ramp-Up period` 값이 `10` 일 때, 1,000명의 사용자(Thread)를 생성할 때 까지 10초가 걸린다는 의미이다. 즉, `1초 동안
+      100명의 유저가 요청을 한다는 뜻이다.`
 - `Samples`: 테스트 서버로 보낸 요청의 수
 - `Average` : 평균 응답 시간(ms)
 - `Min` : 최소 응답 시간(ms)
@@ -63,7 +67,16 @@ chmod +x ./shortened-url-server/stop.sh
 
 > Command, Query 모듈 서버를 분리한 결과
 
+- `Number Of Threads (users) ` : 1,000명, `Ramp-up Period (seoncds)` : 1초
+
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 644,924회 | 89ms | 9ms | 1,109ms | 0.00% | 10723.4/sec |
 | URL 생성 요청 | 50,774회 | 1,182ms | 20ms | 2,743ms | 0.00% | 830.1/sec |
+
+- `Number Of Threads (users) ` : 2,000명, `Ramp-up Period (seoncds)` : 1초
+- Redis 요청시, `Circuit Breaker` 적용 (fallback 처리)
+
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| URL 조회 요청 | 1,294,603회 | 184ms | 9ms | 1,469ms | 0.00% | 10742.2/sec |
