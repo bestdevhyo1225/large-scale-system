@@ -55,3 +55,4 @@
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 1,294,603회 | 184ms | 9ms | 1,469ms | 0.00% | 10742.2/sec |
+| URL 생성 요청 | 102,444회 | 2,348ms | 18ms | 4,537ms | 0.00% | 836.1/sec |
