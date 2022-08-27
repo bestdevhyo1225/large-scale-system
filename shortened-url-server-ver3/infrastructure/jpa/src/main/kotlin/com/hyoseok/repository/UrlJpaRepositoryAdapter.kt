@@ -5,7 +5,6 @@ import com.hyoseok.entity.UrlJpaEntity
 import mu.KotlinLogging
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @Repository
 @Transactional(readOnly = true)
@@ -24,9 +23,4 @@ class UrlJpaRepositoryAdapter(
 
     override fun findByShortUrl(shortUrl: String): Url? =
         urlJpaRepository.findByShortUrl(shortUrl = shortUrl)?.toDomainEntity()
-
-    private fun findTempUrl(exception: Exception): Url {
-        logger.info { "fallback: ${exception.localizedMessage}" }
-        return Url(id = 1, shortUrl = "shortUrl", longUrl = "longUrl", createdAt = LocalDateTime.now())
-    }
 }
