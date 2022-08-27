@@ -52,14 +52,12 @@ class RedissonDistributedLockAspect(
     private fun getLockName(joinPoint: ProceedingJoinPoint): String {
         val (first, second) = joinPoint.args
         return when (second as RedissonUseType) {
-            RedissonUseType.SHORT_URL -> RedissonKeys.getShortUrlKey(shortUrl = first.toString())
+            RedissonUseType.URL -> RedissonKeys.getUrlKey(value = first.toString())
         }
     }
 
-    private fun getLock(lockName: String): RLock {
-        return redissonClient.getLock(lockName)
-            .apply { logger.info { "getLock (key = {$lockName})" } }
-    }
+    private fun getLock(lockName: String): RLock =
+        redissonClient.getLock(lockName).apply { logger.info { "getLock ($lockName)" } }
 
     private fun tryLock(rLock: RLock, lockName: String, waitTime: Long, leaseTime: Long, timeUnit: TimeUnit) {
         val isAcquiredLock: Boolean
@@ -76,15 +74,15 @@ class RedissonDistributedLockAspect(
             )
         }
 
-        logger.info { "tryLock (key = {$lockName})" }
+        logger.info { "tryLock ($lockName)" }
     }
 
     private fun releaseLock(rLock: RLock, lockName: String) {
         if (rLock.isLocked && rLock.isHeldByCurrentThread) {
-            logger.info { "releaseLock (key = {$lockName})" }
+            logger.info { "releaseLock ($lockName)" }
             return rLock.unlock()
         }
 
-        logger.info { "Already releaseLock (key = $lockName)" }
+        logger.info { "Already releaseLock ($lockName)" }
     }
 }
