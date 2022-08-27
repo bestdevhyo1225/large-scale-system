@@ -9,6 +9,6 @@ interface UrlJpaRepository : JpaRepository<UrlJpaEntity, Long> {
     @Query("SELECT u FROM UrlJpaEntity u WHERE u.longUrl = :longUrl")
     fun findByLongUrl(longUrl: String): UrlJpaEntity?
 
-    @Query("SELECT u FROM UrlJpaEntity u WHERE u.shortUrl = :shortUrl")
-    fun findByShortUrl(shortUrl: String): UrlJpaEntity?
+    @Query("SELECT u FROM UrlJpaEntity u WHERE u.encodedUrl = :encodedUrl")
+    fun findByEncodedUrl(encodedUrl: String): UrlJpaEntity?
 }

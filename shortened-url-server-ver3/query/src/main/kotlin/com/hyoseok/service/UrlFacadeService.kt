@@ -17,15 +17,15 @@ class UrlFacadeService(
 
     private val logger = KotlinLogging.logger {}
 
-    fun find(shortUrl: String): String {
-        val key: String = RedisKeys.getUrlsKey(shortUrl = shortUrl)
+    fun find(encodedUrl: String): String {
+        val key: String = RedisKeys.getUrlKey(encodedUrl = encodedUrl)
 
         urlCacheRepository.get(key = key, clazz = String::class.java)
             ?.let { return it }
 
         logger.info { "cache miss!" }
 
-        val longUrl: String = urlService.findLongUrl(shortUrl = shortUrl)
+        val longUrl: String = urlService.findLongUrl(encodedUrl = encodedUrl)
 
         urlCacheRepository.set(
             key = key,
