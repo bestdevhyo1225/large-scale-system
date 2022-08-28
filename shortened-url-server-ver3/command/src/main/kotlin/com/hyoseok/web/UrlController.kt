@@ -5,6 +5,7 @@ import com.hyoseok.web.request.CreateUrlRequest
 import com.hyoseok.web.response.SuccessResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
+import org.springframework.transaction.UnexpectedRollbackException
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,6 +22,13 @@ class UrlController(
     fun create(
         @Valid @RequestBody
         request: CreateUrlRequest,
-    ): ResponseEntity<SuccessResponse<Map<String, String>>> =
-        ok(SuccessResponse(data = mapOf("shortUrl" to urlService.create(longUrl = request.longUrl))))
+    ): ResponseEntity<SuccessResponse<Map<String, String>>> {
+        return try {
+            val encodedUrl = urlService.create(longUrl = request.longUrl)
+            ok(SuccessResponse(data = mapOf("encodedUrl" to encodedUrl)))
+        } catch (exception: UnexpectedRollbackException) {
+            val encodedUrl = urlService.findByEncodedUrl(longUrl = request.longUrl)
+            ok(SuccessResponse(data = mapOf("encodedUrl" to encodedUrl)))
+        }
+    }
 }

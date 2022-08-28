@@ -15,7 +15,7 @@ import javax.persistence.Table
 @Table(
     name = "urls",
     indexes = [
-        Index(name = "ix_urls_encodedUrl", columnList = "encoded_url"),
+        Index(name = "uix_urls_encodedUrl", columnList = "encoded_url", unique = true),
         Index(name = "ix_urls_long_url", columnList = "long_url"),
     ],
 )
