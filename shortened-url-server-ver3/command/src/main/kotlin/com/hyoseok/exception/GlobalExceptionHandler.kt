@@ -46,12 +46,12 @@ class GlobalExceptionHandler {
         return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler(DistributedLockAcquisitionTimeoutException::class)
-    fun handle(exception: DistributedLockAcquisitionTimeoutException): ResponseEntity<FailResponse> {
-        logger.error { exception }
-
-        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.REQUEST_TIMEOUT)
-    }
+//    @ExceptionHandler(DistributedLockAcquisitionTimeoutException::class)
+//    fun handle(exception: DistributedLockAcquisitionTimeoutException): ResponseEntity<FailResponse> {
+//        logger.error { exception }
+//
+//        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.REQUEST_TIMEOUT)
+//    }
 
     @ExceptionHandler(Exception::class)
     fun handle(exception: Exception): ResponseEntity<ErrorResponse> {
