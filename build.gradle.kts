@@ -39,7 +39,7 @@ subprojects {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
         // Kotlin Coroutine
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
         // H2 Datbase
         runtimeOnly("com.h2database:h2")
