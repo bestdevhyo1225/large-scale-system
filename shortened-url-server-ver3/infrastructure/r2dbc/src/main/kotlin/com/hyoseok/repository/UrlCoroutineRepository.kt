@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UrlCoroutineRepository : CoroutineCrudRepository<UrlEntity, Long> {
 
-    suspend fun findUrlEntityByEncodedUrl(encodedUrl: String): UrlEntity?
+    suspend fun findByEncodedUrl(encodedUrl: String): UrlEntity?
 }

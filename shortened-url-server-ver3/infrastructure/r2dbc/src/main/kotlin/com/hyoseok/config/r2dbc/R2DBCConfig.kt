@@ -1,8 +1,15 @@
 package com.hyoseok.config.r2dbc
 
+import io.r2dbc.spi.ConnectionFactory
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories
+import org.springframework.r2dbc.connection.R2dbcTransactionManager
 
 @Configuration
-@EnableR2dbcRepositories(basePackages = ["com.hyoseok.repository"])
-class R2DBCConfig
+class R2DBCConfig {
+
+    @Bean
+    fun transactionManager(@Qualifier("writeConnectionFactory") connectionFactory: ConnectionFactory) =
+        R2dbcTransactionManager(connectionFactory)
+}
