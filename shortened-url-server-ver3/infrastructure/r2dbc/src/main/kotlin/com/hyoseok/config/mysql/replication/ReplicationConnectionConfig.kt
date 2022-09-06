@@ -71,37 +71,40 @@ class ReplicationConnectionConfig(
             .option(PROTOCOL, protocol)
 
         when (replicationRoutingConnectionKey) {
-            WRITE -> {
-                with(receiver = writeConnectionProperty) {
-                    connectionFactoryOptions
-                        .option(HOST, host)
-                        .option(USER, user)
-                        .option(PORT, port)
-                        .option(PASSWORD, password)
-                        .option(DATABASE, database)
-                        .option(INITIAL_SIZE, initialPoolSize)
-                        .option(MAX_SIZE, maxPoolSize)
-                        .option(MAX_LIFE_TIME, Duration.ofMillis(maxLifeTime))
-                        .option(MAX_ACQUIRE_TIME, Duration.ofMillis(maxAcquireTime))
-                }
-            }
-
-            READ -> {
-                with(receiver = readConnectionProperty) {
-                    connectionFactoryOptions
-                        .option(HOST, host)
-                        .option(USER, user)
-                        .option(PORT, port)
-                        .option(PASSWORD, password)
-                        .option(DATABASE, database)
-                        .option(INITIAL_SIZE, initialPoolSize)
-                        .option(MAX_SIZE, maxPoolSize)
-                        .option(MAX_LIFE_TIME, Duration.ofMillis(maxLifeTime))
-                        .option(MAX_ACQUIRE_TIME, Duration.ofMillis(maxAcquireTime))
-                }
-            }
+            WRITE -> setWriteConnectionOptions(connectionFactoryOptions = connectionFactoryOptions)
+            READ -> setReadConnectionOptions(connectionFactoryOptions = connectionFactoryOptions)
         }
 
         return ConnectionFactories.get(connectionFactoryOptions.build())
+    }
+
+    private fun setWriteConnectionOptions(connectionFactoryOptions: ConnectionFactoryOptions.Builder) {
+        with(receiver = writeConnectionProperty) {
+            connectionFactoryOptions
+                .option(HOST, host)
+                .option(USER, user)
+                .option(PORT, port)
+                .option(PASSWORD, password)
+                .option(DATABASE, database)
+                .option(INITIAL_SIZE, initialPoolSize)
+                .option(MAX_SIZE, maxPoolSize)
+                .option(MAX_LIFE_TIME, Duration.ofMillis(maxLifeTime))
+                .option(MAX_ACQUIRE_TIME, Duration.ofMillis(maxAcquireTime))
+        }
+    }
+
+    private fun setReadConnectionOptions(connectionFactoryOptions: ConnectionFactoryOptions.Builder) {
+        with(receiver = readConnectionProperty) {
+            connectionFactoryOptions
+                .option(HOST, host)
+                .option(USER, user)
+                .option(PORT, port)
+                .option(PASSWORD, password)
+                .option(DATABASE, database)
+                .option(INITIAL_SIZE, initialPoolSize)
+                .option(MAX_SIZE, maxPoolSize)
+                .option(MAX_LIFE_TIME, Duration.ofMillis(maxLifeTime))
+                .option(MAX_ACQUIRE_TIME, Duration.ofMillis(maxAcquireTime))
+        }
     }
 }
