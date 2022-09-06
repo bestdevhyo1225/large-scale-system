@@ -43,6 +43,7 @@ subprojects {
 
         // H2 Datbase
         runtimeOnly("com.h2database:h2")
+        runtimeOnly("io.r2dbc:r2dbc-h2")
 
         // MySQL Driver
         runtimeOnly("mysql:mysql-connector-java")

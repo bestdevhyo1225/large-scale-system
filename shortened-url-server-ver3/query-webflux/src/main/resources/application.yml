@@ -1,0 +1,50 @@
+server:
+  port: 9001
+
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    org.springframework.r2dbc: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  r2dbc:
+    pool:
+      protocol: mysql
+      write:
+        host: localhost
+        port: 9770
+        user: masteruser
+        password: masterpassword
+        database: large-scale-system
+        initial-pool-size: 10
+        max-pool-size: 10
+        max-life-time: 18000000 # 5 hour
+        max-acquire-time: 5000 # 5 second
+      read:
+        host: localhost
+        port: 9771
+        user: slaveuser
+        password: slavepassword
+        database: large-scale-system
+        initial-pool-size: 20
+        max-pool-size: 20
+        max-life-time: 18000000 # 5 hour
+        max-acquire-time: 5000 # 5 second
+
+logging:
+  level:
+    org.springframework.r2dbc: debug

@@ -14,9 +14,11 @@ include(
     "shortened-url-server-ver3:common",
     "shortened-url-server-ver3:domain",
     "shortened-url-server-ver3:infrastructure:jpa",
+    "shortened-url-server-ver3:infrastructure:r2dbc",
     "shortened-url-server-ver3:infrastructure:redis",
     "shortened-url-server-ver3:infrastructure:redisson",
     "shortened-url-server-ver3:query",
+    "shortened-url-server-ver3:query-webflux",
     // order-payment-server
     "order-payment-server",
     "order-payment-server:api",
