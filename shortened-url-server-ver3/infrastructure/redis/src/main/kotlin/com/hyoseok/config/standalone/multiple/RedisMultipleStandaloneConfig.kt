@@ -28,19 +28,28 @@ class RedisMultipleStandaloneConfig(
     @Primary
     fun redisMultipleConnectionFactory1(): RedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_1)
-        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig())
+        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
+            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            eagerInitialization = true
+        }
     }
 
     @Bean
     fun redisMultipleConnectionFactory2(): RedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_2)
-        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig())
+        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
+            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            eagerInitialization = true
+        }
     }
 
     @Bean
     fun redisMultipleConnectionFactory3(): RedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_3)
-        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig())
+        return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
+            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            eagerInitialization = true
+        }
     }
 
     private fun getHostAndPort(redisNodesKey: String): Pair<String, Int> {
