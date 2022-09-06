@@ -44,7 +44,3 @@ spring:
         max-pool-size: 20
         max-life-time: 18000000 # 5 hour
         max-acquire-time: 5000 # 5 second
-
-logging:
-  level:
-    org.springframework.r2dbc: debug
