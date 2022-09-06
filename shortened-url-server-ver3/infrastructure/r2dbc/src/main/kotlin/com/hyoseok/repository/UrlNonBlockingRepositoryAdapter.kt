@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 @Transactional(readOnly = true)
 class UrlNonBlockingRepositoryAdapter(
-    private val urlRepository: UrlCoroutineRepository,
+    private val urlCoroutineRepository: UrlCoroutineRepository,
 ) : UrlNonBlockingRepository {
 
     override suspend fun findByEncodedUrl(encodedUrl: String): Url? =
-        urlRepository.findByEncodedUrl(encodedUrl = encodedUrl)?.toDomainEntity()
+        urlCoroutineRepository.findByEncodedUrl(encodedUrl = encodedUrl)?.toDomainEntity()
 }
