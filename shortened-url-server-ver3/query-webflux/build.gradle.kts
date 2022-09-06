@@ -9,4 +9,5 @@ dependencies {
     implementation("org.springframework:spring-tx:5.3.22")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation("io.projectreactor.tools:blockhound:1.0.6.RELEASE")
 }
