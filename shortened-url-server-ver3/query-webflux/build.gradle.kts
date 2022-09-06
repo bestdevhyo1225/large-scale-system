@@ -6,7 +6,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("org.springframework:spring-tx:5.3.19")
+    implementation("org.springframework:spring-tx:5.3.22")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 }

@@ -36,8 +36,6 @@ class ReplicationConnectionConfig(
     private val readConnectionProperty: ReadConnectionProperty,
 ) : AbstractR2dbcConfiguration() {
 
-    // r2dbc:pool:<protocol>://<host>:<port>/<database>[?maxIdleTime=PT60S[&…]
-
     companion object {
         const val POOL_DRIVER = "pool"
     }
@@ -45,12 +43,14 @@ class ReplicationConnectionConfig(
     @Bean
     override fun connectionFactory(): ConnectionFactory {
         val connectionFactoriesMap: MutableMap<Any, ConnectionFactory> = HashMap()
+        val writeConnectionFactory = writeConnectionFactory()
+        val readConnectionFactory = readConnectionFactory()
 
-        connectionFactoriesMap[WRITE] = writeConnectionFactory()
-        connectionFactoriesMap[READ] = readConnectionFactory()
+        connectionFactoriesMap[WRITE] = writeConnectionFactory
+        connectionFactoriesMap[READ] = readConnectionFactory
 
         return ReplicationRoutingConnectionFactory().apply {
-            setDefaultTargetConnectionFactory(writeConnectionFactory())
+            setDefaultTargetConnectionFactory(writeConnectionFactory)
             setTargetConnectionFactories(connectionFactoriesMap)
         }
     }
@@ -75,8 +75,8 @@ class ReplicationConnectionConfig(
                 with(receiver = writeConnectionProperty) {
                     connectionFactoryOptions
                         .option(HOST, host)
-                        .option(PORT, port)
                         .option(USER, user)
+                        .option(PORT, port)
                         .option(PASSWORD, password)
                         .option(DATABASE, database)
                         .option(INITIAL_SIZE, initialPoolSize)
@@ -90,8 +90,8 @@ class ReplicationConnectionConfig(
                 with(receiver = readConnectionProperty) {
                     connectionFactoryOptions
                         .option(HOST, host)
-                        .option(PORT, port)
                         .option(USER, user)
+                        .option(PORT, port)
                         .option(PASSWORD, password)
                         .option(DATABASE, database)
                         .option(INITIAL_SIZE, initialPoolSize)
