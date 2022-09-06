@@ -18,7 +18,8 @@ fun main(args: Array<String>) {
 }
 
 private const val ARG_ENABLE_BLOCKHOUND = "ENABLE_BLOCKHOUND"
-fun enableBlockHoundIfArgsExists(args: Array<String>) {
+
+private fun enableBlockHoundIfArgsExists(args: Array<String>) {
     if (Objects.isNull(args)) {
         return
     }
@@ -30,7 +31,7 @@ fun enableBlockHoundIfArgsExists(args: Array<String>) {
     }
 }
 
-fun enableBlockHound() {
+private fun enableBlockHound() {
     BlockHound.install(
         object : BlockHoundIntegration {
             override fun applyTo(builder: BlockHound.Builder) {
