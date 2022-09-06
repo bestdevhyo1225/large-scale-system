@@ -51,13 +51,16 @@ subprojects {
         // Spring Boot Starter Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-        // Kotest, Mockk
+        // Kotest, Mockk Test
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.2")
         testImplementation("io.kotest:kotest-assertions-core:5.4.1")
         testImplementation("io.kotest:kotest-assertions-core-jvm:5.4.1")
         testImplementation("io.kotest:kotest-extensions-spring:4.4.3")
         testImplementation("io.kotest:kotest-runner-junit5-jvm:5.4.1")
         testImplementation("io.mockk:mockk:1.12.5")
+
+        // Reactor Test
+        testImplementation("io.projectreactor:reactor-test")
     }
 
     dependencyManagement {
