@@ -12,5 +12,4 @@ class UrlCoroutineRepositoryAdapter(
 
     override suspend fun findByEncodedUrl(encodedUrl: String): Url? =
         urlCoroutineRepository.findUrlEntityByEncodedUrl(encodedUrl = encodedUrl)?.toDomainEntity()
-
 }

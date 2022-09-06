@@ -63,7 +63,9 @@ class ReplicationConnectionConfig(
     fun readConnectionFactory(): ConnectionFactory =
         createConnectionFactory(replicationRoutingConnectionKey = READ)
 
-    private fun createConnectionFactory(replicationRoutingConnectionKey: ReplicationRoutingConnectionKey): ConnectionFactory {
+    private fun createConnectionFactory(
+        replicationRoutingConnectionKey: ReplicationRoutingConnectionKey,
+    ): ConnectionFactory {
         val connectionFactoryOptions = ConnectionFactoryOptions.builder()
             .option(DRIVER, POOL_DRIVER)
             .option(PROTOCOL, protocol)
