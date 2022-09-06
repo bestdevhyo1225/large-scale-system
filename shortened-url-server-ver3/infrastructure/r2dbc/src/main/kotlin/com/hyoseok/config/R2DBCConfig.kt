@@ -1,4 +1,4 @@
-package com.hyoseok.config.r2dbc
+package com.hyoseok.config
 
 import io.r2dbc.spi.ConnectionFactory
 import org.springframework.beans.factory.annotation.Qualifier

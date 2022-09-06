@@ -1,4 +1,4 @@
-package com.hyoseok.config.r2dbc
+package com.hyoseok.config
 
 object R2DBCDriver {
     const val POOL = "pool"

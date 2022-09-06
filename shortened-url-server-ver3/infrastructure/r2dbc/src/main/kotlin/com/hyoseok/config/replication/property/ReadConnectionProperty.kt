@@ -1,13 +1,13 @@
-package com.hyoseok.config.mysql.replication.property
+package com.hyoseok.config.replication.property
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.context.annotation.Profile
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "spring.r2dbc.pool.write")
+@ConfigurationProperties(prefix = "spring.r2dbc.pool.read")
 @Profile("prod")
-data class WriteConnectionProperty(
+data class ReadConnectionProperty(
     val host: String,
     val port: Int,
     val user: String,

@@ -1,10 +1,10 @@
-package com.hyoseok.config.mysql.replication
+package com.hyoseok.config.replication
 
-import com.hyoseok.config.r2dbc.R2DBCDriver
-import com.hyoseok.config.mysql.replication.ReplicationRoutingConnectionKey.READ
-import com.hyoseok.config.mysql.replication.ReplicationRoutingConnectionKey.WRITE
-import com.hyoseok.config.mysql.replication.property.ReadConnectionProperty
-import com.hyoseok.config.mysql.replication.property.WriteConnectionProperty
+import com.hyoseok.config.R2DBCDriver
+import com.hyoseok.config.replication.ReplicationRoutingConnectionKey.READ
+import com.hyoseok.config.replication.ReplicationRoutingConnectionKey.WRITE
+import com.hyoseok.config.replication.property.ReadConnectionProperty
+import com.hyoseok.config.replication.property.WriteConnectionProperty
 import io.r2dbc.pool.PoolingConnectionFactoryProvider.INITIAL_SIZE
 import io.r2dbc.pool.PoolingConnectionFactoryProvider.MAX_ACQUIRE_TIME
 import io.r2dbc.pool.PoolingConnectionFactoryProvider.MAX_LIFE_TIME

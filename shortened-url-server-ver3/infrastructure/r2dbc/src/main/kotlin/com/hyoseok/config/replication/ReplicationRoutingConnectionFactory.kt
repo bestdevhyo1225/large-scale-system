@@ -1,4 +1,4 @@
-package com.hyoseok.config.mysql.replication
+package com.hyoseok.config.replication
 
 import org.springframework.r2dbc.connection.lookup.AbstractRoutingConnectionFactory
 import org.springframework.transaction.reactive.TransactionSynchronizationManager
