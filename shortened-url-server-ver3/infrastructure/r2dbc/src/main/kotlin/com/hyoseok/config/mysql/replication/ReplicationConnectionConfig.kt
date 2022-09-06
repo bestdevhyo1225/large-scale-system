@@ -1,5 +1,6 @@
 package com.hyoseok.config.mysql.replication
 
+import com.hyoseok.config.r2dbc.R2DBCDrivers
 import com.hyoseok.config.mysql.replication.ReplicationRoutingConnectionKey.READ
 import com.hyoseok.config.mysql.replication.ReplicationRoutingConnectionKey.WRITE
 import com.hyoseok.config.mysql.replication.property.ReadConnectionProperty
@@ -36,10 +37,6 @@ class ReplicationConnectionConfig(
     private val readConnectionProperty: ReadConnectionProperty,
 ) : AbstractR2dbcConfiguration() {
 
-    companion object {
-        const val POOL_DRIVER = "pool"
-    }
-
     @Bean
     override fun connectionFactory(): ConnectionFactory {
         val connectionFactoriesMap: MutableMap<Any, ConnectionFactory> = HashMap()
@@ -67,7 +64,7 @@ class ReplicationConnectionConfig(
         replicationRoutingConnectionKey: ReplicationRoutingConnectionKey,
     ): ConnectionFactory {
         val connectionFactoryOptions = ConnectionFactoryOptions.builder()
-            .option(DRIVER, POOL_DRIVER)
+            .option(DRIVER, R2DBCDrivers.POOL)
             .option(PROTOCOL, protocol)
 
         when (replicationRoutingConnectionKey) {
