@@ -1,5 +1,6 @@
 package com.hyoseok
 
+import mu.KotlinLogging
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import reactor.blockhound.BlockHound
@@ -18,6 +19,7 @@ fun main(args: Array<String>) {
 }
 
 private const val ARG_ENABLE_BLOCKHOUND = "ENABLE_BLOCKHOUND"
+private val logger = KotlinLogging.logger {}
 
 private fun enableBlockHoundIfArgsExists(args: Array<String>) {
     if (Objects.isNull(args)) {
@@ -32,6 +34,8 @@ private fun enableBlockHoundIfArgsExists(args: Array<String>) {
 }
 
 private fun enableBlockHound() {
+    logger.info { "BlockHound Enabled" }
+
     BlockHound.install(
         object : BlockHoundIntegration {
             override fun applyTo(builder: BlockHound.Builder) {
