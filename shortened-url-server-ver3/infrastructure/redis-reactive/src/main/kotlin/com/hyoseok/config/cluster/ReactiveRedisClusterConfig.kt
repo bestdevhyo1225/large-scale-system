@@ -11,14 +11,14 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 
-@Configuration
+//@Configuration
 @EnableCaching(proxyTargetClass = true)
 @EnableConfigurationProperties(value = [RedisClusterServers::class])
 class ReactiveRedisClusterConfig(
     private val redisClusterServers: RedisClusterServers,
 ) {
 
-    @Bean
+//    @Bean
     fun reactiveRedisClusterConnectionFactory1(): ReactiveRedisConnectionFactory {
         return LettuceConnectionFactory(
             RedisClusterConfiguration(redisClusterServers.nodes[SERVER_1]!!),

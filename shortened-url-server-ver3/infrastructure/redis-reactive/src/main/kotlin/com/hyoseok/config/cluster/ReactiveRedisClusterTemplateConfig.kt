@@ -8,10 +8,10 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.serializer.RedisSerializationContext
 import org.springframework.data.redis.serializer.StringRedisSerializer
 
-@Configuration
+//@Configuration
 class ReactiveRedisClusterTemplateConfig {
 
-    @Bean
+//    @Bean
     fun reactiveRedisClusterTemplate1(
         @Qualifier("reactiveRedisClusterConnectionFactory1")
         reactiveRedisClusterConnectionFactory1: ReactiveRedisConnectionFactory,
