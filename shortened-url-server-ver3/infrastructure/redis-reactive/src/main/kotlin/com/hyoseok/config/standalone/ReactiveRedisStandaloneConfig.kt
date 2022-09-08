@@ -27,7 +27,10 @@ class ReactiveRedisStandaloneConfig(
     fun reactiveRedisConnectionFactory1(): ReactiveRedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_1)
         return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
-            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            // [ 공유 연결 -> shareNativeConnection ]
+            // - shareNativeConnection 값을 true로 설정
+            // - 여러 LettuceConnections 가 단일 기본 연결을 공유할 수 있도록 한다. false로 설정하면, LettuceConnection 의 모든 작업이 소켓을 열고 닫는다.
+            // RedisClient.connect 에서 블록킹이 발생하는데, eagerInitialization 값을 true 로 설정하면 shareNativeConnection 의 즉시 초기화를 활성화한다.
             eagerInitialization = true
         }
     }
@@ -36,7 +39,7 @@ class ReactiveRedisStandaloneConfig(
     fun reactiveRedisConnectionFactory2(): ReactiveRedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_2)
         return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
-            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            // RedisClient.connect 에서 블록킹이 발생하는데, eagerInitialization 값을 true 로 설정하면 shareNativeConnection 의 즉시 초기화를 활성화한다.
             eagerInitialization = true
         }
     }
@@ -45,7 +48,7 @@ class ReactiveRedisStandaloneConfig(
     fun reactiveRedisConnectionFactory3(): ReactiveRedisConnectionFactory {
         val (host, port) = getHostAndPort(redisNodesKey = SERVER_3)
         return LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig()).apply {
-            // RedisClient.connect 에서 블록킹이 발생하는데, EagerInitialization 를 true로 처리하여 해결할 수 있다.
+            // RedisClient.connect 에서 블록킹이 발생하는데, eagerInitialization 값을 true 로 설정하면 shareNativeConnection 의 즉시 초기화를 활성화한다.
             eagerInitialization = true
         }
     }
