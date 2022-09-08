@@ -61,6 +61,13 @@
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | URL 조회 요청 | 1,294,603회 | 184ms | 9ms | 1,469ms | 0.00% | 10742.2/sec |
 
+- `Number Of Threads (users)` : 2,000명, `Ramp-up Period (seoncds)` : 1초
+- `WebFlux`, `R2DBC`, `Redis Reactive` 적용
+
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| URL 조회 요청 | 1,413,954회 | 168ms | 3ms | 1,385ms | 0.00% | 11760.6/sec |
+
 > Command 모듈 서버 결과
 
 - `Number Of Threads (users)` : 1,500명, `Ramp-up Period (seoncds)` : 1초
