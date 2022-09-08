@@ -6,6 +6,7 @@ import org.springframework.boot.runApplication
 import reactor.blockhound.BlockHound
 import reactor.blockhound.integration.BlockHoundIntegration
 import java.util.Objects
+import java.util.zip.InflaterInputStream
 
 @SpringBootApplication
 class QueryWebFluxApplication
@@ -39,6 +40,7 @@ private fun enableBlockHound() {
     BlockHound.install(
         object : BlockHoundIntegration {
             override fun applyTo(builder: BlockHound.Builder) {
+                builder.allowBlockingCallsInside(InflaterInputStream::class.java.name, "read")
             }
         },
     )
