@@ -12,10 +12,12 @@ import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import java.time.Duration
 
 @DataRedisTest
+@DirtiesContext
 @EnableAutoConfiguration
 @ContextConfiguration(
     classes = [
