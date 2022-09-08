@@ -61,6 +61,14 @@ subprojects {
 
         // Reactor Test
         testImplementation("io.projectreactor:reactor-test")
+
+        // Embedded Redis Server for Test
+        testImplementation("it.ozimov:embedded-redis:0.7.3") {
+            // Exception in thread "main"
+            // java.lang.IllegalArgumentException: LoggerFactory is not a Logback LoggerContext but Logback is on the classpath.
+            // 위의 예외가 발생하지 않도록 slf4j-simple 모듈을 제외한다.
+            exclude("org.slf4j", "slf4j-simple")
+        }
     }
 
     dependencyManagement {
