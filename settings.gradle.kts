@@ -16,6 +16,7 @@ include(
     "shortened-url-server-ver3:infrastructure:jpa",
     "shortened-url-server-ver3:infrastructure:r2dbc",
     "shortened-url-server-ver3:infrastructure:redis",
+    "shortened-url-server-ver3:infrastructure:redis-reactive",
     "shortened-url-server-ver3:infrastructure:redisson",
     "shortened-url-server-ver3:query",
     "shortened-url-server-ver3:query-webflux",
