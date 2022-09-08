@@ -5,13 +5,11 @@ import com.hyoseok.config.RedisNodesKey.SERVER_1
 import com.hyoseok.config.property.RedisClusterServers
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 
-//@Configuration
+// @Configuration
 @EnableCaching(proxyTargetClass = true)
 @EnableConfigurationProperties(value = [RedisClusterServers::class])
 class ReactiveRedisClusterConfig(
