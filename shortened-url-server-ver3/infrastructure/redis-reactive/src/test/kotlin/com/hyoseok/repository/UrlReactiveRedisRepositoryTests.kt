@@ -3,6 +3,10 @@ package com.hyoseok.repository
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.standalone.ReactiveRedisStandaloneConfig
 import com.hyoseok.config.standalone.ReactiveRedisStandaloneTemplateConfig
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository1
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository2
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository3
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -27,7 +31,7 @@ import java.time.Duration
         UrlReactiveRedisStandaloneRepository1::class,
         UrlReactiveRedisStandaloneRepository2::class,
         UrlReactiveRedisStandaloneRepository3::class,
-        UrlReactiveRedisRepository::class,
+        UrlReactiveRedisStandaloneRepository::class,
     ],
 )
 internal class UrlReactiveRedisRepositoryTests : DescribeSpec() {
@@ -36,7 +40,7 @@ internal class UrlReactiveRedisRepositoryTests : DescribeSpec() {
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
 
     @Autowired
-    private lateinit var urlReactiveRedisRepository: UrlReactiveRedisRepository
+    private lateinit var urlReactiveRedisRepository: UrlReactiveRedisStandaloneRepository
 
     init {
         this.describe("set 메서드는") {

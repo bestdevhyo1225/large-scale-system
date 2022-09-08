@@ -1,6 +1,8 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.standalone
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hyoseok.repository.AbstractReactiveRedisRepository
+import com.hyoseok.repository.UrlCacheNonBlockingRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.beans.factory.annotation.Qualifier

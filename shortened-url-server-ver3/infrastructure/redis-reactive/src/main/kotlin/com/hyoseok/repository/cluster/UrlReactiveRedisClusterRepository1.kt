@@ -1,6 +1,8 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.cluster
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hyoseok.repository.AbstractReactiveRedisRepository
+import com.hyoseok.repository.UrlCacheNonBlockingRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.beans.factory.annotation.Qualifier
@@ -9,13 +11,13 @@ import org.springframework.stereotype.Repository
 import java.time.Duration
 
 @Repository
-class UrlReactiveRedisStandaloneRepository3(
-    @Qualifier("reactiveRedisTemplate3")
-    private val reactiveRedisTemplate: ReactiveRedisTemplate<String, String?>,
+class UrlReactiveRedisClusterRepository1(
+    @Qualifier("reactiveRedisClusterTemplate1")
+    private val reactiveRedisClusterTemplate: ReactiveRedisTemplate<String, String?>,
 ) : UrlCacheNonBlockingRepository, AbstractReactiveRedisRepository() {
 
     override suspend fun <T : Any> set(key: String, value: T, expireDuration: Duration) {
-        reactiveRedisTemplate.opsForValue()
+        reactiveRedisClusterTemplate.opsForValue()
             .set(key, jacksonObjectMapper().writeValueAsString(value), expireDuration)
             .awaitSingle() // Mono<Boolean!> -> Boolean!
     }
@@ -25,7 +27,7 @@ class UrlReactiveRedisStandaloneRepository3(
             return null
         }
 
-        val value: String? = reactiveRedisTemplate.opsForValue()
+        val value: String? = reactiveRedisClusterTemplate.opsForValue()
             .get(key)
             .awaitSingleOrNull() // Mono<String?> -> String?
 
@@ -37,7 +39,7 @@ class UrlReactiveRedisStandaloneRepository3(
     }
 
     private suspend fun shouldRefreshKey(key: String, expireTimeGapMs: Long = 3_000L): Boolean {
-        val remainingExpiryTimeMS: Long = reactiveRedisTemplate
+        val remainingExpiryTimeMS: Long = reactiveRedisClusterTemplate
             .getExpire(key)
             .awaitSingleOrNull() // Mono<Duration?> -> Duration?
             ?.toMillis() ?: -1L

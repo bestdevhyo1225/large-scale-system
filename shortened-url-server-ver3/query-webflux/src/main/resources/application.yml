@@ -14,9 +14,9 @@ spring:
   data:
     redis:
       nodes:
-        server-1: localhost:6379,
-        server-2: localhost:6380,
-        server-3: localhost:6381,
+        server-1: localhost:6379
+        server-2: localhost:6380
+        server-3: localhost:6381
 
 logging:
   level:
@@ -55,7 +55,11 @@ spring:
 
   data:
     redis:
-      nodes:
-        server-1: localhost:6379,
-        server-2: localhost:6380,
-        server-3: localhost:6381,
+      standalone:
+        nodes:
+          server-1: localhost:6379
+          server-2: localhost:6380
+          server-3: localhost:6381
+      cluster:
+        nodes:
+          server-1: localhost:6379

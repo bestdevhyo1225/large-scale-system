@@ -11,7 +11,7 @@ import java.time.Duration
 @Service
 class UrlFacadeService(
     private val urlService: UrlService,
-    @Qualifier("urlReactiveRedisRepository")
+    @Qualifier("urlReactiveRedisClusterRepository1")
     private val urlReactiveRedisRepository: UrlCacheNonBlockingRepository,
 ) {
 

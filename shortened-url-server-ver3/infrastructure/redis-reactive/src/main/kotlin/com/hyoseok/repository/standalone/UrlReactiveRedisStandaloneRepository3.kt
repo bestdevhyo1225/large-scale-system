@@ -1,6 +1,8 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.standalone
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hyoseok.repository.AbstractReactiveRedisRepository
+import com.hyoseok.repository.UrlCacheNonBlockingRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.beans.factory.annotation.Qualifier
@@ -9,8 +11,8 @@ import org.springframework.stereotype.Repository
 import java.time.Duration
 
 @Repository
-class UrlReactiveRedisStandaloneRepository1(
-    @Qualifier("reactiveRedisTemplate1")
+class UrlReactiveRedisStandaloneRepository3(
+    @Qualifier("reactiveRedisTemplate3")
     private val reactiveRedisTemplate: ReactiveRedisTemplate<String, String?>,
 ) : UrlCacheNonBlockingRepository, AbstractReactiveRedisRepository() {
 

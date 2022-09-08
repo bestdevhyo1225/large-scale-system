@@ -3,6 +3,9 @@ package com.hyoseok.repository
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.standalone.ReactiveRedisStandaloneConfig
 import com.hyoseok.config.standalone.ReactiveRedisStandaloneTemplateConfig
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository1
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository2
+import com.hyoseok.repository.standalone.UrlReactiveRedisStandaloneRepository3
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec

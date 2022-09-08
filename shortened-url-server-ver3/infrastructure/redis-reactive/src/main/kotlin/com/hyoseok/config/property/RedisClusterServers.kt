@@ -1,10 +1,10 @@
-package com.hyoseok.config.standalone.property
+package com.hyoseok.config.property
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConstructorBinding
-@ConfigurationProperties(prefix = "spring.data.redis")
-data class RedisServers(
+@ConfigurationProperties(prefix = "spring.data.redis.cluster")
+data class RedisClusterServers(
     val nodes: Map<String, List<String>>,
 )

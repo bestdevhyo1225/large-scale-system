@@ -1,13 +1,14 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.standalone
 
 import com.hyoseok.config.RedisServerCounts
-import com.hyoseok.config.standalone.property.RedisServers
+import com.hyoseok.config.property.RedisServers
+import com.hyoseok.repository.UrlCacheNonBlockingRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Repository
 import java.time.Duration
 
 @Repository
-class UrlReactiveRedisRepository(
+class UrlReactiveRedisStandaloneRepository(
     private val redisServers: RedisServers,
     @Qualifier("urlReactiveRedisStandaloneRepository1")
     private val urlReactiveRedisStandaloneRepository1: UrlCacheNonBlockingRepository,

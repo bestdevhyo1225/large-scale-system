@@ -3,7 +3,7 @@ package com.hyoseok.config
 import com.hyoseok.config.RedisNodesKey.SERVER_1
 import com.hyoseok.config.RedisNodesKey.SERVER_2
 import com.hyoseok.config.RedisNodesKey.SERVER_3
-import com.hyoseok.config.standalone.property.RedisServers
+import com.hyoseok.config.property.RedisServers
 import mu.KotlinLogging
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
