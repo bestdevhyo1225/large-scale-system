@@ -3,6 +3,7 @@ apply(plugin = "org.springframework.boot")
 dependencies {
     implementation(project(":shortened-url-server-ver3:domain"))
     implementation(project(":shortened-url-server-ver3:infrastructure:r2dbc"))
+    implementation(project(":shortened-url-server-ver3:infrastructure:redis-reactive"))
 
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

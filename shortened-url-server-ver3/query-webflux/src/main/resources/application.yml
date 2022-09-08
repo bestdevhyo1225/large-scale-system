@@ -11,9 +11,17 @@ spring:
     activate:
       on-profile: dev
 
+  data:
+    redis:
+      nodes:
+        server-1: localhost:6379,
+        server-2: localhost:6380,
+        server-3: localhost:6381,
+
 logging:
   level:
     org.springframework.r2dbc: debug
+    io.lettuce.core: debug
 
 ---
 spring:
@@ -44,3 +52,10 @@ spring:
         max-pool-size: 20
         max-life-time: 18000000 # 5 hour
         max-acquire-time: 5000 # 5 second
+
+  data:
+    redis:
+      nodes:
+        server-1: localhost:6379,
+        server-2: localhost:6380,
+        server-3: localhost:6381,
