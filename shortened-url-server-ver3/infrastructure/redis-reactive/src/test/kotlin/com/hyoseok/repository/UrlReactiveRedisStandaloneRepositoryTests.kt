@@ -47,12 +47,12 @@ internal class UrlReactiveRedisStandaloneRepositoryTests : DescribeSpec() {
                 // given
                 val key = "key"
                 val value = "value"
-                val duration = Duration.ofSeconds(60)
+                val expireDuration = Duration.ofSeconds(60)
 
                 // when
-                urlReactiveRedisStandaloneRepository1.set(key = key, value = value, duration = duration)
-                urlReactiveRedisStandaloneRepository2.set(key = key, value = value, duration = duration)
-                urlMultipleReactiveRedisRepository3.set(key = key, value = value, duration = duration)
+                urlReactiveRedisStandaloneRepository1.set(key = key, value = value, expireDuration = expireDuration)
+                urlReactiveRedisStandaloneRepository2.set(key = key, value = value, expireDuration = expireDuration)
+                urlMultipleReactiveRedisRepository3.set(key = key, value = value, expireDuration = expireDuration)
 
                 // then
                 urlReactiveRedisStandaloneRepository1.get(key = key, clazz = String::class.java)

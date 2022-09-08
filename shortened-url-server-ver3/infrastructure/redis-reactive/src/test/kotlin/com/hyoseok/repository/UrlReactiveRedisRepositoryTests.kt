@@ -42,10 +42,10 @@ internal class UrlReactiveRedisRepositoryTests : DescribeSpec() {
                 // given
                 val key = "key"
                 val value = "value"
-                val duration = Duration.ofSeconds(60)
+                val expireDuration = Duration.ofSeconds(60)
 
                 // when
-                urlReactiveRedisRepository.set(key = key, value = value, duration = duration)
+                urlReactiveRedisRepository.set(key = key, value = value, expireDuration = expireDuration)
 
                 // then
                 urlReactiveRedisRepository.get(key = key, clazz = String::class.java)
