@@ -32,8 +32,10 @@ include(
     "sns-service:application:command",
     "sns-service:application:query",
     "sns-service:application:query-webflux",
+    "sns-service:common",
     "sns-service:data:jpa",
     "sns-service:data:redis",
     "sns-service:domain",
+    "sns-service:infrastructure:aws",
     "sns-service:infrastructure:okhttp3",
 )
