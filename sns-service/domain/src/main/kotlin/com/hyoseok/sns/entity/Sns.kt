@@ -12,8 +12,8 @@ class Sns private constructor(
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
-    snsImages: List<SnsImage>,
-    snsTag: SnsTag,
+    snsImages: List<SnsImage> = listOf(),
+    snsTag: SnsTag? = null,
 ) {
 
     var id: Long? = id
@@ -43,7 +43,7 @@ class Sns private constructor(
     var snsImages: List<SnsImage> = snsImages
         private set
 
-    var snsTag: SnsTag = snsTag
+    var snsTag: SnsTag? = snsTag
         private set
 
     override fun hashCode(): Int = Objects.hash(id)
@@ -64,6 +64,10 @@ class Sns private constructor(
             this.deletedAt == otherSns.deletedAt
     }
 
+    fun changeId(id: Long) {
+        this.id = id
+    }
+
     companion object {
         operator fun invoke(
             title: String,
@@ -80,6 +84,50 @@ class Sns private constructor(
             updatedAt = LocalDateTime.now().withNano(0),
             snsImages = SnsImage.createSnsImages(snsImages = snsImages),
             snsTag = SnsTag(type = tagType, values = tagValues),
+        )
+
+        operator fun invoke(
+            id: Long,
+            title: String,
+            contents: String,
+            writer: String,
+            isDisplay: Boolean,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+            deletedAt: LocalDateTime?,
+        ) = Sns(
+            id = id,
+            title = title,
+            contents = contents,
+            writer = writer,
+            isDisplay = isDisplay,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+        )
+
+        operator fun invoke(
+            id: Long,
+            title: String,
+            contents: String,
+            writer: String,
+            isDisplay: Boolean,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+            deletedAt: LocalDateTime?,
+            snsImages: List<SnsImage>,
+            snsTag: SnsTag,
+        ) = Sns(
+            id = id,
+            title = title,
+            contents = contents,
+            writer = writer,
+            isDisplay = isDisplay,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+            snsImages = snsImages,
+            snsTag = snsTag,
         )
     }
 }
