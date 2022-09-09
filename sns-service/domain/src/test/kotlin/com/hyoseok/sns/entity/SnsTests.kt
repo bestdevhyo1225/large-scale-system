@@ -120,8 +120,9 @@ internal class SnsTests : DescribeSpec(
                     snsImage.url.shouldBe(Sha256Util.encode(value = snsImages[index].first))
                     snsImage.sortOrder.shouldBe(snsImages[index].second)
                 }
-                sns.snsTag.type.shouldBe(SnsTagType(value = tagType))
-                sns.snsTag.values.containsAll(tagValues)
+                sns.snsTag.shouldNotBeNull()
+                sns.snsTag!!.type.shouldBe(SnsTagType(value = tagType))
+                sns.snsTag!!.values.containsAll(tagValues)
             }
         }
     },
