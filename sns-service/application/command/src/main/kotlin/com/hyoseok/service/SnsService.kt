@@ -25,5 +25,4 @@ class SnsService(
 
     fun findWithAssociatedEntitiesById(snsId: Long) =
         SnsFindResultDto(sns = snsReadRepository.findWithAssociatedEntitiesById(snsId = snsId))
-
 }

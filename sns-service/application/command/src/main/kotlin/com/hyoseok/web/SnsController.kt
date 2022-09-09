@@ -27,7 +27,10 @@ class SnsController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@Valid @RequestBody request: SnsCreateRequest): ResponseEntity<SuccessResponse<SnsCreateResultDto>> {
+    fun create(
+        @Valid @RequestBody
+        request: SnsCreateRequest,
+    ): ResponseEntity<SuccessResponse<SnsCreateResultDto>> {
         val snsCreateResultDto = snsService.create(dto = request.toServiceDto())
         return created(URI.create("/api/v1/sns/${snsCreateResultDto.snsId}"))
             .body(SuccessResponse(data = snsCreateResultDto))
