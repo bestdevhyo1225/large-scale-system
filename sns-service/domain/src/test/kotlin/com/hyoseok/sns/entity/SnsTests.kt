@@ -4,6 +4,7 @@ import com.hyoseok.exception.Message.EXCEEDS_SNS_IMAGES_SIZE
 import com.hyoseok.exception.Message.EXCEEDS_SNS_TAGS_SIZE
 import com.hyoseok.exception.Message.NOT_EXISTS_TAG_TYPE
 import com.hyoseok.sns.entity.enums.SnsTagType
+import com.hyoseok.utils.Sha256Util
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -23,7 +24,7 @@ internal class SnsTests : DescribeSpec(
 
                 // then
                 createSnsImages.forEachIndexed { index, snsImage ->
-                    snsImage.url.shouldBe(snsImages[index].first)
+                    snsImage.url.shouldBe(Sha256Util.encode(value = snsImages[index].first))
                     snsImage.sortOrder.shouldBe(snsImages[index].second)
                 }
             }
@@ -116,7 +117,7 @@ internal class SnsTests : DescribeSpec(
                 sns.updatedAt.shouldNotBeNull()
                 sns.deletedAt.shouldBeNull()
                 sns.snsImages.forEachIndexed { index, snsImage ->
-                    snsImage.url.shouldBe(snsImages[index].first)
+                    snsImage.url.shouldBe(Sha256Util.encode(value = snsImages[index].first))
                     snsImage.sortOrder.shouldBe(snsImages[index].second)
                 }
                 sns.snsTag.type.shouldBe(SnsTagType(value = tagType))
