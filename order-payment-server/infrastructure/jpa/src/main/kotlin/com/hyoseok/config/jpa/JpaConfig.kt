@@ -17,9 +17,8 @@ import javax.sql.DataSource
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(value = ["$COM_HYOSEOK.entity"])
 @EnableJpaRepositories(
-    basePackages = ["$COM_HYOSEOK.repository"],
+    basePackages = ["com.hyoseok.repository"],
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager",
 )
