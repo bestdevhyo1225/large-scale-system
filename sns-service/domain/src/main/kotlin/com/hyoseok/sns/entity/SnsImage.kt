@@ -1,6 +1,7 @@
 package com.hyoseok.sns.entity
 
 import com.hyoseok.exception.Message.EXCEEDS_SNS_IMAGES_SIZE
+import com.hyoseok.utils.Sha256Util
 import java.util.Objects
 
 class SnsImage private constructor(
@@ -37,7 +38,7 @@ class SnsImage private constructor(
                 throw IllegalArgumentException(EXCEEDS_SNS_IMAGES_SIZE)
             }
 
-            return snsImages.map { SnsImage(url = it.first, sortOrder = it.second) }
+            return snsImages.map { SnsImage(url = Sha256Util.encode(value = it.first), sortOrder = it.second) }
         }
 
         operator fun invoke(id: Long, url: String, sortOrder: Int) = SnsImage(id = id, url = url, sortOrder = sortOrder)
