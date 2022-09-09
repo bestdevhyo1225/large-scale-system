@@ -2,7 +2,6 @@ package com.hyoseok.config.jpa
 
 import com.hyoseok.config.Packages.COM_HYOSEOK
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
