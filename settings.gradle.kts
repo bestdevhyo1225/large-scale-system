@@ -1,6 +1,12 @@
 rootProject.name = "large-scale-system"
 
 include(
+    // order-payment-server
+    "order-payment-server",
+    "order-payment-server:api",
+    "order-payment-server:common",
+    "order-payment-server:domain",
+    "order-payment-server:infrastructure:jpa",
     // shortened-url-server
     "shortened-url-server",
     // shortened-url-server-ver2
@@ -20,10 +26,14 @@ include(
     "shortened-url-server-ver3:infrastructure:redisson",
     "shortened-url-server-ver3:query",
     "shortened-url-server-ver3:query-webflux",
-    // order-payment-server
-    "order-payment-server",
-    "order-payment-server:api",
-    "order-payment-server:common",
-    "order-payment-server:domain",
-    "order-payment-server:infrastructure:jpa",
+    // sns-service
+    "sns-service:application:admin",
+    "sns-service:application:batch",
+    "sns-service:application:command",
+    "sns-service:application:query",
+    "sns-service:application:query-webflux",
+    "sns-service:data:jpa",
+    "sns-service:data:redis",
+    "sns-service:domain",
+    "sns-service:infrastructure:okhttp3",
 )
