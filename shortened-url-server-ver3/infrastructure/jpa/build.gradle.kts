@@ -9,7 +9,8 @@ allOpen {
 
 dependencies {
     implementation(project(":shortened-url-server-ver3:common"))
-    implementation(project(":shortened-url-server-ver3:domain"))
+
+    compileOnly(project(":shortened-url-server-ver3:domain"))
 
     // spring data jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
