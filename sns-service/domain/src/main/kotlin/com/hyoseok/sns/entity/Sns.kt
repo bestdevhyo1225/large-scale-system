@@ -73,17 +73,16 @@ class Sns private constructor(
             title: String,
             contents: String,
             writer: String,
-            snsImages: List<Pair<String, Int>>,
-            tagType: String,
-            tagValues: List<String>,
+            snsImages: List<SnsImage>,
+            snsTag: SnsTag,
         ) = Sns(
             title = title,
             contents = contents,
             writer = writer,
             createdAt = LocalDateTime.now().withNano(0),
             updatedAt = LocalDateTime.now().withNano(0),
-            snsImages = SnsImage.createSnsImages(snsImages = snsImages),
-            snsTag = SnsTag(type = tagType, values = tagValues),
+            snsImages = snsImages,
+            snsTag = snsTag,
         )
 
         operator fun invoke(

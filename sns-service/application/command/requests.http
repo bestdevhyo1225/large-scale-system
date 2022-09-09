@@ -1,0 +1,24 @@
+### SNS 생성
+POST localhost:9000/api/v1/sns
+Content-Type: application/json
+
+{
+  "title": "title",
+  "contents": "contents",
+  "writer": "writer",
+  "images": [
+    {
+      "url": "image1",
+      "sortOrder": 0
+    },
+    {
+      "url": "image2",
+      "sortOrder": 1
+    }
+  ],
+  "tagType": "style",
+  "tagValues": ["출근", "여행"]
+}
+
+### SNS 상세 조회
+GET localhost:9000/api/v1/sns/1
