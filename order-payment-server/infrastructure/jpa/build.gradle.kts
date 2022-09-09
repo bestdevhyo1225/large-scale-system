@@ -10,7 +10,7 @@ allOpen {
 dependencies {
     implementation(project(":order-payment-server:common"))
 
-    compileOnly(project(":order-payment-server:domain"))
+    implementation(project(":order-payment-server:domain"))
 
     // Spring Data Jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

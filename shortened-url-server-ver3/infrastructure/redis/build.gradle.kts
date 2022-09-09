@@ -1,7 +1,7 @@
 dependencies {
     implementation(project(":shortened-url-server-ver3:common"))
 
-    compileOnly(project(":shortened-url-server-ver3:domain"))
+    implementation(project(":shortened-url-server-ver3:domain"))
 
     // spring data redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
