@@ -103,9 +103,8 @@ internal class SnsTests : DescribeSpec(
                     title = title,
                     contents = contents,
                     writer = writer,
-                    snsImages = snsImages,
-                    tagType = tagType,
-                    tagValues = tagValues,
+                    snsImages = SnsImage.createSnsImages(snsImages = snsImages),
+                    snsTag = SnsTag(type = tagType, values = tagValues),
                 )
 
                 // then

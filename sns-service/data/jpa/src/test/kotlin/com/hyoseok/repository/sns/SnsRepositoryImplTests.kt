@@ -2,6 +2,8 @@ package com.hyoseok.repository.sns
 
 import com.hyoseok.repository.RepositoryImplTests
 import com.hyoseok.sns.entity.Sns
+import com.hyoseok.sns.entity.SnsImage
+import com.hyoseok.sns.entity.SnsTag
 import com.hyoseok.sns.entity.enums.SnsTagType
 import com.hyoseok.sns.repository.SnsRepository
 import com.hyoseok.sns.repository.read.SnsReadRepository
@@ -42,9 +44,8 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                     title = title,
                     contents = contents,
                     writer = writer,
-                    snsImages = snsImages,
-                    tagType = tagType,
-                    tagValues = tagValues,
+                    snsImages = SnsImage.createSnsImages(snsImages = snsImages),
+                    snsTag = SnsTag(type = tagType, values = tagValues),
                 )
 
                 // when
@@ -80,9 +81,8 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                     title = title,
                     contents = contents,
                     writer = writer,
-                    snsImages = snsImages,
-                    tagType = tagType,
-                    tagValues = tagValues,
+                    snsImages = SnsImage.createSnsImages(snsImages = snsImages),
+                    snsTag = SnsTag(type = tagType, values = tagValues),
                 )
 
                 snsRepository.save(sns = sns)
