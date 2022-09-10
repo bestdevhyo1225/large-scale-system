@@ -38,6 +38,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 val title = "title"
                 val contents = "contents"
                 val writer = "writer"
+                val productIds = listOf(1L, 2L, 3L)
                 val snsImages = listOf(Pair("image0", 0), Pair("image1", 1), Pair("image2", 2))
                 val tagType = "tpo"
                 val tagValues = listOf("파티", "나들이")
@@ -46,6 +47,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                     title = title,
                     contents = contents,
                     writer = writer,
+                    productIds = productIds,
                     snsImages = SnsImage.createSnsImages(snsImages = snsImages),
                     snsTag = SnsTag(type = tagType, values = tagValues),
                 )
@@ -77,6 +79,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 val title = "title"
                 val contents = "contents"
                 val writer = "writer"
+                val productIds = listOf(1L, 2L, 3L)
                 val snsImages = listOf(Pair("image0", 0), Pair("image1", 1), Pair("image2", 2))
                 val tagType = "tpo"
                 val tagValues = listOf("파티", "나들이")
@@ -85,6 +88,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                     title = title,
                     contents = contents,
                     writer = writer,
+                    productIds = productIds,
                     snsImages = SnsImage.createSnsImages(snsImages = snsImages),
                     snsTag = SnsTag(type = tagType, values = tagValues),
                 )

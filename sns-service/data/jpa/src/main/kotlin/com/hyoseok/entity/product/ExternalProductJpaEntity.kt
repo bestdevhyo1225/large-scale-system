@@ -14,7 +14,7 @@ import javax.persistence.Table
 @Table(
     name = "external_product",
     indexes = [
-        Index(name = "uix_external_product_sns_id_product_id", columnList = "sns_id, product_id", unique = true),
+        Index(name = "ix_external_product_product_id", columnList = "product_id"),
     ],
 )
 class ExternalProductJpaEntity private constructor(
@@ -25,8 +25,6 @@ class ExternalProductJpaEntity private constructor(
     isSale: Boolean,
     isSoldout: Boolean,
     isDisplay: Boolean,
-    snsId: Long,
-    memberId: Long,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -65,14 +63,6 @@ class ExternalProductJpaEntity private constructor(
     var isDisplay: Boolean = isDisplay
         protected set
 
-    @Column(name = "sns_id", nullable = false)
-    var snsId: Long = snsId
-        protected set
-
-    @Column(name = "member_id", nullable = false)
-    var memberId: Long = memberId
-        protected set
-
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
         protected set
@@ -99,8 +89,6 @@ class ExternalProductJpaEntity private constructor(
             isSale = isSale,
             isSoldout = isSoldout,
             isDisplay = isDisplay,
-            snsId = snsId,
-            memberId = memberId,
             createdAt = createdAt,
             updatedAt = updatedAt,
             deletedAt = deletedAt,
@@ -117,8 +105,6 @@ class ExternalProductJpaEntity private constructor(
                     isSale = isSale,
                     isSoldout = isSoldout,
                     isDisplay = isDisplay,
-                    snsId = snsId,
-                    memberId = memberId,
                     createdAt = createdAt,
                     updatedAt = updatedAt,
                     deletedAt = deletedAt,

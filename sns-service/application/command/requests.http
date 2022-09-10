@@ -22,24 +22,7 @@ Content-Type: application/json
     "출근",
     "여행"
   ],
-  "products": [
-    {
-      "productId": 1,
-      "imageUrl": "product-image1",
-      "name": "Kotlin Guide 1.0",
-      "price": 15000,
-      "isSale": true,
-      "isSoldout": false
-    },
-    {
-      "productId": 2,
-      "imageUrl": "product-image2",
-      "name": "Spring Guide 1.0",
-      "price": 35000,
-      "isSale": true,
-      "isSoldout": false
-    }
-  ]
+  "productIds": [1, 2, 3, 4, 5]
 }
 
 ### SNS 상세 조회

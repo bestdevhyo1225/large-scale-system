@@ -18,8 +18,6 @@ internal class ExternalProductTests : DescribeSpec(
                 val price = 15_000
                 val isSale = true
                 val isSoldout = false
-                val snsId = 1552L
-                val memberId = 192321L
 
                 // when
                 val externalProduct = ExternalProduct(
@@ -29,8 +27,6 @@ internal class ExternalProductTests : DescribeSpec(
                     price = price,
                     isSale = isSale,
                     isSoldout = isSoldout,
-                    snsId = snsId,
-                    memberId = memberId,
                 )
 
                 // then
@@ -41,8 +37,6 @@ internal class ExternalProductTests : DescribeSpec(
                 externalProduct.isSale.shouldBe(isSale)
                 externalProduct.isSoldout.shouldBe(isSoldout)
                 externalProduct.isDisplay.shouldBeTrue()
-                externalProduct.snsId.shouldBe(snsId)
-                externalProduct.memberId.shouldBe(memberId)
                 externalProduct.createdAt.shouldNotBeNull()
                 externalProduct.updatedAt.shouldNotBeNull()
                 externalProduct.deletedAt.shouldBeNull()

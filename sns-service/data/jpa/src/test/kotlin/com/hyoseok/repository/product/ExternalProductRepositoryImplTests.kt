@@ -33,8 +33,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                 val price = 15_000
                 val isSale = true
                 val isSoldout = false
-                val snsId = 1552L
-                val memberId = 192321L
                 val externalProduct = ExternalProduct(
                     productId = productId,
                     imageUrl = imageUrl,
@@ -42,8 +40,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                     price = price,
                     isSale = isSale,
                     isSoldout = isSoldout,
-                    snsId = snsId,
-                    memberId = memberId,
                 )
 
                 // when
@@ -64,8 +60,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                 val price = 15_000
                 val isSale = true
                 val isSoldout = false
-                val snsId = 1552L
-                val memberId = 192321L
                 val externalProducts = (1L..3L).map {
                     ExternalProduct(
                         productId = it,
@@ -74,8 +68,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                         price = price,
                         isSale = isSale,
                         isSoldout = isSoldout,
-                        snsId = snsId,
-                        memberId = memberId,
                     )
                 }
 
@@ -83,7 +75,8 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                 externalProductRepository.saveAll(externalProducts = externalProducts)
 
                 // then
-                val findExternalProducts = externalProductReadRepository.findAllBySnsId(snsId = snsId)
+                val findExternalProducts = externalProductReadRepository
+                    .findAllByProductIds(productIds = externalProducts.map { it.productId })
                     .sortedBy { it.id }
 
                 findExternalProducts.shouldNotBeEmpty()
@@ -102,8 +95,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                 val price = 15_000
                 val isSale = true
                 val isSoldout = false
-                val snsId = 1552L
-                val memberId = 192321L
                 val externalProduct = ExternalProduct(
                     productId = productId,
                     imageUrl = imageUrl,
@@ -111,8 +102,6 @@ internal class ExternalProductRepositoryImplTests : RepositoryImplTests, Describ
                     price = price,
                     isSale = isSale,
                     isSoldout = isSoldout,
-                    snsId = snsId,
-                    memberId = memberId,
                 )
 
                 externalProductRepository.save(externalProduct = externalProduct)
