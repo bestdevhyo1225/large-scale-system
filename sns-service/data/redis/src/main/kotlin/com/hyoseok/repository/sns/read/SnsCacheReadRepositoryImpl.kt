@@ -19,7 +19,7 @@ class SnsCacheReadRepositoryImpl(
     override fun get(key: String, clazz: Class<SnsCache>): SnsCache? {
         val remainingExpiryTimeMS = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS)
 
-        if (shouldRefreshKey(remainingExpiryTimeMS = remainingExpiryTimeMS)) {
+        if (isRefreshKey(remainingExpiryTimeMS = remainingExpiryTimeMS)) {
             return null
         }
 
