@@ -1,7 +1,5 @@
 package com.hyoseok.web.request
 
-import com.hyoseok.service.dto.ProductCreateDto
-import com.hyoseok.service.dto.ProductEditDto
 import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsEditDto
 import com.hyoseok.service.dto.SnsImageDto
@@ -9,7 +7,6 @@ import com.hyoseok.service.dto.SnsTagDto
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
-import javax.validation.constraints.NotNull
 import javax.validation.constraints.Positive
 import javax.validation.constraints.PositiveOrZero
 
