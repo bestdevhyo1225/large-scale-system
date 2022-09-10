@@ -21,7 +21,6 @@ class SnsCacheRepositoryImpl(
     }
 
     override fun zaddSnsKeys(key: String, value: String, score: Double) {
-        redisTemplate.opsForZSet()
-            .add(key, jacksonObjectMapper.writeValueAsString(value), score)
+        redisTemplate.opsForZSet().add(key, value, score)
     }
 }
