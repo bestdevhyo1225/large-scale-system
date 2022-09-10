@@ -16,6 +16,7 @@ import javax.persistence.Table
 @Table(name = "sns")
 @DynamicUpdate
 class SnsJpaEntity private constructor(
+    memberId: Long,
     title: String,
     contents: String,
     writer: String,
@@ -28,6 +29,10 @@ class SnsJpaEntity private constructor(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+        protected set
+
+    @Column(name = "member_id", nullable = false)
+    var memberId: Long = memberId
         protected set
 
     @Column(name = "title", nullable = false)
@@ -81,6 +86,7 @@ class SnsJpaEntity private constructor(
     fun toDomainEntity() =
         Sns(
             id = id!!,
+            memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
@@ -93,6 +99,7 @@ class SnsJpaEntity private constructor(
     fun toDomainEntityAssociatedEntities(snsTagJpaEntities: List<SnsTagJpaEntity>) =
         Sns(
             id = id!!,
+            memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
@@ -108,6 +115,7 @@ class SnsJpaEntity private constructor(
         operator fun invoke(sns: Sns) =
             with(receiver = sns) {
                 val snsJpaEntity = SnsJpaEntity(
+                    memberId = memberId,
                     title = title,
                     contents = contents,
                     writer = writer,

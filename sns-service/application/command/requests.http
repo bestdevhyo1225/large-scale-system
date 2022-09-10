@@ -3,6 +3,7 @@ POST localhost:9000/api/v1/sns
 Content-Type: application/json
 
 {
+  "memberId": 1823,
   "title": "title",
   "contents": "contents",
   "writer": "writer",
@@ -17,7 +18,28 @@ Content-Type: application/json
     }
   ],
   "tagType": "style",
-  "tagValues": ["출근", "여행"]
+  "tagValues": [
+    "출근",
+    "여행"
+  ],
+  "products": [
+    {
+      "productId": 1,
+      "imageUrl": "product-image1",
+      "name": "Kotlin Guide 1.0",
+      "price": 15000,
+      "isSale": true,
+      "isSoldout": false
+    },
+    {
+      "productId": 2,
+      "imageUrl": "product-image2",
+      "name": "Spring Guide 1.0",
+      "price": 35000,
+      "isSale": true,
+      "isSoldout": false
+    }
+  ]
 }
 
 ### SNS 상세 조회
