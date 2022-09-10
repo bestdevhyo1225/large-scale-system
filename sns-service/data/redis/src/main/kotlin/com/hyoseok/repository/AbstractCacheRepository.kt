@@ -19,7 +19,7 @@ abstract class AbstractCacheRepository {
         return remainingExpiryTimeMS - abs(delta * beta * ln(Math.random()))
     }
 
-    protected fun shouldRefreshKey(key: String, remainingExpiryTimeMS: Long, expireTimeGapMs: Long = 3_000L): Boolean {
+    protected fun shouldRefreshKey(remainingExpiryTimeMS: Long, expireTimeGapMs: Long = 3_000L): Boolean {
         return remainingExpiryTimeMS >= 0 &&
             getExpiryTimeBasedOnPER(remainingExpiryTimeMS = remainingExpiryTimeMS, delta = expireTimeGapMs) <= 0.0f
     }
