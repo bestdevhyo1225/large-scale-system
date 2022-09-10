@@ -9,4 +9,3 @@ class SnsQueryApplication
 fun main(args: Array<String>) {
     runApplication<SnsQueryApplication>(*args)
 }
-
