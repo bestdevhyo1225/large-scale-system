@@ -78,6 +78,21 @@ class Sns private constructor(
         this.id = id
     }
 
+    fun toCacheDto() =
+        SnsCache(
+            id = id!!,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            isDisplay = isDisplay,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            snsImages = snsImages,
+            snsTag = snsTag!!,
+            products = listOf(),
+        )
+
     companion object {
         operator fun invoke(
             memberId: Long,
