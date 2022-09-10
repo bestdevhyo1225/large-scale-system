@@ -13,6 +13,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -102,6 +103,53 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 findSns.shouldBe(sns)
                 findSns.snsImages.shouldBeEmpty()
                 findSns.snsTag.shouldBeNull()
+            }
+        }
+
+        this.describe("findAllByLimitAndOffset 메서드는") {
+            it("limit, offset 값을 통해 Sns 엔티티 리스트를 반환한다") {
+                // given
+                val memberIds = listOf(1L, 2L, 3L, 4L, 5L)
+                val snsList = memberIds.map {
+                    val title = "title"
+                    val contents = "contents"
+                    val writer = "writer"
+                    val productIds = listOf(1L, 2L, 3L)
+                    val snsImages = listOf(Pair("image0", 0), Pair("image1", 1), Pair("image2", 2))
+                    val tagType = "tpo"
+                    val tagValues = listOf("파티", "나들이")
+                    Sns(
+                        memberId = it,
+                        title = title,
+                        contents = contents,
+                        writer = writer,
+                        productIds = productIds,
+                        snsImages = SnsImage.createSnsImages(snsImages = snsImages),
+                        snsTag = SnsTag(type = tagType, values = tagValues),
+                    )
+                }
+
+                snsList.forEach { snsRepository.save(sns = it) }
+
+                // when
+                val limit = 3L
+                val offset = 0L
+                val (findSnsList, totalCount) = snsReadRepository.findAllByLimitAndOffset(
+                    limit = limit,
+                    offset = offset,
+                )
+
+                // then
+                findSnsList.shouldNotBeEmpty()
+                findSnsList.shouldHaveSize(limit.toInt())
+                findSnsList.forEachIndexed { index, sns ->
+                    sns.snsImages.shouldNotBeEmpty()
+                    sns.snsImages.shouldHaveSize(snsList[index].snsImages.size)
+                    sns.snsTag.shouldNotBeNull()
+                    sns.snsTag!!.type.shouldBe(snsList[index].snsTag!!.type)
+                    sns.snsTag!!.values.containsAll(snsList[index].snsTag!!.values)
+                }
+                totalCount.shouldBe(snsList.size)
             }
         }
     }

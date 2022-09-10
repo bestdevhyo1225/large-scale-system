@@ -1,2 +1,5 @@
 ### SNS 상세 조회
 GET localhost:9001/api/v1/sns/1
+
+### SNS 페이징 조회
+GET localhost:9001/api/v1/sns?start=0&count=10

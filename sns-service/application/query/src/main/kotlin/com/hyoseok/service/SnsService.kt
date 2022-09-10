@@ -13,4 +13,7 @@ class SnsService(
 
     fun findWithAssociatedEntitiesById(snsId: Long): Sns =
         snsReadRepository.findWithAssociatedEntitiesById(snsId = snsId)
+
+    fun findAllByLimitAndOffset(limit: Long, offset: Long): Pair<List<Sns>, Long> =
+        snsReadRepository.findAllByLimitAndOffset(limit = limit, offset = offset)
 }

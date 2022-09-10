@@ -42,4 +42,10 @@ class SnsFacadeService(
 
         return SnsFindResultDto(snsCache = snsCache)
     }
+
+    fun findAllByLimitAndOffset(start: Long, count: Long): Pair<List<SnsFindResultDto>, Long> {
+        val (snsList, totalCount) = snsService.findAllByLimitAndOffset(limit = count, offset = start)
+        val snsCaches = snsList.map { SnsFindResultDto(snsCache = it.toCacheDto()) }
+        return Pair(first = snsCaches, second = totalCount)
+    }
 }
