@@ -13,8 +13,6 @@ class ExternalProduct private constructor(
     isSale: Boolean,
     isSoldout: Boolean,
     isDisplay: Boolean,
-    snsId: Long,
-    memberId: Long,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -44,12 +42,6 @@ class ExternalProduct private constructor(
     var isDisplay: Boolean = isDisplay
         private set
 
-    var snsId: Long = snsId
-        private set
-
-    var memberId: Long = memberId
-        private set
-
     var createdAt: LocalDateTime = createdAt
         private set
 
@@ -61,8 +53,8 @@ class ExternalProduct private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "ExternalProduct(id=$id, productId=$productId, imageUrl=$imageUrl, name=$name, price=$price, isSale=$isSale, " +
-            "isSoldout=$isSoldout, isDisplay=$isDisplay, snsId=$snsId, memberId=$memberId" +
+        "ExternalProduct(id=$id, productId=$productId, imageUrl=$imageUrl, name=$name, price=$price, " +
+            "isSale=$isSale, isSoldout=$isSoldout, isDisplay=$isDisplay " +
             "createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
     override fun equals(other: Any?): Boolean {
@@ -76,8 +68,6 @@ class ExternalProduct private constructor(
             this.isSale == otherExternalProduct.isSale &&
             this.isSoldout == otherExternalProduct.isSoldout &&
             this.isDisplay == otherExternalProduct.isDisplay &&
-            this.snsId == otherExternalProduct.snsId &&
-            this.memberId == otherExternalProduct.memberId &&
             this.createdAt == otherExternalProduct.createdAt &&
             this.updatedAt == otherExternalProduct.updatedAt &&
             this.deletedAt == otherExternalProduct.deletedAt
@@ -95,8 +85,6 @@ class ExternalProduct private constructor(
             price: Int,
             isSale: Boolean,
             isSoldout: Boolean,
-            snsId: Long,
-            memberId: Long,
         ) = ExternalProduct(
             productId = productId,
             imageUrl = Sha256Util.encode(value = imageUrl),
@@ -105,8 +93,6 @@ class ExternalProduct private constructor(
             isSale = isSale,
             isSoldout = isSoldout,
             isDisplay = true,
-            snsId = snsId,
-            memberId = memberId,
             createdAt = LocalDateTime.now().withNano(0),
             updatedAt = LocalDateTime.now().withNano(0),
         )
@@ -120,8 +106,6 @@ class ExternalProduct private constructor(
             isSale: Boolean,
             isSoldout: Boolean,
             isDisplay: Boolean,
-            snsId: Long,
-            memberId: Long,
             createdAt: LocalDateTime,
             updatedAt: LocalDateTime,
             deletedAt: LocalDateTime?,
@@ -134,8 +118,6 @@ class ExternalProduct private constructor(
             isSale = isSale,
             isSoldout = isSoldout,
             isDisplay = isDisplay,
-            snsId = snsId,
-            memberId = memberId,
             createdAt = createdAt,
             updatedAt = updatedAt,
             deletedAt = deletedAt,

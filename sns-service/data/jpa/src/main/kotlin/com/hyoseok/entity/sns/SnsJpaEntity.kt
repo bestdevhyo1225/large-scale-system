@@ -21,6 +21,7 @@ class SnsJpaEntity private constructor(
     contents: String,
     writer: String,
     isDisplay: Boolean = true,
+    productIds: String,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -49,6 +50,10 @@ class SnsJpaEntity private constructor(
 
     @Column(name = "is_display", nullable = false)
     var isDisplay: Boolean = isDisplay
+        protected set
+
+    @Column(name = "product_ids", nullable = false)
+    var productIds: String = productIds
         protected set
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
@@ -90,6 +95,7 @@ class SnsJpaEntity private constructor(
             title = title,
             contents = contents,
             writer = writer,
+            productIds = productIds.split(",").map { it.toLong() },
             isDisplay = isDisplay,
             createdAt = createdAt,
             updatedAt = updatedAt,
@@ -104,6 +110,7 @@ class SnsJpaEntity private constructor(
             contents = contents,
             writer = writer,
             isDisplay = isDisplay,
+            productIds = productIds.split(",").map { it.toLong() },
             createdAt = createdAt,
             updatedAt = updatedAt,
             deletedAt = deletedAt,
@@ -119,6 +126,7 @@ class SnsJpaEntity private constructor(
                     title = title,
                     contents = contents,
                     writer = writer,
+                    productIds = productIds.joinToString(","),
                     isDisplay = isDisplay,
                     createdAt = createdAt,
                     updatedAt = updatedAt,

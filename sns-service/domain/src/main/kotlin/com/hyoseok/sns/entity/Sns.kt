@@ -10,6 +10,7 @@ class Sns private constructor(
     contents: String,
     writer: String,
     isDisplay: Boolean = true,
+    productIds: List<Long>,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -35,6 +36,9 @@ class Sns private constructor(
     var isDisplay: Boolean = isDisplay
         private set
 
+    var productIds: List<Long> = productIds
+        private set
+
     var createdAt: LocalDateTime = createdAt
         private set
 
@@ -53,7 +57,7 @@ class Sns private constructor(
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
         "Sns(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer, isDisplay=$isDisplay, " +
-            "createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
+            "productIds=$productIds, createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -64,6 +68,7 @@ class Sns private constructor(
             this.contents == otherSns.contents &&
             this.writer == otherSns.writer &&
             this.isDisplay == otherSns.isDisplay &&
+            this.productIds == otherSns.productIds &&
             this.createdAt == otherSns.createdAt &&
             this.updatedAt == otherSns.updatedAt &&
             this.deletedAt == otherSns.deletedAt
@@ -79,6 +84,7 @@ class Sns private constructor(
             title: String,
             contents: String,
             writer: String,
+            productIds: List<Long>,
             snsImages: List<SnsImage>,
             snsTag: SnsTag,
         ) = Sns(
@@ -86,6 +92,7 @@ class Sns private constructor(
             title = title,
             contents = contents,
             writer = writer,
+            productIds = productIds,
             createdAt = LocalDateTime.now().withNano(0),
             updatedAt = LocalDateTime.now().withNano(0),
             snsImages = snsImages,
@@ -99,6 +106,7 @@ class Sns private constructor(
             contents: String,
             writer: String,
             isDisplay: Boolean,
+            productIds: List<Long>,
             createdAt: LocalDateTime,
             updatedAt: LocalDateTime,
             deletedAt: LocalDateTime?,
@@ -109,6 +117,7 @@ class Sns private constructor(
             contents = contents,
             writer = writer,
             isDisplay = isDisplay,
+            productIds = productIds,
             createdAt = createdAt,
             updatedAt = updatedAt,
             deletedAt = deletedAt,
@@ -121,6 +130,7 @@ class Sns private constructor(
             contents: String,
             writer: String,
             isDisplay: Boolean,
+            productIds: List<Long>,
             createdAt: LocalDateTime,
             updatedAt: LocalDateTime,
             deletedAt: LocalDateTime?,
@@ -133,6 +143,7 @@ class Sns private constructor(
             contents = contents,
             writer = writer,
             isDisplay = isDisplay,
+            productIds = productIds,
             createdAt = createdAt,
             updatedAt = updatedAt,
             deletedAt = deletedAt,

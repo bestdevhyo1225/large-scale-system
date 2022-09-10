@@ -5,5 +5,5 @@ import com.hyoseok.product.entity.ExternalProduct
 interface ExternalProductReadRepository {
     fun findById(id: Long): ExternalProduct
     fun findByProductId(productId: Long): ExternalProduct
-    fun findAllBySnsId(snsId: Long): List<ExternalProduct>
+    fun findAllByProductIds(productIds: List<Long>): List<ExternalProduct>
 }

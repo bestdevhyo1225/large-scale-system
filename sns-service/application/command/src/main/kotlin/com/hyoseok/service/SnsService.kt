@@ -1,8 +1,6 @@
 package com.hyoseok.service
 
-import com.hyoseok.product.repository.ExternalProductRepository
 import com.hyoseok.product.repository.read.ExternalProductReadRepository
-import com.hyoseok.service.dto.ProductCreateDto
 import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsCreateResultDto
 import com.hyoseok.service.dto.SnsFindResultDto
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional
 class SnsService(
     private val snsRepository: SnsRepository,
     private val snsReadRepository: SnsReadRepository,
-    private val externalProductRepository: ExternalProductRepository,
     private val externalProductReadRepository: ExternalProductReadRepository,
 ) {
 
@@ -28,23 +25,16 @@ class SnsService(
     fun create(dto: SnsCreateDto): SnsCreateResultDto {
         val sns: Sns = dto.toEntity()
         snsRepository.save(sns = sns)
-        externalProductRepository.saveAll(
-            externalProducts = ProductCreateDto.toEntities(
-                products = dto.products,
-                snsId = sns.id!!,
-                memberId = sns.memberId,
-            ),
-        )
         return SnsCreateResultDto(sns = sns)
     }
 
     fun findWithAssociatedEntitiesById(snsId: Long): SnsFindResultDto = runBlocking {
-        val asyncSns = async(context = Dispatchers.IO) {
-            snsReadRepository.findWithAssociatedEntitiesById(snsId = snsId)
+        val asyncSnsAndExternalProducts = async(context = Dispatchers.IO) {
+            val sns = snsReadRepository.findWithAssociatedEntitiesById(snsId = snsId)
+            val externalProducts = externalProductReadRepository.findAllByProductIds(productIds = sns.productIds)
+            Pair(first = sns, second = externalProducts)
         }
-        val asyncExternalProducts = async(context = Dispatchers.IO) {
-            externalProductReadRepository.findAllBySnsId(snsId = snsId)
-        }
-        SnsFindResultDto(sns = asyncSns.await(), externalProducts = asyncExternalProducts.await())
+        val snsAndExternalProducts = asyncSnsAndExternalProducts.await()
+        SnsFindResultDto(sns = snsAndExternalProducts.first, externalProducts = snsAndExternalProducts.second)
     }
 }

@@ -14,7 +14,7 @@ data class SnsCreateDto(
     val writer: String,
     val images: List<SnsImageDto>,
     val tag: SnsTagDto,
-    val products: List<ProductCreateDto>,
+    val productIds: List<Long>,
 ) {
     fun toEntity() =
         Sns(
@@ -22,6 +22,7 @@ data class SnsCreateDto(
             title = title,
             contents = contents,
             writer = writer,
+            productIds = productIds,
             snsImages = SnsImageDto.toEntities(images = images),
             snsTag = tag.toEntity(),
         )
@@ -43,7 +44,7 @@ data class SnsEditDto(
     val writer: String,
     val images: List<SnsImageDto>,
     val tag: SnsTagDto,
-    val products: List<ProductEditDto>,
+    val productIds: List<Long>,
 )
 
 data class SnsFindResultDto(

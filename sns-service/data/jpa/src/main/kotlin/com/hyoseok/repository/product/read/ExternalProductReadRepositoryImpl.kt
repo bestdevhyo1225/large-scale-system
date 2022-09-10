@@ -32,10 +32,10 @@ class ExternalProductReadRepositoryImpl(
         return externalProductJpaEntity.toDomainEntity()
     }
 
-    override fun findAllBySnsId(snsId: Long): List<ExternalProduct> {
+    override fun findAllByProductIds(productIds: List<Long>): List<ExternalProduct> {
         return jpaQueryFactory
             .selectFrom(externalProductJpaEntity)
-            .where(externalProductJpaEntitySnsIdEq(snsId = snsId))
+            .where(externalProductJpaEntityProductIdsIn(productIds = productIds))
             .fetch()
             .map { it.toDomainEntity() }
     }
@@ -45,5 +45,6 @@ class ExternalProductReadRepositoryImpl(
 
     private fun externalProductJpaEntityProductIdEq(productId: Long) = externalProductJpaEntity.productId.eq(productId)
 
-    private fun externalProductJpaEntitySnsIdEq(snsId: Long) = externalProductJpaEntity.snsId.eq(snsId)
+    private fun externalProductJpaEntityProductIdsIn(productIds: List<Long>) =
+        externalProductJpaEntity.productId.`in`(productIds)
 }

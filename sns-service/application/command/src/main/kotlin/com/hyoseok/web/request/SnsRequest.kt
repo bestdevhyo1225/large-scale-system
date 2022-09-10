@@ -33,8 +33,8 @@ data class SnsCreateRequest(
     @field:NotEmpty(message = "tagValues는 비어 있을 수 없습니다")
     val tagValues: List<@Valid String>,
 
-    @field:NotEmpty(message = "products 비어 있을 수 없습니다")
-    val products: List<@Valid ProductCreateRequest>,
+    @field:NotEmpty(message = "productIds 비어 있을 수 없습니다")
+    val productIds: List<@Valid Long>,
 ) {
     fun toServiceDto() =
         SnsCreateDto(
@@ -44,7 +44,7 @@ data class SnsCreateRequest(
             writer = writer,
             images = images.map { it.toServiceDto() },
             tag = SnsTagDto(type = tagType, values = tagValues),
-            products = products.map { it.toServiceDto() },
+            productIds = productIds,
         )
 }
 
@@ -74,8 +74,8 @@ data class SnsEditRequest(
     @field:NotEmpty(message = "tagValues는 비어 있을 수 없습니다")
     val tagValues: List<@Valid String>,
 
-    @field:NotEmpty(message = "products 비어 있을 수 없습니다")
-    val products: List<@Valid ProductEditRequest>,
+    @field:NotEmpty(message = "productIds 비어 있을 수 없습니다")
+    val productIds: List<@Valid Long>,
 ) {
     fun toServiceDto() =
         SnsEditDto(
@@ -86,7 +86,7 @@ data class SnsEditRequest(
             writer = writer,
             images = images.map { it.toServiceDto() },
             tag = SnsTagDto(type = tagType, values = tagValues),
-            products = products.map { it.toServiceDto() },
+            productIds = productIds,
         )
 }
 
