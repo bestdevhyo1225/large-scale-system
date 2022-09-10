@@ -91,6 +91,7 @@ internal class SnsTests : DescribeSpec(
         context("Sns 엔티티의 invoke 메서드는") {
             it("Sns, SnsImage, SnsTag 엔티티를 생성한다.") {
                 // given
+                val memberId = 1723L
                 val title = "title"
                 val contents = "contents"
                 val writer = "writer"
@@ -100,6 +101,7 @@ internal class SnsTests : DescribeSpec(
 
                 // when
                 val sns = Sns(
+                    memberId = memberId,
                     title = title,
                     contents = contents,
                     writer = writer,
@@ -108,6 +110,7 @@ internal class SnsTests : DescribeSpec(
                 )
 
                 // then
+                sns.memberId.shouldBe(memberId)
                 sns.title.shouldBe(title)
                 sns.contents.shouldBe(contents)
                 sns.writer.shouldBe(writer)

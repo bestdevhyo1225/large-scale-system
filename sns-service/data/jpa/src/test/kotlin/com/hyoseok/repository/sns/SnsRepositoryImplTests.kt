@@ -34,6 +34,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
         this.describe("save 메서드는") {
             it("Sns, SnsImage, SnsTag 엔티티를 저장한다.") {
                 // given
+                val memberId = 1235L
                 val title = "title"
                 val contents = "contents"
                 val writer = "writer"
@@ -41,6 +42,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 val tagType = "tpo"
                 val tagValues = listOf("파티", "나들이")
                 val sns = Sns(
+                    memberId = memberId,
                     title = title,
                     contents = contents,
                     writer = writer,
@@ -71,6 +73,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
         this.describe("findById 메서드는") {
             it("Sns 엔티티만 조회한다.") {
                 // given
+                val memberId = 19823L
                 val title = "title"
                 val contents = "contents"
                 val writer = "writer"
@@ -78,6 +81,7 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 val tagType = "tpo"
                 val tagValues = listOf("파티", "나들이")
                 val sns = Sns(
+                    memberId = memberId,
                     title = title,
                     contents = contents,
                     writer = writer,

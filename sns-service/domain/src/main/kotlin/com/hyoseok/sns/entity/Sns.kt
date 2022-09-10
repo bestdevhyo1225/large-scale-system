@@ -5,6 +5,7 @@ import java.util.Objects
 
 class Sns private constructor(
     id: Long? = null,
+    memberId: Long,
     title: String,
     contents: String,
     writer: String,
@@ -17,6 +18,9 @@ class Sns private constructor(
 ) {
 
     var id: Long? = id
+        private set
+
+    var memberId: Long = memberId
         private set
 
     var title: String = title
@@ -48,13 +52,14 @@ class Sns private constructor(
 
     override fun hashCode(): Int = Objects.hash(id)
     override fun toString(): String =
-        "Sns(id=$id, title=$title, contents=$contents, writer=$writer, isDisplay=$isDisplay, " +
+        "Sns(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer, isDisplay=$isDisplay, " +
             "createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherSns = (other as? Sns) ?: return false
         return this.id == otherSns.id &&
+            this.memberId == otherSns.memberId &&
             this.title == otherSns.title &&
             this.contents == otherSns.contents &&
             this.writer == otherSns.writer &&
@@ -70,12 +75,14 @@ class Sns private constructor(
 
     companion object {
         operator fun invoke(
+            memberId: Long,
             title: String,
             contents: String,
             writer: String,
             snsImages: List<SnsImage>,
             snsTag: SnsTag,
         ) = Sns(
+            memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
@@ -87,6 +94,7 @@ class Sns private constructor(
 
         operator fun invoke(
             id: Long,
+            memberId: Long,
             title: String,
             contents: String,
             writer: String,
@@ -96,6 +104,7 @@ class Sns private constructor(
             deletedAt: LocalDateTime?,
         ) = Sns(
             id = id,
+            memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
@@ -107,6 +116,7 @@ class Sns private constructor(
 
         operator fun invoke(
             id: Long,
+            memberId: Long,
             title: String,
             contents: String,
             writer: String,
@@ -118,6 +128,7 @@ class Sns private constructor(
             snsTag: SnsTag,
         ) = Sns(
             id = id,
+            memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
