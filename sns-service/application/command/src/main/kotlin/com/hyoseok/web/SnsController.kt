@@ -30,7 +30,7 @@ class SnsController(
         @Valid @RequestBody
         request: SnsCreateRequest,
     ): ResponseEntity<SuccessResponse<SnsCreateResultDto>> {
-        val snsCreateResultDto = snsFacadeService.create(dto = request.toServiceDto())
+        val snsCreateResultDto: SnsCreateResultDto = snsFacadeService.create(dto = request.toServiceDto())
         return created(URI.create("/api/v1/sns/${snsCreateResultDto.snsId}"))
             .body(SuccessResponse(data = snsCreateResultDto))
     }

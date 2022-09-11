@@ -8,6 +8,7 @@ import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsCreateResultDto
 import com.hyoseok.service.dto.SnsEditDto
 import com.hyoseok.sns.entity.Sns
+import com.hyoseok.sns.entity.SnsCache
 import com.hyoseok.sns.repository.SnsCacheRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,9 +26,9 @@ class SnsFacadeService(
         val sns: Sns = snsCommandService.create(dto = dto)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key = RedisKeys.getSnsKey(id = sns.id!!)
-            val snsCache = sns.toCacheDto()
-            val score = RedisZsetScores.getTimestampCreatedAt(createdAt = snsCache.createdAt)
+            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
+            val snsCache: SnsCache = sns.toCacheDto()
+            val score: Double = RedisZsetScores.getTimestampCreatedAt(createdAt = snsCache.createdAt)
 
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
@@ -40,8 +41,8 @@ class SnsFacadeService(
         val sns: Sns = snsCommandService.edit(dto = dto)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key = RedisKeys.getSnsKey(id = sns.id!!)
-            val snsCache = sns.toCacheDto()
+            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
+            val snsCache: SnsCache = sns.toCacheDto()
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
         }
     }
