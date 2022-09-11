@@ -118,6 +118,22 @@ class SnsJpaEntity private constructor(
             snsTag = snsTagJpaEntities.map { it.toDomainEntity() }.first(),
         )
 
+    fun toDomainEntityAssociatedEntities() =
+        Sns(
+            id = id!!,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            isDisplay = isDisplay,
+            productIds = productIds.split(",").map { it.toLong() },
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+            snsImages = snsImageJpaEntities.map { it.toDomainEntity() },
+            snsTag = snsTagJpaEntities.map { it.toDomainEntity() }.first(),
+        )
+
     companion object {
         operator fun invoke(sns: Sns) =
             with(receiver = sns) {
