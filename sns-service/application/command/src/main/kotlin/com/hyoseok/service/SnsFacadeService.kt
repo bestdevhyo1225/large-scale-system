@@ -3,7 +3,6 @@ package com.hyoseok.service
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
-import com.hyoseok.config.RedisZsetScores
 import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsCreateResultDto
 import com.hyoseok.service.dto.SnsEditDto
@@ -14,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
+import java.sql.Timestamp
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
@@ -28,7 +28,7 @@ class SnsFacadeService(
         CoroutineScope(context = Dispatchers.IO).launch {
             val key: String = RedisKeys.getSnsKey(id = sns.id!!)
             val snsCache: SnsCache = sns.toCacheDto()
-            val score: Double = RedisZsetScores.getTimestampCreatedAt(createdAt = snsCache.createdAt)
+            val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
 
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
