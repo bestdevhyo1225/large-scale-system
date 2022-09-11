@@ -13,9 +13,9 @@ class SnsCommandService(
     private val snsRepository: SnsRepository,
 ) {
 
-    fun create(dto: SnsCreateDto): SnsCreateResultDto {
+    fun create(dto: SnsCreateDto): Sns {
         val sns: Sns = dto.toEntity()
         snsRepository.save(sns = sns)
-        return SnsCreateResultDto(sns = sns)
+        return sns
     }
 }
