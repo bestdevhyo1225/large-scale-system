@@ -26,7 +26,10 @@ class SnsController(
         @RequestParam("start") start: Long,
         @RequestParam("count") count: Long,
     ): ResponseEntity<SuccessResponse<Map<String, Any>>> {
-        val (snsFindResultDto, totalCount) = snsFacadeService.findAllByLimitAndOffset(start = start, count = count)
+        val (snsFindResultDto: List<SnsFindResultDto>, totalCount: Long) = snsFacadeService.findAllByLimitAndOffset(
+            start = start,
+            count = count,
+        )
         return ok(
             SuccessResponse(
                 data = mapOf(

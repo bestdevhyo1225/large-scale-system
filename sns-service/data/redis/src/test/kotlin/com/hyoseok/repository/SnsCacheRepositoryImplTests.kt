@@ -17,6 +17,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -134,6 +135,26 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 // then
                 values.containsAll(snsCaches)
             }
+
+            context("null 값이 하나라도 존재하는 경우") {
+                it("빈 리스트를 반환한다") {
+                    // given
+                    val ids = listOf(1L, 2L)
+                    val keys = ids.map { RedisKeys.getSnsKey(id = it) }
+
+                    // when
+                    val values = snsCacheReadRepository.mget(keys = keys, clazz = SnsCache::class.java)
+
+                    // then
+                    values.isEmpty()
+                }
+            }
+
+            context("빈 값의 keys인 경우") {
+                it("빈 리스트를 반환한다") {
+                    snsCacheReadRepository.mget(keys = listOf(), clazz = SnsCache::class.java).isEmpty()
+                }
+            }
         }
 
         this.describe("setAllEx 메서드는") {
@@ -164,6 +185,15 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 // then
                 snsCacheReadRepository.mget(keys = keysAndValues.map { it.first }, clazz = SnsCache::class.java)
                     .containsAll(keysAndValues.map { it.second })
+            }
+        }
+
+        this.describe("zrevrangeString 메서드는") {
+            context("key에 대한 값이 없는 경우") {
+                it("빈 리스트를 반환한다") {
+                    snsCacheReadRepository.zrevrangeString(key = "test", startIndex = 0, endIndex = 5)
+                        .shouldBeEmpty()
+                }
             }
         }
     }

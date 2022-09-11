@@ -17,13 +17,13 @@ class SnsCacheReadRepositoryImpl(
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     override fun get(key: String, clazz: Class<SnsCache>): SnsCache? {
-        val remainingExpiryTimeMS = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS)
+        val remainingExpiryTimeMS: Long = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS)
 
         if (isRefreshKey(remainingExpiryTimeMS = remainingExpiryTimeMS)) {
             return null
         }
 
-        val value = redisTemplate.opsForValue().get(key)
+        val value: String? = redisTemplate.opsForValue().get(key)
 
         if (value.isNullOrBlank()) {
             return null
@@ -33,9 +33,13 @@ class SnsCacheReadRepositoryImpl(
     }
 
     override fun mget(keys: List<String>, clazz: Class<SnsCache>): List<SnsCache> {
-        val values = redisTemplate.opsForValue().multiGet(keys)
+        val values: List<String?>? = redisTemplate.opsForValue().multiGet(keys)
 
         if (values.isNullOrEmpty()) {
+            return listOf()
+        }
+
+        if (values.any { it.isNullOrBlank() }) {
             return listOf()
         }
 
@@ -43,7 +47,7 @@ class SnsCacheReadRepositoryImpl(
     }
 
     override fun zrevrangeString(key: String, startIndex: Long, endIndex: Long): List<String> {
-        val values = redisTemplate.opsForZSet().reverseRange(key, startIndex, endIndex)
+        val values: Set<String?>? = redisTemplate.opsForZSet().reverseRange(key, startIndex, endIndex)
 
         if (values.isNullOrEmpty()) {
             return listOf()
