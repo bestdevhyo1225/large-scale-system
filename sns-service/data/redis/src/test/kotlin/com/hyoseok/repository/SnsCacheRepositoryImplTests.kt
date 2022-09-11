@@ -135,5 +135,36 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 values.containsAll(snsCaches)
             }
         }
+
+        this.describe("setAllEx 메서드는") {
+            it("파이프라인을 활용해서 여러 캐시를 한 번에 저장한다") {
+                val ids = listOf(1L, 2L)
+                val keysAndValues: List<Pair<String, SnsCache>> = ids.map {
+                    Pair(
+                        first = RedisKeys.getSnsKey(id = it),
+                        second = SnsCache(
+                            id = it,
+                            memberId = 1234L,
+                            title = "title",
+                            contents = "contents",
+                            writer = "writer",
+                            isDisplay = true,
+                            createdAt = LocalDateTime.now().withNano(0),
+                            updatedAt = LocalDateTime.now().withNano(0),
+                            snsImages = listOf(SnsImage(id = 1L, url = "https://test.com", sortOrder = 0)),
+                            snsTag = SnsTag(id = 1L, type = SnsTagType.STYLE, values = listOf("캐주얼", "출근")),
+                            products = listOf(),
+                        ),
+                    )
+                }
+
+                // when
+                snsCacheRepository.setAllEx(keysAndValues = keysAndValues, expireTime = SNS, timeUnit = SECONDS)
+
+                // then
+                snsCacheReadRepository.mget(keys = keysAndValues.map { it.first }, clazz = SnsCache::class.java)
+                    .containsAll(keysAndValues.map { it.second })
+            }
+        }
     }
 }

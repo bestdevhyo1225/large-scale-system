@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 class SnsFacadeService(
     private val snsCacheReadRepository: SnsCacheReadRepository,
     private val snsCacheRepository: SnsCacheRepository,
-    private val snsService: SnsService,
+    private val snsQueryService: SnsQueryService,
 ) {
 
     fun findWithAssociatedEntitiesById(snsId: Long): SnsFindResultDto {
@@ -27,7 +27,7 @@ class SnsFacadeService(
         snsCacheReadRepository.get(key = key, clazz = SnsCache::class.java)
             ?.let { return SnsFindResultDto(snsCache = it) }
 
-        val snsCache: SnsCache = snsService.findWithAssociatedEntitiesById(snsId = snsId)
+        val snsCache: SnsCache = snsQueryService.findWithAssociatedEntitiesById(snsId = snsId)
             .toCacheDto()
 
         CoroutineScope(context = Dispatchers.IO).launch {
@@ -44,8 +44,32 @@ class SnsFacadeService(
     }
 
     fun findAllByLimitAndOffset(start: Long, count: Long): Pair<List<SnsFindResultDto>, Long> {
-        val (snsList, totalCount) = snsService.findAllByLimitAndOffset(limit = count, offset = start)
-        val snsCaches = snsList.map { SnsFindResultDto(snsCache = it.toCacheDto()) }
-        return Pair(first = snsCaches, second = totalCount)
+        // DB 등록시, 캐시도 등록되어야 작성된 코드가 의미가 있음
+        val snsKeys: List<String> = snsCacheReadRepository.zrevrangeSnsKeys(
+            key = SNS_ZSET_KEY,
+            startIndex = start,
+            endIndex = start.plus(count).minus(1),
+        )
+        val snsKeyTotalCount: Long = snsCacheReadRepository.zcardSnsKeys(key = SNS_ZSET_KEY)
+        val snsCaches: List<SnsCache> = snsCacheReadRepository.mget(keys = snsKeys, clazz = SnsCache::class.java)
+
+        // 조건에 만족하면, 만료된 캐시가 없다는 의미
+        if (snsCaches.size == snsKeys.size) {
+            return Pair(first = snsCaches.map { SnsFindResultDto(snsCache = it) }, second = snsKeyTotalCount)
+        }
+
+        val (snsList, totalCount) = snsQueryService.findAllByLimitAndOffset(limit = count, offset = start)
+
+        CoroutineScope(context = Dispatchers.IO).launch {
+            snsCacheRepository.setAllEx(
+                keysAndValues = snsList.map {
+                    Pair(first = RedisKeys.getSnsKey(id = it.id!!), second = it.toCacheDto())
+                },
+                expireTime = SNS,
+                timeUnit = SECONDS,
+            )
+        }
+
+        return Pair(first = snsList.map { SnsFindResultDto(snsCache = it.toCacheDto()) }, second = totalCount)
     }
 }

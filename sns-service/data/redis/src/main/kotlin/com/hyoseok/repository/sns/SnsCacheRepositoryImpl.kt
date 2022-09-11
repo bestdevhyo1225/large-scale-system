@@ -20,6 +20,15 @@ class SnsCacheRepositoryImpl(
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
     }
 
+    override fun setAllEx(keysAndValues: List<Pair<String, SnsCache>>, expireTime: Long, timeUnit: TimeUnit) {
+        redisTemplate.executePipelined {
+            keysAndValues.forEach { (key, value) ->
+                setex(key = key, value = value, expireTime = expireTime, timeUnit = timeUnit)
+            }
+            return@executePipelined null
+        }
+    }
+
     override fun zaddSnsKeys(key: String, value: String, score: Double) {
         redisTemplate.opsForZSet().add(key, value, score)
     }
