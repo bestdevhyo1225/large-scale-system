@@ -86,6 +86,10 @@ class SnsJpaEntity private constructor(
 
     fun mapDomainEntity(sns: Sns) {
         sns.changeId(id = id!!)
+        sns.snsImages.forEachIndexed { index, snsImage ->
+            snsImage.changeId(id = snsImageJpaEntities[index].id!!)
+        }
+        sns.snsTag!!.changeId(id = snsTagJpaEntities.first().id!!)
     }
 
     fun toDomainEntity() =
@@ -133,6 +137,13 @@ class SnsJpaEntity private constructor(
             snsImages = snsImageJpaEntities.map { it.toDomainEntity() },
             snsTag = snsTagJpaEntities.map { it.toDomainEntity() }.first(),
         )
+
+    fun change(sns: Sns) {
+        this.title = sns.title
+        this.contents = sns.contents
+        this.productIds = sns.productIds.joinToString(",")
+        this.updatedAt = sns.updatedAt
+    }
 
     companion object {
         operator fun invoke(sns: Sns) =

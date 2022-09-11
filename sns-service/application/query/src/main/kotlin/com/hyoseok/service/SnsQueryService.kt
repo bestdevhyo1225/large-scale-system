@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(readOnly = true)
-class SnsService(
+class SnsQueryService(
     private val snsReadRepository: SnsReadRepository,
 ) {
 

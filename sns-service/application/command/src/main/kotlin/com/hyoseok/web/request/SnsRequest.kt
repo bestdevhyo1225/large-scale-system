@@ -3,7 +3,8 @@ package com.hyoseok.web.request
 import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsEditDto
 import com.hyoseok.service.dto.SnsImageDto
-import com.hyoseok.service.dto.SnsTagDto
+import com.hyoseok.service.dto.SnsTagCreateDto
+import com.hyoseok.service.dto.SnsTagEditDto
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
@@ -43,15 +44,12 @@ data class SnsCreateRequest(
             contents = contents,
             writer = writer,
             images = images.map { it.toServiceDto() },
-            tag = SnsTagDto(type = tagType, values = tagValues),
+            tag = SnsTagCreateDto(type = tagType, values = tagValues),
             productIds = productIds,
         )
 }
 
 data class SnsEditRequest(
-
-    @field:Positive(message = "id는 0보다 큰 값을 입력하세요")
-    val id: Long,
 
     @field:Positive(message = "memberId는 0보다 큰 값을 입력하세요")
     val memberId: Long,
@@ -68,6 +66,9 @@ data class SnsEditRequest(
     @field:NotEmpty(message = "images는 비어 있을 수 없습니다")
     val images: List<@Valid SnsImageRequest>,
 
+    @field:Positive(message = "tagId는 0보다 큰 값을 입력하세요")
+    val tagId: Long,
+
     @field:NotBlank(message = "tagType을 입력하세요")
     val tagType: String,
 
@@ -77,7 +78,7 @@ data class SnsEditRequest(
     @field:NotEmpty(message = "productIds 비어 있을 수 없습니다")
     val productIds: List<@Valid Long>,
 ) {
-    fun toServiceDto() =
+    fun toServiceDto(id: Long) =
         SnsEditDto(
             id = id,
             memberId = memberId,
@@ -85,7 +86,7 @@ data class SnsEditRequest(
             contents = contents,
             writer = writer,
             images = images.map { it.toServiceDto() },
-            tag = SnsTagDto(type = tagType, values = tagValues),
+            tag = SnsTagEditDto(id = tagId, type = tagType, values = tagValues),
             productIds = productIds,
         )
 }

@@ -15,8 +15,6 @@ internal class Sha256UtilTests : DescribeSpec(
                 val result1 = Sha256Util.encode(value = value1)
                 val result2 = Sha256Util.encode(value = value2)
 
-                println(result1)
-
                 // then
                 result1.shouldBe(result2)
             }

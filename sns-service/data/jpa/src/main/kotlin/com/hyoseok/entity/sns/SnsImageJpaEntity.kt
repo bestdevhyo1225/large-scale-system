@@ -47,5 +47,11 @@ class SnsImageJpaEntity private constructor(
     companion object {
         operator fun invoke(snsImage: SnsImage): SnsImageJpaEntity =
             SnsImageJpaEntity(url = snsImage.url, sortOrder = snsImage.sortOrder)
+
+        fun mapDomainEntities(snsImages: List<SnsImage>, snsImageJpaEntities: List<SnsImageJpaEntity>) {
+            snsImages.forEachIndexed { index, snsImage ->
+                snsImage.changeId(id = snsImageJpaEntities[index].id!!)
+            }
+        }
     }
 }

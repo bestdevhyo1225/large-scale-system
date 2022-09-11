@@ -15,12 +15,7 @@ abstract class AbstractCacheRepository {
      * - ex) beta < 1.0 => 조금 더 소극적으로 재 계산한다.
      * - ex) beta > 1.0 => 조금 더 적극적으로 재 계산한다.
      * */
-    private fun getExpiryTimeBasedOnPER(remainingExpiryTimeMS: Long, delta: Long, beta: Float = 1.0f): Double {
-        return remainingExpiryTimeMS - abs(delta * beta * ln(Math.random()))
-    }
-
-    protected fun isRefreshKey(remainingExpiryTimeMS: Long, expireTimeGapMs: Long = 3_000L): Boolean {
-        return remainingExpiryTimeMS >= 0 &&
-            getExpiryTimeBasedOnPER(remainingExpiryTimeMS = remainingExpiryTimeMS, delta = expireTimeGapMs) <= 0.0f
+    protected fun isRefreshKey(remainingExpiryTimeMS: Long, delta: Long = 3_000L, beta: Float = 1.0f): Boolean {
+        return remainingExpiryTimeMS >= 0 && abs(delta * beta * ln(Math.random())) >= remainingExpiryTimeMS
     }
 }

@@ -42,8 +42,8 @@ class SnsCacheReadRepositoryImpl(
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
     }
 
-    override fun zrangeSnsKeys(key: String, startIndex: Long, endIndex: Long): List<String> {
-        val values = redisTemplate.opsForZSet().range(key, startIndex, endIndex)
+    override fun zrevrangeString(key: String, startIndex: Long, endIndex: Long): List<String> {
+        val values = redisTemplate.opsForZSet().reverseRange(key, startIndex, endIndex)
 
         if (values.isNullOrEmpty()) {
             return listOf()
@@ -51,4 +51,6 @@ class SnsCacheReadRepositoryImpl(
 
         return values.map { it.toString() }
     }
+
+    override fun zcard(key: String): Long = redisTemplate.opsForZSet().zCard(key) ?: 0L
 }

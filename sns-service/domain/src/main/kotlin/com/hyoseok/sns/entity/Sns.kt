@@ -120,6 +120,28 @@ class Sns private constructor(
             title: String,
             contents: String,
             writer: String,
+            productIds: List<Long>,
+            snsImages: List<SnsImage>,
+            snsTag: SnsTag,
+        ) = Sns(
+            id = id,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            productIds = productIds,
+            createdAt = LocalDateTime.now().withNano(0),
+            updatedAt = LocalDateTime.now().withNano(0),
+            snsImages = snsImages,
+            snsTag = snsTag,
+        )
+
+        operator fun invoke(
+            id: Long,
+            memberId: Long,
+            title: String,
+            contents: String,
+            writer: String,
             isDisplay: Boolean,
             productIds: List<Long>,
             createdAt: LocalDateTime,
