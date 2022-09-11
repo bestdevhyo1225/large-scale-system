@@ -41,7 +41,7 @@ class SnsFacadeService(
 
     fun findAllByLimitAndOffset(start: Long, count: Long): Pair<List<SnsFindResultDto>, Long> {
         // DB 등록시, 캐시도 등록되어야 작성된 코드가 의미가 있음
-        val snsKeys: List<String> = snsCacheReadRepository.zrevrangeSnsKeys(
+        val snsKeys: List<String> = snsCacheReadRepository.zrevrangeString(
             key = SNS_ZSET_KEY,
             startIndex = start,
             endIndex = start.plus(count).minus(1),

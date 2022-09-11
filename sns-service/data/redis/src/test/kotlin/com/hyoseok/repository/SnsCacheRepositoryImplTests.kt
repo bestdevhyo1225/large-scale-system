@@ -82,7 +82,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
             }
         }
 
-        this.describe("zaddSnsKeys 메서드는") {
+        this.describe("zaddString 메서드는") {
             it("key, value, score를 저장한다") {
                 // given
                 val key = RedisKeys.SNS_ZSET_KEY
@@ -98,7 +98,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 snsCacheRepository.zaddString(key = key, value = values[1], score = scores[1])
 
                 // then
-                snsCacheReadRepository.zrevrangeSnsKeys(key = key, startIndex = 0, endIndex = 1)
+                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 1)
                     .containsAll(values)
             }
         }
