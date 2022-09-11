@@ -28,7 +28,7 @@ class SnsFacadeService(
             val snsCache = sns.toCacheDto()
             val score = RedisZsetScores.getTimestampCreatedAt(createdAt = snsCache.createdAt)
 
-            snsCacheRepository.zaddSnsKeys(key = SNS_ZSET_KEY, value = key, score = score)
+            snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
         }
 

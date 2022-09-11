@@ -94,8 +94,8 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 )
 
                 // when
-                snsCacheRepository.zaddSnsKeys(key = key, value = values[0], score = scores[0])
-                snsCacheRepository.zaddSnsKeys(key = key, value = values[1], score = scores[1])
+                snsCacheRepository.zaddString(key = key, value = values[0], score = scores[0])
+                snsCacheRepository.zaddString(key = key, value = values[1], score = scores[1])
 
                 // then
                 snsCacheReadRepository.zrevrangeSnsKeys(key = key, startIndex = 0, endIndex = 1)

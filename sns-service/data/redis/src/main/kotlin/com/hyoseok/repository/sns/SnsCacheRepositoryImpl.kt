@@ -29,7 +29,7 @@ class SnsCacheRepositoryImpl(
         }
     }
 
-    override fun zaddSnsKeys(key: String, value: String, score: Double) {
+    override fun zaddString(key: String, value: String, score: Double) {
         redisTemplate.opsForZSet().add(key, value, score)
     }
 }
