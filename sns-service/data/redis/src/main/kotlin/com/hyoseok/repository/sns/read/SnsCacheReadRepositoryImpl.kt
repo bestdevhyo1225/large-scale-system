@@ -39,7 +39,7 @@ class SnsCacheReadRepositoryImpl(
             return listOf()
         }
 
-        if (values.any { it.isNullOrEmpty() }) {
+        if (values.any { it.isNullOrBlank() }) {
             return listOf()
         }
 

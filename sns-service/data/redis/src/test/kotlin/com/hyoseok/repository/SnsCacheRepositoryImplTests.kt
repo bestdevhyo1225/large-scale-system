@@ -17,6 +17,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -184,6 +185,15 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 // then
                 snsCacheReadRepository.mget(keys = keysAndValues.map { it.first }, clazz = SnsCache::class.java)
                     .containsAll(keysAndValues.map { it.second })
+            }
+        }
+
+        this.describe("zrevrangeString 메서드는") {
+            context("key에 대한 값이 없는 경우") {
+                it("빈 리스트를 반환한다") {
+                    snsCacheReadRepository.zrevrangeString(key = "test", startIndex = 0, endIndex = 5)
+                        .shouldBeEmpty()
+                }
             }
         }
     }
