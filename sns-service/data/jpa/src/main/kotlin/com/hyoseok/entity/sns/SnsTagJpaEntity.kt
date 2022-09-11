@@ -45,6 +45,11 @@ class SnsTagJpaEntity private constructor(
 
     fun toDomainEntity() = SnsTag(id = id!!, type = SnsTagType(value = type), values = values.split(","))
 
+    fun change(snsTag: SnsTag) {
+        this.type = snsTag.type.name
+        this.values = snsTag.values.joinToString(",")
+    }
+
     companion object {
         operator fun invoke(snsTag: SnsTag) =
             SnsTagJpaEntity(type = snsTag.type.name, values = snsTag.values.joinToString(","))

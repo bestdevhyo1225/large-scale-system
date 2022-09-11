@@ -30,6 +30,16 @@ class SnsTag private constructor(
             this.values == otherSnsTag.values
     }
 
+    fun validateValues() {
+        if (values.size > MAX_VALUE_SIZE) {
+            throw IllegalArgumentException(EXCEEDS_SNS_TAGS_SIZE)
+        }
+    }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
+
     companion object {
         private const val MAX_VALUE_SIZE = 3
 
@@ -38,13 +48,12 @@ class SnsTag private constructor(
                 it.validateValues()
             }
 
+        operator fun invoke(id: Long, type: String, values: List<String>) =
+            SnsTag(id = id, type = SnsTagType(value = type), values = values).also {
+                it.validateValues()
+            }
+
         operator fun invoke(id: Long, type: SnsTagType, values: List<String>) =
             SnsTag(id = id, type = type, values = values)
-    }
-
-    fun validateValues() {
-        if (values.size > MAX_VALUE_SIZE) {
-            throw IllegalArgumentException(EXCEEDS_SNS_TAGS_SIZE)
-        }
     }
 }

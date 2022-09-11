@@ -30,6 +30,10 @@ class SnsImage private constructor(
             this.sortOrder == otherSnsImage.sortOrder
     }
 
+    fun changeId(id: Long) {
+        this.id = id
+    }
+
     companion object {
         private const val MAX_SNS_IMAGE_SIZE = 10
 

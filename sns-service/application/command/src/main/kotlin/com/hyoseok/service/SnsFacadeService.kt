@@ -6,6 +6,7 @@ import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
 import com.hyoseok.config.RedisZsetScores
 import com.hyoseok.service.dto.SnsCreateDto
 import com.hyoseok.service.dto.SnsCreateResultDto
+import com.hyoseok.service.dto.SnsEditDto
 import com.hyoseok.sns.entity.Sns
 import com.hyoseok.sns.repository.SnsCacheRepository
 import kotlinx.coroutines.CoroutineScope
@@ -33,5 +34,15 @@ class SnsFacadeService(
         }
 
         return SnsCreateResultDto(snsId = sns.id!!)
+    }
+
+    fun edit(dto: SnsEditDto) {
+        val sns: Sns = snsCommandService.edit(dto = dto)
+
+        CoroutineScope(context = Dispatchers.IO).launch {
+            val key = RedisKeys.getSnsKey(id = sns.id!!)
+            val snsCache = sns.toCacheDto()
+            snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.hyoseok.product.repository.read.ExternalProductReadRepository
 import com.hyoseok.repository.product.ExternalProductJpaRepository
 import com.hyoseok.repository.product.ExternalProductRepositoryImpl
 import com.hyoseok.repository.product.read.ExternalProductReadRepositoryImpl
+import com.hyoseok.repository.sns.SnsImageJpaRepository
 import com.hyoseok.repository.sns.SnsJpaRepository
 import com.hyoseok.repository.sns.SnsRepositoryImpl
 import com.hyoseok.repository.sns.read.SnsReadRepositoryImpl
@@ -23,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration
         JpaConfig::class,
         JpaQueryFactoryConfig::class,
         SnsJpaRepository::class,
+        SnsImageJpaRepository::class,
         SnsRepository::class,
         SnsReadRepository::class,
         SnsRepositoryImpl::class,

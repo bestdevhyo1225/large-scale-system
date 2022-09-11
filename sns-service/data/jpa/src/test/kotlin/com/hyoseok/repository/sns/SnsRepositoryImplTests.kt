@@ -19,6 +19,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
+import javax.persistence.EntityManager
 
 internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
 
@@ -30,6 +31,9 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
 
     @Autowired
     private lateinit var snsRepository: SnsRepository
+
+    @Autowired
+    private lateinit var entityManager: EntityManager
 
     init {
         this.describe("save 메서드는") {
@@ -70,6 +74,9 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                 findSns.snsTag!!.id.shouldNotBeNull()
                 findSns.snsTag!!.type.shouldBe(SnsTagType(value = tagType))
                 findSns.snsTag!!.values.containsAll(tagValues)
+
+                sns.snsImages.forEach { it.id.shouldNotBeNull() }
+                sns.snsTag!!.id.shouldNotBeNull()
             }
         }
 
@@ -150,6 +157,63 @@ internal class SnsRepositoryImplTests : RepositoryImplTests, DescribeSpec() {
                     sns.snsTag!!.values.containsAll(snsList[index].snsTag!!.values)
                 }
                 totalCount.shouldBe(snsList.size)
+            }
+        }
+
+        this.describe("update 메서드는") {
+            it("Sns, SnsImage, SnsTag 엔티티를 수정한다") {
+                // given
+                val memberId = 19823L
+                val title = "title"
+                val contents = "contents"
+                val writer = "writer"
+                val productIds = listOf(1L, 2L, 3L)
+                val snsImages = listOf(Pair("image0", 0), Pair("image1", 1), Pair("image2", 2))
+                val tagType = "tpo"
+                val tagValues = listOf("파티", "나들이")
+                val sns = Sns(
+                    memberId = memberId,
+                    title = title,
+                    contents = contents,
+                    writer = writer,
+                    productIds = productIds,
+                    snsImages = SnsImage.createSnsImages(snsImages = snsImages),
+                    snsTag = SnsTag(type = tagType, values = tagValues),
+                )
+
+                snsRepository.save(sns = sns)
+
+                val updateTitle = "updateTitle"
+                val updateContents = "updateContents"
+                val updateProductIds = listOf(1L, 2L)
+                val updateSnsImages = listOf(Pair("image0", 0), Pair("image3", 1))
+                val updateTagType = "style"
+                val updateTagValues = listOf("파티", "출근")
+
+                val updateSns = Sns(
+                    id = sns.id!!,
+                    memberId = memberId,
+                    title = updateTitle,
+                    contents = updateContents,
+                    writer = writer,
+                    productIds = updateProductIds,
+                    snsImages = SnsImage.createSnsImages(snsImages = updateSnsImages),
+                    snsTag = SnsTag(id = sns.snsTag!!.id!!, type = updateTagType, values = updateTagValues),
+                )
+
+                // when
+                snsRepository.update(sns = updateSns)
+                entityManager.flush()
+                entityManager.clear()
+
+                // then
+                val findSns: Sns = snsReadRepository.findWithAssociatedEntitiesById(snsId = sns.id!!)
+                val findSnsImages: List<SnsImage> = findSns.snsImages
+                val findSnsTag: SnsTag = findSns.snsTag!!
+
+                findSns.shouldBe(updateSns)
+                findSnsImages.shouldHaveSize(updateSns.snsImages.size)
+                findSnsTag.shouldBe(updateSns.snsTag!!)
             }
         }
     }

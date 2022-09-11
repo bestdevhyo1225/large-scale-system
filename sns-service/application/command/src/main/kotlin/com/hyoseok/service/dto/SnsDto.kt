@@ -1,11 +1,8 @@
 package com.hyoseok.service.dto
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import com.hyoseok.product.entity.ExternalProduct
 import com.hyoseok.sns.entity.Sns
 import com.hyoseok.sns.entity.SnsImage
 import com.hyoseok.sns.entity.SnsTag
-import java.time.LocalDateTime
 
 data class SnsCreateDto(
     val memberId: Long,
@@ -13,7 +10,7 @@ data class SnsCreateDto(
     val contents: String,
     val writer: String,
     val images: List<SnsImageDto>,
-    val tag: SnsTagDto,
+    val tag: SnsTagCreateDto,
     val productIds: List<Long>,
 ) {
     fun toEntity() =
@@ -43,45 +40,20 @@ data class SnsEditDto(
     val contents: String,
     val writer: String,
     val images: List<SnsImageDto>,
-    val tag: SnsTagDto,
+    val tag: SnsTagEditDto,
     val productIds: List<Long>,
-)
-
-data class SnsFindResultDto(
-    val id: Long,
-    val memberId: Long,
-    val title: String,
-    val contents: String,
-    val writer: String,
-    val isDisplay: Boolean,
-    val images: List<SnsImageDto>,
-    val tag: SnsTagDto,
-    val products: List<ProductFindResultDto>,
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    val createdAt: LocalDateTime,
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    val updatedAt: LocalDateTime,
 ) {
-    companion object {
-        operator fun invoke(sns: Sns, externalProducts: List<ExternalProduct>) =
-            with(receiver = sns) {
-                SnsFindResultDto(
-                    id = id!!,
-                    memberId = memberId,
-                    title = title,
-                    contents = contents,
-                    writer = writer,
-                    isDisplay = isDisplay,
-                    images = snsImages.map { SnsImageDto(url = "https://test/${it.url}", sortOrder = it.sortOrder) },
-                    tag = with(receiver = snsTag!!) { SnsTagDto(type = type.name.lowercase(), values = values) },
-                    products = externalProducts.map { ProductFindResultDto(externalProduct = it) },
-                    createdAt = createdAt,
-                    updatedAt = updatedAt,
-                )
-            }
-    }
+    fun toEntity() =
+        Sns(
+            id = id,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            productIds = productIds,
+            snsImages = SnsImageDto.toEntities(images = images),
+            snsTag = tag.toEntity(),
+        )
 }
 
 data class SnsImageDto(
@@ -94,9 +66,17 @@ data class SnsImageDto(
     }
 }
 
-data class SnsTagDto(
+data class SnsTagCreateDto(
     val type: String,
     val values: List<String>,
 ) {
     fun toEntity() = SnsTag(type = type, values = values)
+}
+
+data class SnsTagEditDto(
+    val id: Long,
+    val type: String,
+    val values: List<String>,
+) {
+    fun toEntity() = SnsTag(id = id, type = type, values = values)
 }
