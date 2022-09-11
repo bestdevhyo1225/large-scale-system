@@ -46,6 +46,7 @@ class SnsReadRepositoryImpl(
     override fun findAllByLimitAndOffset(limit: Long, offset: Long): Pair<List<Sns>, Long> {
         val snsJpaEntities: List<SnsJpaEntity> = jpaQueryFactory
             .selectFrom(snsJpaEntity)
+            .orderBy(snsJpaEntity.createdAt.desc())
             .limit(limit)
             .offset(offset)
             .fetch()

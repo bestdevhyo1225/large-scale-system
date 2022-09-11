@@ -134,6 +134,26 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 // then
                 values.containsAll(snsCaches)
             }
+
+            context("null 값이 하나라도 존재하는 경우") {
+                it("빈 리스트를 반환한다") {
+                    // given
+                    val ids = listOf(1L, 2L)
+                    val keys = ids.map { RedisKeys.getSnsKey(id = it) }
+
+                    // when
+                    val values = snsCacheReadRepository.mget(keys = keys, clazz = SnsCache::class.java)
+
+                    // then
+                    values.isEmpty()
+                }
+            }
+
+            context("빈 값의 keys인 경우") {
+                it("빈 리스트를 반환한다") {
+                    snsCacheReadRepository.mget(keys = listOf(), clazz = SnsCache::class.java).isEmpty()
+                }
+            }
         }
 
         this.describe("setAllEx 메서드는") {
