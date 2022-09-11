@@ -52,5 +52,5 @@ class SnsCacheReadRepositoryImpl(
         return values.map { it.toString() }
     }
 
-    override fun zcardSnsKeys(key: String): Long = redisTemplate.opsForZSet().zCard(key) ?: 0L
+    override fun zcard(key: String): Long = redisTemplate.opsForZSet().zCard(key) ?: 0L
 }

@@ -46,7 +46,7 @@ class SnsFacadeService(
             startIndex = start,
             endIndex = start.plus(count).minus(1),
         )
-        val snsKeyTotalCount: Long = snsCacheReadRepository.zcardSnsKeys(key = SNS_ZSET_KEY)
+        val snsKeyTotalCount: Long = snsCacheReadRepository.zcard(key = SNS_ZSET_KEY)
         val snsCaches: List<SnsCache> = snsCacheReadRepository.mget(keys = snsKeys, clazz = SnsCache::class.java)
 
         // 조건에 만족하면, 만료된 캐시가 없다는 의미
