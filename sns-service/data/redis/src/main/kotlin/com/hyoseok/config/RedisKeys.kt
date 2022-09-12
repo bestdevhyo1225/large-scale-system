@@ -7,5 +7,5 @@ object RedisKeys {
 
     fun getMemberKey(id: Long) = "{member}:$id"
     fun getProductKey(id: Long) = "{product}:$id"
-    fun getSnsHashKey(id: Long) = "{sns}:$id"
+    fun getSnsKey(id: Long) = "sns:$id"
 }

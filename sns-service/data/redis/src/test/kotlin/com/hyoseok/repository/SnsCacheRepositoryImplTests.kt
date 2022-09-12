@@ -60,7 +60,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
             it("캐시를 저장한다") {
                 // given
                 val id = 1L
-                val key = RedisKeys.getSnsHashKey(id = id)
+                val key = RedisKeys.getSnsKey(id = id)
                 val snsCache = SnsCache(
                     id = id,
                     memberId = 1234L,
@@ -89,7 +89,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
             it("key, value, score를 저장한다") {
                 // given
                 val key = SNS_ZSET_KEY
-                val values = listOf(RedisKeys.getSnsHashKey(id = 1L), RedisKeys.getSnsHashKey(id = 2L))
+                val values = listOf(RedisKeys.getSnsKey(id = 1L), RedisKeys.getSnsKey(id = 2L))
                 val nowDateTime = LocalDateTime.now().withNano(0)
                 val scores = listOf(
                     Timestamp.valueOf(nowDateTime).time.toDouble(),
@@ -110,7 +110,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
             it("한 번에 여러개의 캐시 데이터를 가져온다") {
                 // given
                 val ids = listOf(1L, 2L)
-                val keys = ids.map { RedisKeys.getSnsHashKey(id = it) }
+                val keys = ids.map { RedisKeys.getSnsKey(id = it) }
                 val snsCaches = ids.map {
                     SnsCache(
                         id = it,
@@ -142,7 +142,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 it("null 값을 제외한 리스트를 반환한다") {
                     // given
                     val ids = listOf(1L, 2L)
-                    val keys = ids.map { RedisKeys.getSnsHashKey(id = it) }
+                    val keys = ids.map { RedisKeys.getSnsKey(id = it) }
                     val snsCache = SnsCache(
                         id = ids.first(),
                         memberId = 1234L,
@@ -179,7 +179,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 val ids = listOf(1L, 2L)
                 val keysAndValues: List<Pair<String, SnsCache>> = ids.map {
                     Pair(
-                        first = RedisKeys.getSnsHashKey(id = it),
+                        first = RedisKeys.getSnsKey(id = it),
                         second = SnsCache(
                             id = it,
                             memberId = 1234L,
@@ -218,7 +218,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
             it("key, value를 통해 데이터를 삭제한다") {
                 // given
                 val key: String = SNS_ZSET_KEY
-                val value: String = RedisKeys.getSnsHashKey(id = 1)
+                val value: String = RedisKeys.getSnsKey(id = 1)
                 val socre = 1.0
 
                 snsCacheRepository.zaddString(key = key, value = value, score = socre)

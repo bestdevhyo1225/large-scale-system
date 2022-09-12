@@ -26,7 +26,7 @@ class SnsFacadeService(
         val sns: Sns = snsCommandService.create(dto = dto)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsHashKey(id = sns.id!!)
+            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
             val snsCache: SnsCache = sns.toCacheDto()
             val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
 
@@ -41,7 +41,7 @@ class SnsFacadeService(
         val sns: Sns = snsCommandService.edit(dto = dto)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsHashKey(id = sns.id!!)
+            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
             val snsCache: SnsCache = sns.toCacheDto()
 
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
@@ -52,7 +52,7 @@ class SnsFacadeService(
         snsCommandService.delete(id = id)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsHashKey(id = id)
+            val key: String = RedisKeys.getSnsKey(id = id)
 
             snsCacheRepository.zremString(key = SNS_ZSET_KEY, value = key)
         }

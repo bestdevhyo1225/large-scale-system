@@ -23,7 +23,7 @@ class SnsFacadeService(
 ) {
 
     fun findWithAssociatedEntitiesById(snsId: Long): SnsFindResultDto {
-        val key: String = RedisKeys.getSnsHashKey(id = snsId)
+        val key: String = RedisKeys.getSnsKey(id = snsId)
 
         snsCacheReadRepository.get(key = key, clazz = SnsCache::class.java)
             ?.let { return SnsFindResultDto(snsCache = it) }
@@ -63,7 +63,7 @@ class SnsFacadeService(
         CoroutineScope(context = Dispatchers.IO).launch {
             snsCacheRepository.setAllEx(
                 keysAndValues = snsList.map {
-                    Pair(first = RedisKeys.getSnsHashKey(id = it.id!!), second = it.toCacheDto())
+                    Pair(first = RedisKeys.getSnsKey(id = it.id!!), second = it.toCacheDto())
                 },
                 expireTime = SNS,
                 timeUnit = SECONDS,
