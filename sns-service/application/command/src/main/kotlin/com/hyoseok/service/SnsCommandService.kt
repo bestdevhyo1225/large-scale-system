@@ -24,4 +24,8 @@ class SnsCommandService(
         snsRepository.update(sns = sns)
         return sns
     }
+
+    fun delete(id: Long) {
+        snsRepository.delete(id = id)
+    }
 }

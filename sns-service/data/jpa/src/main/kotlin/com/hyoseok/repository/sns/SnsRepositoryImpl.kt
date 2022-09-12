@@ -12,6 +12,7 @@ import com.hyoseok.sns.repository.SnsRepository
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Repository
 @Transactional
@@ -53,6 +54,10 @@ class SnsRepositoryImpl(
         snsImageJpaRepository.saveAll(snsImageJpaEntities)
 
         SnsImageJpaEntity.mapDomainEntities(snsImages = sns.snsImages, snsImageJpaEntities = snsImageJpaEntities)
+    }
+
+    override fun delete(id: Long) {
+        snsJpaRepository.updateDeletedAt(deletedAt = LocalDateTime.now().withNano(0), id = id)
     }
 
     private fun snsJpaEntityIdEq(snsId: Long) = snsJpaEntity.id.eq(snsId)

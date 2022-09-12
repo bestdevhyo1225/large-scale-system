@@ -3,6 +3,7 @@ package com.hyoseok.repository
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
+import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
 import com.hyoseok.config.standalone.RedisStandaloneConfig
 import com.hyoseok.config.standalone.RedisStandaloneTemplateConfig
 import com.hyoseok.repository.sns.SnsCacheRepositoryImpl
@@ -87,7 +88,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
         this.describe("zaddString 메서드는") {
             it("key, value, score를 저장한다") {
                 // given
-                val key = RedisKeys.SNS_ZSET_KEY
+                val key = SNS_ZSET_KEY
                 val values = listOf(RedisKeys.getSnsKey(id = 1L), RedisKeys.getSnsKey(id = 2L))
                 val nowDateTime = LocalDateTime.now().withNano(0)
                 val scores = listOf(
@@ -210,6 +211,24 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                     snsCacheReadRepository.zrevrangeString(key = "test", startIndex = 0, endIndex = 5)
                         .shouldBeEmpty()
                 }
+            }
+        }
+
+        this.describe("zremString 메서드는") {
+            it("key, value를 통해 데이터를 삭제한다") {
+                // given
+                val key: String = SNS_ZSET_KEY
+                val value: String = RedisKeys.getSnsKey(id = 1)
+                val socre = 1.0
+
+                snsCacheRepository.zaddString(key = key, value = value, score = socre)
+
+                // when
+                snsCacheRepository.zremString(key = key, value = value)
+
+                // then
+                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 10)
+                    .isEmpty()
             }
         }
     }

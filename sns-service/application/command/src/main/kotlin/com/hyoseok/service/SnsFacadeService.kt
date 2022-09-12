@@ -43,7 +43,18 @@ class SnsFacadeService(
         CoroutineScope(context = Dispatchers.IO).launch {
             val key: String = RedisKeys.getSnsKey(id = sns.id!!)
             val snsCache: SnsCache = sns.toCacheDto()
+
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+        }
+    }
+
+    fun delete(id: Long) {
+        snsCommandService.delete(id = id)
+
+        CoroutineScope(context = Dispatchers.IO).launch {
+            val key: String = RedisKeys.getSnsKey(id = id)
+
+            snsCacheRepository.zremString(key = SNS_ZSET_KEY, value = key)
         }
     }
 }

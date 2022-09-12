@@ -32,4 +32,8 @@ class SnsCacheRepositoryImpl(
     override fun zaddString(key: String, value: String, score: Double) {
         redisTemplate.opsForZSet().add(key, value, score)
     }
+
+    override fun zremString(key: String, value: String) {
+        redisTemplate.opsForZSet().remove(key, value)
+    }
 }
