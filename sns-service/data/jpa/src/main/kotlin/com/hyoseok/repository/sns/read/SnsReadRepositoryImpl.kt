@@ -4,10 +4,12 @@ import com.hyoseok.entity.sns.QSnsImageJpaEntity.snsImageJpaEntity
 import com.hyoseok.entity.sns.QSnsJpaEntity.snsJpaEntity
 import com.hyoseok.entity.sns.QSnsTagJpaEntity.snsTagJpaEntity
 import com.hyoseok.entity.sns.SnsJpaEntity
+import com.hyoseok.entity.sns.SnsTagJpaEntity
 import com.hyoseok.exception.Message.NOT_FOUND_SNS
 import com.hyoseok.repository.sns.SnsJpaRepository
 import com.hyoseok.sns.entity.Sns
 import com.hyoseok.sns.repository.read.SnsReadRepository
+import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -20,22 +22,28 @@ class SnsReadRepositoryImpl(
 ) : SnsReadRepository {
 
     override fun findById(snsId: Long): Sns {
-        val snsJpaEntity = jpaQueryFactory
+        val snsJpaEntity: SnsJpaEntity = jpaQueryFactory
             .selectFrom(snsJpaEntity)
-            .where(snsJpaEntityIdEq(snsId = snsId))
+            .where(
+                snsJpaEntityIdEq(snsId = snsId),
+                snsJpaEntityDeletedAtIsNull(),
+            )
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_SNS)
 
         return snsJpaEntity.toDomainEntity()
     }
 
     override fun findWithAssociatedEntitiesById(snsId: Long): Sns {
-        val snsJpaEntity = jpaQueryFactory
+        val snsJpaEntity: SnsJpaEntity = jpaQueryFactory
             .selectFrom(snsJpaEntity)
             .innerJoin(snsJpaEntity.snsImageJpaEntities, snsImageJpaEntity).fetchJoin()
-            .where(snsJpaEntityIdEq(snsId = snsId))
+            .where(
+                snsJpaEntityIdEq(snsId = snsId),
+                snsJpaEntityDeletedAtIsNull(),
+            )
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_SNS)
 
-        val snsTagJpaEntities = jpaQueryFactory
+        val snsTagJpaEntities: List<SnsTagJpaEntity> = jpaQueryFactory
             .selectFrom(snsTagJpaEntity)
             .where(snsJpaEntityIdEq(snsId = snsId))
             .fetch()
@@ -46,15 +54,18 @@ class SnsReadRepositoryImpl(
     override fun findAllByLimitAndOffset(limit: Long, offset: Long): Pair<List<Sns>, Long> {
         val snsJpaEntities: List<SnsJpaEntity> = jpaQueryFactory
             .selectFrom(snsJpaEntity)
+            .where(snsJpaEntityDeletedAtIsNull())
             .orderBy(snsJpaEntity.createdAt.desc())
             .limit(limit)
             .offset(offset)
             .fetch()
 
-        val totalCount: Long = snsJpaRepository.count()
+        val totalCount: Long = snsJpaRepository.countExcludeDeletedSnsJpaEntity()
 
         return Pair(first = snsJpaEntities.map { it.toDomainEntityAssociatedEntities() }, second = totalCount)
     }
 
-    private fun snsJpaEntityIdEq(snsId: Long) = snsJpaEntity.id.eq(snsId)
+    private fun snsJpaEntityIdEq(snsId: Long): BooleanExpression = snsJpaEntity.id.eq(snsId)
+
+    private fun snsJpaEntityDeletedAtIsNull(): BooleanExpression = snsJpaEntity.deletedAt.isNull
 }

@@ -8,6 +8,7 @@ import com.hyoseok.web.response.SuccessResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.created
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -44,5 +45,11 @@ class SnsController(
         request: SnsEditRequest,
     ) {
         snsFacadeService.edit(dto = request.toServiceDto(id = id))
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Long) {
+        snsFacadeService.delete(id = id)
     }
 }

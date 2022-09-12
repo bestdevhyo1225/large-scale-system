@@ -48,3 +48,6 @@ Content-Type: application/json
   ],
   "productIds": [1, 2, 3]
 }
+
+### SNS 삭제
+DELETE localhost:9000/api/v1/sns/3

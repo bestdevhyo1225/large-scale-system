@@ -7,4 +7,6 @@ interface SnsCacheRepository {
     fun setex(key: String, value: SnsCache, expireTime: Long, timeUnit: TimeUnit)
     fun setAllEx(keysAndValues: List<Pair<String, SnsCache>>, expireTime: Long, timeUnit: TimeUnit)
     fun zaddString(key: String, value: String, score: Double)
+
+    fun zremString(key: String, value: String)
 }
