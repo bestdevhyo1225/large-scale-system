@@ -18,6 +18,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -136,17 +137,32 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 values.containsAll(snsCaches)
             }
 
-            context("null 값이 하나라도 존재하는 경우") {
-                it("빈 리스트를 반환한다") {
+            context("null 값이 존재하는 경우") {
+                it("null 값을 제외한 리스트를 반환한다") {
                     // given
                     val ids = listOf(1L, 2L)
                     val keys = ids.map { RedisKeys.getSnsKey(id = it) }
+                    val snsCache = SnsCache(
+                        id = ids.first(),
+                        memberId = 1234L,
+                        title = "title",
+                        contents = "contents",
+                        writer = "writer",
+                        isDisplay = true,
+                        createdAt = LocalDateTime.now().withNano(0),
+                        updatedAt = LocalDateTime.now().withNano(0),
+                        snsImages = listOf(SnsImage(id = 1L, url = "https://test.com", sortOrder = 0)),
+                        snsTag = SnsTag(id = 1L, type = SnsTagType.STYLE, values = listOf("캐주얼", "출근")),
+                        products = listOf(),
+                    )
+
+                    snsCacheRepository.setex(key = keys.first(), value = snsCache, expireTime = SNS, timeUnit = SECONDS)
 
                     // when
                     val values = snsCacheReadRepository.mget(keys = keys, clazz = SnsCache::class.java)
 
                     // then
-                    values.isEmpty()
+                    values.shouldHaveSize(ids.size.minus(1))
                 }
             }
 

@@ -39,11 +39,12 @@ class SnsCacheReadRepositoryImpl(
             return listOf()
         }
 
-        if (values.any { it.isNullOrBlank() }) {
-            return listOf()
+        return values.fold(mutableListOf()) { acc, value ->
+            if (!value.isNullOrBlank()) {
+                acc.add(jacksonObjectMapper.readValue(value, clazz))
+            }
+            acc
         }
-
-        return values.map { jacksonObjectMapper.readValue(it, clazz) }
     }
 
     override fun zrevrangeString(key: String, startIndex: Long, endIndex: Long): List<String> {
