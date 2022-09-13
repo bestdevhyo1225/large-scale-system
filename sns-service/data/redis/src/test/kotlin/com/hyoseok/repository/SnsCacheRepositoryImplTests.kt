@@ -102,7 +102,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 snsCacheRepository.zaddString(key = key, value = values[1], score = scores[1])
 
                 // then
-                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 1)
+                snsCacheReadRepository.zrevrangeString(key = key, start = 0, end = 1)
                     .containsAll(values)
             }
         }
@@ -209,7 +209,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
         this.describe("zrevrangeString 메서드는") {
             context("key에 대한 값이 없는 경우") {
                 it("빈 리스트를 반환한다") {
-                    snsCacheReadRepository.zrevrangeString(key = "test", startIndex = 0, endIndex = 5)
+                    snsCacheReadRepository.zrevrangeString(key = "test", start = 0, end = 5)
                         .shouldBeEmpty()
                 }
             }
@@ -228,7 +228,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 snsCacheRepository.zremString(key = key, value = value)
 
                 // then
-                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 10)
+                snsCacheReadRepository.zrevrangeString(key = key, start = 0, end = 10)
                     .isEmpty()
             }
         }
@@ -244,7 +244,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
 
                 // when
-                snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 9, endIndex = 9)
+                snsCacheRepository.zremStringRangeByRank(key = key, start = 9, end = 9)
 
                 // then
                 val afterTotalCount = snsCacheReadRepository.zcard(key = key)
@@ -263,7 +263,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                     val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
 
                     // when
-                    snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 100_000, endIndex = 100_000)
+                    snsCacheRepository.zremStringRangeByRank(key = key, start = 100_000, end = 100_000)
 
                     // then
                     val afterTotalCount = snsCacheReadRepository.zcard(key = key)

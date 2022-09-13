@@ -1,5 +1,6 @@
 package com.hyoseok.service
 
+import com.hyoseok.config.RedisCommons.ZSET_MAX_LIMIT
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
@@ -34,8 +35,11 @@ class SnsFacadeService(
         val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
 
         CoroutineScope(context = Dispatchers.IO).launch {
+            // 트랜잭션 처리??
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
+            snsCacheRepository.zremStringRangeByRank(key = SNS_ZSET_KEY, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+            snsCacheRepository.del(key = key)
         }
 
         return SnsFindResultDto(snsCache = snsCache)
@@ -44,8 +48,8 @@ class SnsFacadeService(
     fun findAllByLimitAndOffset(start: Long, count: Long): Pair<List<SnsFindResultDto>, Long> {
         val snsKeys: List<String> = snsCacheReadRepository.zrevrangeString(
             key = SNS_ZSET_KEY,
-            startIndex = start,
-            endIndex = start.plus(count).minus(1),
+            start = start,
+            end = start.plus(count).minus(1),
         )
         val snsKeyTotalCount: Long = snsCacheReadRepository.zcard(key = SNS_ZSET_KEY)
         val snsCaches: List<SnsCache> = snsCacheReadRepository.mget(keys = snsKeys, clazz = SnsCache::class.java)
