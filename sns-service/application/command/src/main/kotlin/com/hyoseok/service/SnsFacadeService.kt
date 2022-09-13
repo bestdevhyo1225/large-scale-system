@@ -33,7 +33,6 @@ class SnsFacadeService(
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
             snsCacheRepository.zremStringRangeByRank(key = SNS_ZSET_KEY, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
-            snsCacheRepository.del(key = key)
         }
 
         return SnsCreateResultDto(snsId = sns.id!!)
