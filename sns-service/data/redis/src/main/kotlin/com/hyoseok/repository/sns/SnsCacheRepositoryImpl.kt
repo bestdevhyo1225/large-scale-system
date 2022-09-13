@@ -15,6 +15,10 @@ class SnsCacheRepositoryImpl(
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
+    override fun del(key: String) {
+        redisTemplate.opsForValue().operations.delete(key)
+    }
+
     override fun setex(key: String, value: SnsCache, expireTime: Long, timeUnit: TimeUnit) {
         redisTemplate.opsForValue()
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
