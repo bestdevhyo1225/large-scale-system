@@ -48,8 +48,8 @@ class SnsFacadeService(
     fun findAllByLimitAndOffset(start: Long, count: Long): Pair<List<SnsFindResultDto>, Long> {
         val snsKeys: List<String> = snsCacheReadRepository.zrevrangeString(
             key = SNS_ZSET_KEY,
-            startIndex = start,
-            endIndex = start.plus(count).minus(1),
+            start = start,
+            end = start.plus(count).minus(1),
         )
         val snsKeyTotalCount: Long = snsCacheReadRepository.zcard(key = SNS_ZSET_KEY)
         val snsCaches: List<SnsCache> = snsCacheReadRepository.mget(keys = snsKeys, clazz = SnsCache::class.java)

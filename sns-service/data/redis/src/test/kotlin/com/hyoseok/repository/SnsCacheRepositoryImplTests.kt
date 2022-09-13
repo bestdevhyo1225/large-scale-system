@@ -209,7 +209,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
         this.describe("zrevrangeString 메서드는") {
             context("key에 대한 값이 없는 경우") {
                 it("빈 리스트를 반환한다") {
-                    snsCacheReadRepository.zrevrangeString(key = "test", startIndex = 0, endIndex = 5)
+                    snsCacheReadRepository.zrevrangeString(key = "test", start = 0, end = 5)
                         .shouldBeEmpty()
                 }
             }
@@ -228,7 +228,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 snsCacheRepository.zremString(key = key, value = value)
 
                 // then
-                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 10)
+                snsCacheReadRepository.zrevrangeString(key = key, start = 0, end = 10)
                     .isEmpty()
             }
         }
