@@ -102,7 +102,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 snsCacheRepository.zaddString(key = key, value = values[1], score = scores[1])
 
                 // then
-                snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 1)
+                snsCacheReadRepository.zrevrangeString(key = key, start = 0, end = 1)
                     .containsAll(values)
             }
         }
