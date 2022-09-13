@@ -20,6 +20,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -269,6 +270,36 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
 
                     afterTotalCount.shouldBe(beforeTotalCount)
                 }
+            }
+        }
+
+        this.describe("del 메서드는") {
+            it("캐시를 삭제한다") {
+                // given
+                val id = 1L
+                val key = RedisKeys.getSnsKey(id = id)
+                val snsCache = SnsCache(
+                    id = id,
+                    memberId = 1234L,
+                    title = "title",
+                    contents = "contents",
+                    writer = "writer",
+                    isDisplay = true,
+                    createdAt = LocalDateTime.now().withNano(0),
+                    updatedAt = LocalDateTime.now().withNano(0),
+                    snsImages = listOf(SnsImage(id = 1L, url = "https://test.com", sortOrder = 0)),
+                    snsTag = SnsTag(id = 1L, type = SnsTagType.STYLE, values = listOf("캐주얼", "출근")),
+                    products = listOf(),
+                )
+
+                snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+
+                // when
+                snsCacheRepository.del(key = key)
+
+                // then
+                snsCacheReadRepository.get(key = key, clazz = SnsCache::class.java)
+                    .shouldBeNull()
             }
         }
     }
