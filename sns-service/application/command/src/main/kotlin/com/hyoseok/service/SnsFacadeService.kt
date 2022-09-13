@@ -1,5 +1,6 @@
 package com.hyoseok.service
 
+import com.hyoseok.config.RedisCommons.ZSET_MAX_LIMIT
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
@@ -24,14 +25,20 @@ class SnsFacadeService(
 
     fun create(dto: SnsCreateDto): SnsCreateResultDto {
         val sns: Sns = snsCommandService.create(dto = dto)
+        val key: String = RedisKeys.getSnsKey(id = sns.id!!)
+        val snsCache: SnsCache = sns.toCacheDto()
+        val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
-            val snsCache: SnsCache = sns.toCacheDto()
-            val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
-
+            // 트랜잭션 처리??
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
+            snsCacheRepository.zremStringRangeByRank(
+                key = SNS_ZSET_KEY,
+                startIndex = ZSET_MAX_LIMIT,
+                endIndex = ZSET_MAX_LIMIT,
+            )
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+            snsCacheRepository.del(key = key)
         }
 
         return SnsCreateResultDto(snsId = sns.id!!)
@@ -39,11 +46,10 @@ class SnsFacadeService(
 
     fun edit(dto: SnsEditDto) {
         val sns: Sns = snsCommandService.edit(dto = dto)
+        val key: String = RedisKeys.getSnsKey(id = sns.id!!)
+        val snsCache: SnsCache = sns.toCacheDto()
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsKey(id = sns.id!!)
-            val snsCache: SnsCache = sns.toCacheDto()
-
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
         }
     }
@@ -51,9 +57,9 @@ class SnsFacadeService(
     fun delete(id: Long) {
         snsCommandService.delete(id = id)
 
-        CoroutineScope(context = Dispatchers.IO).launch {
-            val key: String = RedisKeys.getSnsKey(id = id)
+        val key: String = RedisKeys.getSnsKey(id = id)
 
+        CoroutineScope(context = Dispatchers.IO).launch {
             snsCacheRepository.zremString(key = SNS_ZSET_KEY, value = key)
         }
     }

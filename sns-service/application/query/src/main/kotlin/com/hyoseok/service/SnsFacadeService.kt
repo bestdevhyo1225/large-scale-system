@@ -1,5 +1,6 @@
 package com.hyoseok.service
 
+import com.hyoseok.config.RedisCommons
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
@@ -35,7 +36,13 @@ class SnsFacadeService(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
+            snsCacheRepository.zremStringRangeByRank(
+                key = SNS_ZSET_KEY,
+                startIndex = RedisCommons.ZSET_MAX_LIMIT,
+                endIndex = RedisCommons.ZSET_MAX_LIMIT,
+            )
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+            snsCacheRepository.del(key = key)
         }
 
         return SnsFindResultDto(snsCache = snsCache)
