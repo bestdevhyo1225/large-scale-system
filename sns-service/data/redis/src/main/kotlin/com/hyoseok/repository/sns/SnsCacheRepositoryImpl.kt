@@ -36,4 +36,8 @@ class SnsCacheRepositoryImpl(
     override fun zremString(key: String, value: String) {
         redisTemplate.opsForZSet().remove(key, value)
     }
+
+    override fun zremStringRangeByRank(key: String, startIndex: Long, endIndex: Long) {
+        redisTemplate.opsForZSet().removeRange(key, startIndex, endIndex)
+    }
 }

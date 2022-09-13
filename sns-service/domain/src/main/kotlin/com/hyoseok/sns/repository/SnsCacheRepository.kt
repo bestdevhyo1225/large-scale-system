@@ -9,4 +9,5 @@ interface SnsCacheRepository {
     fun zaddString(key: String, value: String, score: Double)
 
     fun zremString(key: String, value: String)
+    fun zremStringRangeByRank(key: String, startIndex: Long, endIndex: Long)
 }

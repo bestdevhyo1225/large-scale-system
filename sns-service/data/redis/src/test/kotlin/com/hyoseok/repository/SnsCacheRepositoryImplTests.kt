@@ -231,5 +231,45 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                     .isEmpty()
             }
         }
+
+        this.describe("zremStringRangeByRank 메서드는") {
+            it("순위에 대한 범위를 지정하여 데이터를 삭제한다") {
+                // given
+                val key = "snsKeys"
+                val values = (1L..10L).map { RedisKeys.getSnsKey(id = it) }
+                values.forEachIndexed { index, value ->
+                    snsCacheRepository.zaddString(key = key, value = value, score = index.toDouble())
+                }
+                val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                // when
+                snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 9, endIndex = 9)
+
+                // then
+                val afterTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                afterTotalCount.shouldBe(beforeTotalCount.minus(1))
+            }
+
+            context("startIndex 및 endIndex 범위에 해당되지 않는 데이터의 경우") {
+                it("삭제되지 않는다") {
+                    // given
+                    val key = "snsKeys"
+                    val values = (1L..10L).map { RedisKeys.getSnsKey(id = it) }
+                    values.forEachIndexed { index, value ->
+                        snsCacheRepository.zaddString(key = key, value = value, score = index.toDouble())
+                    }
+                    val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                    // when
+                    snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 100_000, endIndex = 100_000)
+
+                    // then
+                    val afterTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                    afterTotalCount.shouldBe(beforeTotalCount)
+                }
+            }
+        }
     }
 }
