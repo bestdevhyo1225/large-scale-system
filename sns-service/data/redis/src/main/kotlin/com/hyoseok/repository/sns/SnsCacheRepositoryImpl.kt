@@ -15,6 +15,10 @@ class SnsCacheRepositoryImpl(
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
+    override fun del(key: String) {
+        redisTemplate.opsForValue().operations.delete(key)
+    }
+
     override fun setex(key: String, value: SnsCache, expireTime: Long, timeUnit: TimeUnit) {
         redisTemplate.opsForValue()
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
@@ -35,5 +39,9 @@ class SnsCacheRepositoryImpl(
 
     override fun zremString(key: String, value: String) {
         redisTemplate.opsForZSet().remove(key, value)
+    }
+
+    override fun zremStringRangeByRank(key: String, startIndex: Long, endIndex: Long) {
+        redisTemplate.opsForZSet().removeRange(key, startIndex, endIndex)
     }
 }

@@ -20,6 +20,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -229,6 +230,76 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 // then
                 snsCacheReadRepository.zrevrangeString(key = key, startIndex = 0, endIndex = 10)
                     .isEmpty()
+            }
+        }
+
+        this.describe("zremStringRangeByRank 메서드는") {
+            it("순위에 대한 범위를 지정하여 데이터를 삭제한다") {
+                // given
+                val key = "snsKeys"
+                val values = (1L..10L).map { RedisKeys.getSnsKey(id = it) }
+                values.forEachIndexed { index, value ->
+                    snsCacheRepository.zaddString(key = key, value = value, score = index.toDouble())
+                }
+                val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                // when
+                snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 9, endIndex = 9)
+
+                // then
+                val afterTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                afterTotalCount.shouldBe(beforeTotalCount.minus(1))
+            }
+
+            context("startIndex 및 endIndex 범위에 해당되지 않는 데이터의 경우") {
+                it("삭제되지 않는다") {
+                    // given
+                    val key = "snsKeys"
+                    val values = (1L..10L).map { RedisKeys.getSnsKey(id = it) }
+                    values.forEachIndexed { index, value ->
+                        snsCacheRepository.zaddString(key = key, value = value, score = index.toDouble())
+                    }
+                    val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                    // when
+                    snsCacheRepository.zremStringRangeByRank(key = key, startIndex = 100_000, endIndex = 100_000)
+
+                    // then
+                    val afterTotalCount = snsCacheReadRepository.zcard(key = key)
+
+                    afterTotalCount.shouldBe(beforeTotalCount)
+                }
+            }
+        }
+
+        this.describe("del 메서드는") {
+            it("캐시를 삭제한다") {
+                // given
+                val id = 1L
+                val key = RedisKeys.getSnsKey(id = id)
+                val snsCache = SnsCache(
+                    id = id,
+                    memberId = 1234L,
+                    title = "title",
+                    contents = "contents",
+                    writer = "writer",
+                    isDisplay = true,
+                    createdAt = LocalDateTime.now().withNano(0),
+                    updatedAt = LocalDateTime.now().withNano(0),
+                    snsImages = listOf(SnsImage(id = 1L, url = "https://test.com", sortOrder = 0)),
+                    snsTag = SnsTag(id = 1L, type = SnsTagType.STYLE, values = listOf("캐주얼", "출근")),
+                    products = listOf(),
+                )
+
+                snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
+
+                // when
+                snsCacheRepository.del(key = key)
+
+                // then
+                snsCacheReadRepository.get(key = key, clazz = SnsCache::class.java)
+                    .shouldBeNull()
             }
         }
     }
