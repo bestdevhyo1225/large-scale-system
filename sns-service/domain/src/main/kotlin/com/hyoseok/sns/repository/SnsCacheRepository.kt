@@ -9,5 +9,5 @@ interface SnsCacheRepository {
     fun setAllEx(keysAndValues: List<Pair<String, SnsCache>>, expireTime: Long, timeUnit: TimeUnit)
     fun zaddString(key: String, value: String, score: Double)
     fun zremString(key: String, value: String)
-    fun zremStringRangeByRank(key: String, startIndex: Long, endIndex: Long)
+    fun zremStringRangeByRank(key: String, start: Long, end: Long)
 }

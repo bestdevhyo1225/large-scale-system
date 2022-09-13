@@ -31,11 +31,7 @@ class SnsFacadeService(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
-            snsCacheRepository.zremStringRangeByRank(
-                key = SNS_ZSET_KEY,
-                startIndex = ZSET_MAX_LIMIT,
-                endIndex = ZSET_MAX_LIMIT,
-            )
+            snsCacheRepository.zremStringRangeByRank(key = SNS_ZSET_KEY, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
             snsCacheRepository.del(key = key)
         }
