@@ -56,6 +56,7 @@ class SnsFacadeService(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             snsCacheRepository.zremString(key = SNS_ZSET_KEY, value = key)
+            snsCacheRepository.del(key = key)
         }
     }
 }
