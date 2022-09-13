@@ -30,8 +30,10 @@ class SnsFacadeService(
         val score: Double = Timestamp.valueOf(snsCache.createdAt).time.toDouble()
 
         CoroutineScope(context = Dispatchers.IO).launch {
+            // 트랜잭션 시작
             snsCacheRepository.zaddString(key = SNS_ZSET_KEY, value = key, score = score)
             snsCacheRepository.zremStringRangeByRank(key = SNS_ZSET_KEY, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
+            // 트랜잭션 종료
             snsCacheRepository.setex(key = key, value = snsCache, expireTime = SNS, timeUnit = SECONDS)
         }
 
