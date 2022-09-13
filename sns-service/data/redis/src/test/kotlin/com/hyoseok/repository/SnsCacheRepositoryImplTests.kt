@@ -244,11 +244,14 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                 val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
 
                 // when
-                snsCacheRepository.zremStringRangeByRank(key = key, start = 9, end = 9)
+                snsCacheRepository.zremStringRangeByRank(key = key, start = -10, end = -10)
 
                 // then
+                val findValues = snsCacheReadRepository.zrevrangeString(key = key, start = 0, end = 10)
                 val afterTotalCount = snsCacheReadRepository.zcard(key = key)
 
+                findValues.first().shouldBe(values.last())
+                findValues.last().shouldBe(values[1])
                 afterTotalCount.shouldBe(beforeTotalCount.minus(1))
             }
 
@@ -263,7 +266,7 @@ internal class SnsCacheRepositoryImplTests : DescribeSpec() {
                     val beforeTotalCount = snsCacheReadRepository.zcard(key = key)
 
                     // when
-                    snsCacheRepository.zremStringRangeByRank(key = key, start = 100_000, end = 100_000)
+                    snsCacheRepository.zremStringRangeByRank(key = key, start = -100_000, end = -100_000)
 
                     // then
                     val afterTotalCount = snsCacheReadRepository.zcard(key = key)
