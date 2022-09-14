@@ -1,7 +1,6 @@
 package com.hyoseok.config
 
 import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import redis.embedded.RedisServer
 import redis.embedded.exceptions.EmbeddedRedisException
@@ -9,10 +8,7 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 @Configuration
-class RedisEmbbededServerConfig(
-    @Value("\${spring.data.redis.port}")
-    private val port: Int,
-) {
+class RedisEmbbededServerConfig {
 
     private val logger = KotlinLogging.logger {}
 
@@ -21,7 +17,8 @@ class RedisEmbbededServerConfig(
     @PostConstruct
     fun startEmbeddedRedisServer() {
         try {
-            embeddedRedisServer = RedisServer(port)
+            val redisPort = 6379
+            embeddedRedisServer = RedisServer(redisPort)
             embeddedRedisServer.start()
         } catch (exception: EmbeddedRedisException) {
             logger.error { exception }

@@ -4,8 +4,9 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      mode: standalone
+      nodes:
+        server-1: localhost:6379
 
 logging:
   level:

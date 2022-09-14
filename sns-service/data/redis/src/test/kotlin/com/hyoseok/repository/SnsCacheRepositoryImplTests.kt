@@ -1,11 +1,11 @@
 package com.hyoseok.repository
 
+import com.hyoseok.config.RedisConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.RedisExpireTimes.SNS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.SNS_ZSET_KEY
-import com.hyoseok.config.standalone.RedisStandaloneConfig
-import com.hyoseok.config.standalone.RedisStandaloneTemplateConfig
+import com.hyoseok.config.RedisTemplateConfig
 import com.hyoseok.repository.sns.SnsCacheRepositoryImpl
 import com.hyoseok.repository.sns.read.SnsCacheReadRepositoryImpl
 import com.hyoseok.sns.entity.SnsCache
@@ -37,8 +37,8 @@ import java.util.concurrent.TimeUnit.SECONDS
 @ContextConfiguration(
     classes = [
         RedisEmbbededServerConfig::class,
-        RedisStandaloneConfig::class,
-        RedisStandaloneTemplateConfig::class,
+        RedisConfig::class,
+        RedisTemplateConfig::class,
         SnsCacheRepository::class,
         SnsCacheReadRepository::class,
         SnsCacheRepositoryImpl::class,
