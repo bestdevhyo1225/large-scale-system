@@ -32,3 +32,43 @@ services:
     ports:
       - '6382:6382'
     restart: always
+
+  sns-post-redis:
+    image: redis:latest
+    container_name: sns-post-redis
+    command: redis-server --port 6383
+    ports:
+      - '6383:6383'
+    restart: always
+
+  sns-feed-redis:
+    image: redis:latest
+    container_name: sns-feed-redis
+    command: redis-server --port 6384
+    ports:
+      - '6384:6384'
+    restart: always
+
+  sns-wish-redis:
+    image: redis:latest
+    container_name: sns-wish-redis
+    command: redis-server --port 6385
+    ports:
+      - '6385:6385'
+    restart: always
+
+  sns-member-redis:
+    image: redis:latest
+    container_name: sns-member-redis
+    command: redis-server --port 6386
+    ports:
+      - '6386:6386'
+    restart: always
+
+  sns-friends-redis:
+    image: redis:latest
+    container_name: sns-friends-redis
+    command: redis-server --port 6387
+    ports:
+      - '6387:6387'
+    restart: always
