@@ -8,8 +8,8 @@ allOpen {
 }
 
 dependencies {
-    implementation(project(":sns-service:common"))
-    implementation(project(":sns-service:domain"))
+    implementation(project(":sns-feed-service:common"))
+    implementation(project(":sns-feed-service:domain"))
 
     // spring data jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
