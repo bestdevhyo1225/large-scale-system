@@ -1,6 +1,7 @@
 package com.hyoseok.repository.post
 
 import com.hyoseok.post.entity.Post
+import com.hyoseok.post.entity.PostImage
 import com.hyoseok.post.repository.PostRepository
 import com.hyoseok.repository.RepositoryImplTests
 import io.kotest.core.extensions.Extension
@@ -25,9 +26,9 @@ internal class PostRepositoryTests : RepositoryImplTests, DescribeSpec() {
                 val title = "게시물 제목"
                 val contents = "내용"
                 val writer = "작성자"
-                val images: List<Pair<String, Int>> = listOf(
-                    Pair(first = "https://main/images.com", second = 0),
-                    Pair(first = "https://list/images.com", second = 1),
+                val images: List<PostImage> = listOf(
+                    PostImage(url = "https://main/images.com", sortOrder = 0),
+                    PostImage(url = "https://list/images.com", sortOrder = 1),
                 )
                 val post = Post(
                     memberId = memberId,

@@ -9,7 +9,7 @@ class Post private constructor(
     title: String,
     contents: String,
     writer: String,
-    viewCount: Int = 0,
+    viewCount: Long = 0,
     images: List<PostImage>,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
@@ -31,7 +31,7 @@ class Post private constructor(
     var writer: String = writer
         private set
 
-    var viewCount: Int = viewCount
+    var viewCount: Long = viewCount
         private set
 
     var images: List<PostImage> = images
@@ -72,13 +72,13 @@ class Post private constructor(
             title: String,
             contents: String,
             writer: String,
-            images: List<Pair<String, Int>>,
+            images: List<PostImage>,
         ) = Post(
             memberId = memberId,
             title = title,
             contents = contents,
             writer = writer,
-            images = images.map { with(receiver = it) { PostImage(url = first, sortOrder = second) } },
+            images = images,
             createdAt = LocalDateTime.now().withNano(0),
             updatedAt = LocalDateTime.now().withNano(0),
         )
@@ -87,4 +87,16 @@ class Post private constructor(
     fun changeId(id: Long) {
         this.id = id
     }
+
+    fun toPostCache() =
+        PostCache(
+            id = id!!,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            images = images,
+        )
 }

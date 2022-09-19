@@ -20,7 +20,7 @@ class PostJpaEntity private constructor(
     title: String,
     contents: String,
     writer: String,
-    viewCount: Int = 0,
+    viewCount: Long = 0,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -48,7 +48,7 @@ class PostJpaEntity private constructor(
         protected set
 
     @Column(name = "view_count", nullable = false)
-    var viewCount: Int = viewCount
+    var viewCount: Long = viewCount
         protected set
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
