@@ -1,0 +1,3 @@
+package com.hyoseok.follower.repository
+
+interface FollowerCacheReadRepository
