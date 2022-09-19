@@ -34,7 +34,7 @@ class PostService(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             setPostCache(id = post.id!!, postCache = post.toPostCache())
-            setPostViewCache(id = post.id!!, viewCount = post.viewCount)
+            setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
         }
@@ -51,7 +51,7 @@ class PostService(
         )
     }
 
-    private suspend fun setPostViewCache(id: Long, viewCount: Long) {
+    private suspend fun setPostViewCount(id: Long, viewCount: Long) {
         postCacheRepository.set(
             key = RedisKeys.getPostViewsKey(id = id),
             value = viewCount,
