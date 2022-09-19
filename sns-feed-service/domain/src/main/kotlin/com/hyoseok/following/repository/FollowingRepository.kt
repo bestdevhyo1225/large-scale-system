@@ -1,3 +1,3 @@
 package com.hyoseok.following.repository
 
-interface FollowingCacheRepository
+interface FollowingRepository
