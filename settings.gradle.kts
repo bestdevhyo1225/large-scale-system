@@ -38,4 +38,14 @@ include(
     "sns-service:domain",
     "sns-service:infrastructure:aws",
     "sns-service:infrastructure:okhttp3",
+    // sns-feed-service
+    "sns-feed-service:application:api:command",
+    "sns-feed-service:application:api:query",
+    "sns-feed-service:application:event-worker:feed",
+    "sns-feed-service:common",
+    "sns-feed-service:data:jpa",
+    "sns-feed-service:data:redis",
+    "sns-feed-service:domain",
+    "sns-feed-service:infrastructure:aws",
+    "sns-feed-service:infrastructure:okhttp3",
 )
