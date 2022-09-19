@@ -10,6 +10,7 @@ import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImage
 import com.hyoseok.post.repository.PostCacheReadRepository
 import com.hyoseok.post.repository.PostCacheRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -18,6 +19,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest
+import org.springframework.data.redis.RedisSystemException
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
 import java.time.LocalDateTime
@@ -71,6 +73,49 @@ internal class PostCacheRepositoryTests : DescribeSpec() {
                 // then
                 postCacheReadRepository.get(key = key, clazz = PostCache::class.java)
                     .shouldBe(snsCache)
+            }
+        }
+
+        this.describe("increment 메서드는") {
+            it("key의 value를 1씩 증가 시킨다") {
+                // given
+                val id = 1L
+                val key: String = RedisKeys.getPostViewsKey(id = id)
+                val value = 0L
+
+                postCacheRepository.set(key = key, value = value, expireTime = POST_VIEWS, timeUnit = SECONDS)
+
+                // when
+                val result: Long = postCacheRepository.increment(key = key)
+
+                // then
+                result.shouldBe(value.plus(1))
+            }
+
+            context("key가 존재하지 않는 경우") {
+                it("value의 초기 값은 1이다") {
+                    // given
+                    val id = 1L
+                    val key: String = RedisKeys.getPostViewsKey(id = id)
+
+                    // when
+                    val result: Long = postCacheRepository.increment(key = key)
+
+                    // then
+                    result.shouldBe(1)
+                }
+            }
+
+            context("value가 정수형이 아닌 경우") {
+                it("예외를 던진다") {
+                    val id = 1L
+                    val key: String = RedisKeys.getPostViewsKey(id = id)
+                    val value = "testValue"
+
+                    postCacheRepository.set(key = key, value = value, expireTime = POST_VIEWS, timeUnit = SECONDS)
+
+                    shouldThrow<RedisSystemException> { postCacheRepository.increment(key = key) }
+                }
             }
         }
     }

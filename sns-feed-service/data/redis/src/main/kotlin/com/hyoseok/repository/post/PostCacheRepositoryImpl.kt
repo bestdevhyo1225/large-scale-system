@@ -20,4 +20,6 @@ class PostCacheRepositoryImpl(
         redisTemplate.opsForValue()
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
     }
+
+    override fun increment(key: String): Long = redisTemplate.opsForValue().increment(key) ?: 0
 }
