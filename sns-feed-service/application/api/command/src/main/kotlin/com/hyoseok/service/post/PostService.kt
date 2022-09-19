@@ -35,7 +35,7 @@ class PostService(
         CoroutineScope(context = Dispatchers.IO).launch {
             setPostCache(id = post.id!!, postCache = post.toPostCache())
             setPostViewCache(id = post.id!!, viewCount = post.viewCount)
-            zaddPostKeys(value = post.id!!, createdAt = post.createdAt)
+            zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
         }
 
@@ -60,10 +60,10 @@ class PostService(
         )
     }
 
-    private suspend fun zaddPostKeys(value: Long, createdAt: LocalDateTime) {
+    private suspend fun zaddPostKeys(id: Long, createdAt: LocalDateTime) {
         postCacheRepository.zadd(
             key = POST_KEYS,
-            value = value,
+            value = id,
             score = Timestamp.valueOf(createdAt).time.toDouble(),
         )
     }
