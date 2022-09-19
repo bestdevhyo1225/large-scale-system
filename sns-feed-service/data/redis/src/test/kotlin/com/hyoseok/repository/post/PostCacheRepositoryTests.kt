@@ -4,6 +4,7 @@ import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.RedisExpireTimes.POST
 import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
 import com.hyoseok.config.RedisKeys
+import com.hyoseok.config.RedisKeys.POST_KEYS
 import com.hyoseok.config.post.RedisPostConfig
 import com.hyoseok.config.post.RedisPostTemplateConfig
 import com.hyoseok.post.entity.PostCache
@@ -22,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest
 import org.springframework.data.redis.RedisSystemException
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
+import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit.SECONDS
 
@@ -51,31 +53,6 @@ internal class PostCacheRepositoryTests : DescribeSpec() {
     private lateinit var postCacheReadRepository: PostCacheReadRepository
 
     init {
-        this.describe("set 메서드는") {
-            it("PostCache 엔티티를 저장한다") {
-                // given
-                val id = 1L
-                val key: String = RedisKeys.getPostKey(id = id)
-                val snsCache = PostCache(
-                    id = id,
-                    memberId = 1234L,
-                    title = "title",
-                    contents = "contents",
-                    writer = "writer",
-                    createdAt = LocalDateTime.now().withNano(0),
-                    updatedAt = LocalDateTime.now().withNano(0),
-                    images = listOf(PostImage(id = 1L, url = "https://test.com", sortOrder = 0)),
-                )
-
-                // when
-                postCacheRepository.set(key = key, value = snsCache, expireTime = POST, timeUnit = SECONDS)
-
-                // then
-                postCacheReadRepository.get(key = key, clazz = PostCache::class.java)
-                    .shouldBe(snsCache)
-            }
-        }
-
         this.describe("increment 메서드는") {
             it("key의 value를 1씩 증가 시킨다") {
                 // given
@@ -116,6 +93,52 @@ internal class PostCacheRepositoryTests : DescribeSpec() {
 
                     shouldThrow<RedisSystemException> { postCacheRepository.increment(key = key) }
                 }
+            }
+        }
+
+        this.describe("set 메서드는") {
+            it("PostCache 엔티티를 저장한다") {
+                // given
+                val id = 1L
+                val key: String = RedisKeys.getPostKey(id = id)
+                val snsCache = PostCache(
+                    id = id,
+                    memberId = 1234L,
+                    title = "title",
+                    contents = "contents",
+                    writer = "writer",
+                    createdAt = LocalDateTime.now().withNano(0),
+                    updatedAt = LocalDateTime.now().withNano(0),
+                    images = listOf(PostImage(id = 1L, url = "https://test.com", sortOrder = 0)),
+                )
+
+                // when
+                postCacheRepository.set(key = key, value = snsCache, expireTime = POST, timeUnit = SECONDS)
+
+                // then
+                postCacheReadRepository.get(key = key, clazz = PostCache::class.java)
+                    .shouldBe(snsCache)
+            }
+        }
+
+        this.describe("zadd 메서드는") {
+            it("key, value, score를 저장한다") {
+                // given
+                val key: String = POST_KEYS
+                val values = listOf(RedisKeys.getPostKey(id = 1L), RedisKeys.getPostKey(id = 2L))
+                val nowDateTime = LocalDateTime.now().withNano(0)
+                val scores = listOf(
+                    Timestamp.valueOf(nowDateTime).time.toDouble(),
+                    Timestamp.valueOf(nowDateTime.plusHours(1)).time.toDouble(),
+                )
+
+                // when
+                postCacheRepository.zadd(key = key, value = values[0], score = scores[0])
+                postCacheRepository.zadd(key = key, value = values[1], score = scores[1])
+
+                // then
+                postCacheReadRepository.zrevrange(key = key, start = 0, end = 1, clazz = String::class.java)
+                    .containsAll(values)
             }
         }
     }

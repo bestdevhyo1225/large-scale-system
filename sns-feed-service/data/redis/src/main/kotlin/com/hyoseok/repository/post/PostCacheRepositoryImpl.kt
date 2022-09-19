@@ -16,10 +16,18 @@ class PostCacheRepositoryImpl(
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
+    override fun increment(key: String): Long = redisTemplate.opsForValue().increment(key) ?: 0
+
     override fun <T : Any> set(key: String, value: T, expireTime: Long, timeUnit: TimeUnit) {
         redisTemplate.opsForValue()
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
     }
 
-    override fun increment(key: String): Long = redisTemplate.opsForValue().increment(key) ?: 0
+    override fun <T : Any> zadd(key: String, value: T, score: Double) {
+        redisTemplate.opsForZSet().add(key, jacksonObjectMapper.writeValueAsString(value), score)
+    }
+
+    override fun zremRangeByRank(key: String, start: Long, end: Long) {
+        redisTemplate.opsForZSet().removeRange(key, start, end)
+    }
 }
