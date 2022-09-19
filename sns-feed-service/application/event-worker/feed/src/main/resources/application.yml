@@ -1,0 +1,6 @@
+server:
+  port: 9002
+  tomcat:
+    threads:
+      min-spare: 10
+      max: 10
