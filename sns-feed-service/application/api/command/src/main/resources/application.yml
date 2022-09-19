@@ -76,6 +76,7 @@ spring:
 
   data:
     redis:
-      mode: cluster
-      nodes:
-        server-1: cluster:6379
+      post:
+        mode: standalone
+        nodes:
+          node1: localhost:6379
