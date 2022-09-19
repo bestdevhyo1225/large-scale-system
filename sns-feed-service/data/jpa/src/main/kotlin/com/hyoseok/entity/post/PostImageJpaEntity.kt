@@ -17,7 +17,7 @@ import javax.persistence.Table
 class PostImageJpaEntity private constructor(
     url: String,
     sortOrder: Int,
-){
+) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
