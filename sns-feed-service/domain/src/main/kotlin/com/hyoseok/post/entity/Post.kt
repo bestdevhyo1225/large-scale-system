@@ -83,4 +83,8 @@ class Post private constructor(
             updatedAt = LocalDateTime.now().withNano(0),
         )
     }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
 }

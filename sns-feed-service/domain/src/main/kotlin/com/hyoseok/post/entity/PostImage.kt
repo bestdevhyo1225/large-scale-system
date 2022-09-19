@@ -32,4 +32,8 @@ class PostImage private constructor(
         operator fun invoke(id: Long, url: String, sortOrder: Int) =
             PostImage(id = id, url = url, sortOrder = sortOrder)
     }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
 }
