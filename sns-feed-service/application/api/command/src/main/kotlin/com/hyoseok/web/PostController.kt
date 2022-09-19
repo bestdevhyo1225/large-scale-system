@@ -23,7 +23,10 @@ class PostController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@Valid @RequestBody request: PostCreateRequest): ResponseEntity<SuccessResponse<PostCreateResultDto>> {
+    fun create(
+        @Valid @RequestBody
+        request: PostCreateRequest,
+    ): ResponseEntity<SuccessResponse<PostCreateResultDto>> {
         val postCreateResultDto: PostCreateResultDto = postService.create(dto = request.toServiceDto())
         return created(create("/api/v1/posts/${postCreateResultDto.postId}"))
             .body(SuccessResponse(data = postCreateResultDto))
