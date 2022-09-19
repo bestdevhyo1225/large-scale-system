@@ -1,6 +1,7 @@
 package com.hyoseok.post
 
 import com.hyoseok.post.entity.Post
+import com.hyoseok.post.entity.PostImage
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -13,9 +14,9 @@ internal class PostTests : DescribeSpec(
                 val title = "게시물 제목"
                 val contents = "내용"
                 val writer = "작성자"
-                val images: List<Pair<String, Int>> = listOf(
-                    Pair(first = "https://main/images.com", second = 0),
-                    Pair(first = "https://list/images.com", second = 1),
+                val images: List<PostImage> = listOf(
+                    PostImage(url = "https://main/images.com", sortOrder = 0),
+                    PostImage(url = "https://list/images.com", sortOrder = 1),
                 )
 
                 // when
@@ -33,8 +34,8 @@ internal class PostTests : DescribeSpec(
                 post.contents.shouldBe(contents)
                 post.writer.shouldBe(writer)
                 post.images.forEachIndexed { index, postImage ->
-                    postImage.url.shouldBe(images[index].first)
-                    postImage.sortOrder.shouldBe(images[index].second)
+                    postImage.url.shouldBe(images[index].url)
+                    postImage.sortOrder.shouldBe(images[index].sortOrder)
                 }
             }
         }

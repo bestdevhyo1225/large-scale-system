@@ -12,7 +12,3 @@ data class PostCache(
     val updatedAt: LocalDateTime,
     val images: List<PostImage>,
 )
-
-data class PostViewCache(
-    val viewCount: Int,
-)
