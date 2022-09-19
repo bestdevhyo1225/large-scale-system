@@ -47,5 +47,6 @@ include(
     "sns-feed-service:data:redis",
     "sns-feed-service:domain",
     "sns-feed-service:infrastructure:aws",
+    "sns-feed-service:infrastructure:kafka",
     "sns-feed-service:infrastructure:okhttp3",
 )
