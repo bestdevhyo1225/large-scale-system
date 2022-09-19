@@ -1,3 +1,9 @@
 package com.hyoseok.post.repository
 
-interface PostReadRepository
+import com.hyoseok.post.entity.Post
+
+interface PostReadRepository {
+    fun findById(id: Long): Post
+    fun findByIdWithImages(id: Long): Post
+    fun findAllByPLimitAndOffset(limit: Long, offset: Long): Pair<Long, List<Post>>
+}
