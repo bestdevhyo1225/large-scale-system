@@ -1,0 +1,47 @@
+### SNS Post 생성
+POST localhost:9000/api/v1/posts
+Content-Type: application/json
+
+{
+  "memberId": 1823,
+  "title": "title",
+  "contents": "contents",
+  "writer": "writer",
+  "images": [
+    {
+      "url": "image1",
+      "sortOrder": 0
+    },
+    {
+      "url": "image2",
+      "sortOrder": 1
+    }
+  ]
+}
+
+### SNS 수정
+PATCH localhost:9000/api/v1/sns/1
+Content-Type: application/json
+
+{
+  "memberId": 1823,
+  "title": "SNS 제목 수정",
+  "contents": "contents",
+  "writer": "writer",
+  "images": [
+    {
+      "url": "image1",
+      "sortOrder": 0
+    }
+  ],
+  "tagId": 1,
+  "tagType": "tpo",
+  "tagValues": [
+    "출근",
+    "경조사"
+  ],
+  "productIds": [1, 2, 3]
+}
+
+### SNS 삭제
+DELETE localhost:9000/api/v1/sns/3
