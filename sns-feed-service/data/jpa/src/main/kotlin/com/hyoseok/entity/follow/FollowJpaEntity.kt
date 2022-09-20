@@ -7,10 +7,17 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(name = "follow")
+@Table(
+    name = "follow",
+    indexes = [
+        Index(name = "ix_follow_follower_id", columnList = "follower_id"),
+        Index(name = "ix_follow_followee_id", columnList = "followee_id"),
+    ],
+)
 @DynamicUpdate
 class FollowJpaEntity private constructor(
     followerId: Long,
@@ -40,4 +47,6 @@ class FollowJpaEntity private constructor(
     fun mapDomainEntity(follow: Follow) {
         follow.changeId(id = id!!)
     }
+
+    fun toDomainEntity() = Follow(id = id!!, followerId = followerId, followeeId = followeeId)
 }
