@@ -30,6 +30,9 @@ class Follow private constructor(
     companion object {
         operator fun invoke(followerId: Long, followeeId: Long) =
             Follow(followerId = followerId, followeeId = followeeId)
+
+        operator fun invoke(id: Long, followerId: Long, followeeId: Long) =
+            Follow(id = id, followerId = followerId, followeeId = followeeId)
     }
 
     fun changeId(id: Long) {

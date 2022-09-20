@@ -3,6 +3,6 @@ package com.hyoseok.follow.repository
 import com.hyoseok.follow.entity.Follow
 
 interface FollowReadRepository {
-    fun findByFollowerId(followerId: Long): Follow
-    fun findByFolloweeId(followeeId: Long): Follow
+    fun findAllByFollowerIdAndLimitAndCount(followerId: Long, limit: Long, offset: Long): Pair<Long, List<Follow>>
+    fun findAllByFolloweeIdAndLimitAndCount(followeeId: Long, limit: Long, offset: Long): Pair<Long, List<Follow>>
 }
