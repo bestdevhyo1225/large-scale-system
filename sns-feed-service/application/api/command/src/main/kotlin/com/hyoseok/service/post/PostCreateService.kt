@@ -5,10 +5,13 @@ import com.hyoseok.config.RedisExpireTimes.POST
 import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.POST_KEYS
+import com.hyoseok.follow.entity.Follow
+import com.hyoseok.follow.repository.FollowReadRepository
 import com.hyoseok.post.entity.Post
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.repository.PostCacheRepository
 import com.hyoseok.post.repository.PostRepository
+import com.hyoseok.service.dto.FollowerSendEventDto
 import com.hyoseok.service.dto.PostCreateDto
 import com.hyoseok.service.dto.PostCreateResultDto
 import kotlinx.coroutines.CoroutineScope
@@ -22,12 +25,13 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
 @Transactional
-class PostService(
+class PostCreateService(
     private val postRepository: PostRepository,
     private val postCacheRepository: PostCacheRepository,
+    private val followReadRepository: FollowReadRepository,
 ) {
 
-    fun create(dto: PostCreateDto): PostCreateResultDto {
+    fun execute(dto: PostCreateDto): PostCreateResultDto {
         val post: Post = dto.toEntity()
 
         postRepository.save(post = post)
@@ -37,6 +41,7 @@ class PostService(
             setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
+            sendFeedMessage(postId = post.id!!, followeeId = post.memberId)
         }
 
         return PostCreateResultDto(post = post)
@@ -70,5 +75,26 @@ class PostService(
 
     private suspend fun zremPostKeysRangeByRank() {
         postCacheRepository.zremRangeByRank(key = POST_KEYS, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
+    }
+
+    private suspend fun sendFeedMessage(postId: Long, followeeId: Long) {
+        val limit = 1000L
+        var offset = 0L
+        while (true) {
+            val (total: Long, follows: List<Follow>) = followReadRepository.findAllByFolloweeIdAndLimitAndCount(
+                followeeId = followeeId,
+                limit = limit,
+                offset = offset,
+            )
+
+            if (offset > total) {
+                break
+            }
+
+            // 메시지 보내기
+            follows.map { FollowerSendEventDto(postId = postId, followerId = it.followerId) }
+
+            offset += limit
+        }
     }
 }
