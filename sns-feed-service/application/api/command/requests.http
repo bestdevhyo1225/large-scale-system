@@ -45,3 +45,12 @@ Content-Type: application/json
 
 ### SNS 삭제
 DELETE localhost:9000/api/v1/sns/3
+
+### Follow 생성
+POST localhost:9000/api/v1/follows
+Content-Type: application/json
+
+{
+  "followerId": 1,
+  "followeeId": 2,
+}
