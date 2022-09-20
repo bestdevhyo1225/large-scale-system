@@ -1,7 +1,7 @@
 package com.hyoseok.web
 
 import com.hyoseok.service.dto.PostCreateResultDto
-import com.hyoseok.service.post.PostService
+import com.hyoseok.service.post.PostCreateService
 import com.hyoseok.web.request.PostCreateRequest
 import com.hyoseok.web.response.SuccessResponse
 import org.springframework.http.HttpStatus
@@ -18,7 +18,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/v1/posts")
 class PostController(
-    private val postService: PostService,
+    private val postCreateService: PostCreateService,
 ) {
 
     @PostMapping
@@ -27,7 +27,7 @@ class PostController(
         @Valid @RequestBody
         request: PostCreateRequest,
     ): ResponseEntity<SuccessResponse<PostCreateResultDto>> {
-        val postCreateResultDto: PostCreateResultDto = postService.create(dto = request.toServiceDto())
+        val postCreateResultDto: PostCreateResultDto = postCreateService.execute(dto = request.toServiceDto())
         return created(create("/api/v1/posts/${postCreateResultDto.postId}"))
             .body(SuccessResponse(data = postCreateResultDto))
     }
