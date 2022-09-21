@@ -1,7 +1,7 @@
 package com.hyoseok.service.post
 
 import com.hyoseok.config.KafkaTopics
-import com.hyoseok.config.RedisCommons.ZSET_MAX_LIMIT
+import com.hyoseok.config.RedisCommons.ZSET_POST_MAX_LIMIT
 import com.hyoseok.config.RedisExpireTimes.POST
 import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
 import com.hyoseok.config.RedisKeys
@@ -44,7 +44,7 @@ class PostCreateService(
             setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
-            sendFeedToFollower(postId = post.id!!, followeeId = post.memberId)
+            sendFeedToFollower(post = post, followeeId = post.memberId)
         }
 
         return PostCreateResultDto(post = post)
@@ -77,10 +77,10 @@ class PostCreateService(
     }
 
     private suspend fun zremPostKeysRangeByRank() {
-        postCacheRepository.zremRangeByRank(key = POST_KEYS, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
+        postCacheRepository.zremRangeByRank(key = POST_KEYS, start = ZSET_POST_MAX_LIMIT, end = ZSET_POST_MAX_LIMIT)
     }
 
-    private suspend fun sendFeedToFollower(postId: Long, followeeId: Long) {
+    private suspend fun sendFeedToFollower(post: Post, followeeId: Long) {
         val limit = 1000L
         var offset = 0L
         var isProgress = true
@@ -93,7 +93,7 @@ class PostCreateService(
 
             follows.forEach {
                 kafkaProducer.send(
-                    event = FollowerSendEventDto(postId = postId, followerId = it.followerId),
+                    event = FollowerSendEventDto(post = post, followerId = it.followerId),
                     topic = KafkaTopics.SNS_FEED,
                 )
             }
