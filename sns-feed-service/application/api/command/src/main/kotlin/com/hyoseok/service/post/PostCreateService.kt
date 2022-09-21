@@ -1,5 +1,6 @@
 package com.hyoseok.service.post
 
+import com.hyoseok.config.KafkaTopics
 import com.hyoseok.config.RedisCommons.ZSET_MAX_LIMIT
 import com.hyoseok.config.RedisExpireTimes.POST
 import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
@@ -11,6 +12,7 @@ import com.hyoseok.post.entity.Post
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.repository.PostCacheRepository
 import com.hyoseok.post.repository.PostRepository
+import com.hyoseok.publisher.KafkaProducer
 import com.hyoseok.service.dto.FollowerSendEventDto
 import com.hyoseok.service.dto.PostCreateDto
 import com.hyoseok.service.dto.PostCreateResultDto
@@ -29,6 +31,7 @@ class PostCreateService(
     private val postRepository: PostRepository,
     private val postCacheRepository: PostCacheRepository,
     private val followReadRepository: FollowReadRepository,
+    private val kafkaProducer: KafkaProducer,
 ) {
 
     fun execute(dto: PostCreateDto): PostCreateResultDto {
@@ -41,7 +44,7 @@ class PostCreateService(
             setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
-            sendFeedMessage(postId = post.id!!, followeeId = post.memberId)
+            sendFeedToFollower(postId = post.id!!, followeeId = post.memberId)
         }
 
         return PostCreateResultDto(post = post)
@@ -77,24 +80,29 @@ class PostCreateService(
         postCacheRepository.zremRangeByRank(key = POST_KEYS, start = ZSET_MAX_LIMIT, end = ZSET_MAX_LIMIT)
     }
 
-    private suspend fun sendFeedMessage(postId: Long, followeeId: Long) {
+    private suspend fun sendFeedToFollower(postId: Long, followeeId: Long) {
         val limit = 1000L
         var offset = 0L
-        while (true) {
-            val (total: Long, follows: List<Follow>) = followReadRepository.findAllByFolloweeIdAndLimitAndCount(
+        var isProgress = true
+        while (isProgress) {
+            val (total: Long, follows: List<Follow>) = followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
                 followeeId = followeeId,
                 limit = limit,
                 offset = offset,
             )
 
-            if (offset > total) {
-                break
+            follows.forEach {
+                kafkaProducer.send(
+                    event = FollowerSendEventDto(postId = postId, followerId = it.followerId),
+                    topic = KafkaTopics.SNS_FEED,
+                )
             }
 
-            // 메시지 보내기
-            follows.map { FollowerSendEventDto(postId = postId, followerId = it.followerId) }
-
             offset += limit
+
+            if (offset >= total) {
+                isProgress = false
+            }
         }
     }
 }
