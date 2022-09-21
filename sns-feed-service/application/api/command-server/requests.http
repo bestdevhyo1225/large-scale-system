@@ -54,3 +54,11 @@ Content-Type: application/json
   "followerId": 1,
   "followeeId": 2
 }
+
+### Member 생성
+POST localhost:9000/api/v1/members
+Content-Type: application/json
+
+{
+  "name": "janghs"
+}
