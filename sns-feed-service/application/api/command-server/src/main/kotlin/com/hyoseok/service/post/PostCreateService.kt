@@ -8,6 +8,7 @@ import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.POST_KEYS
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.repository.FollowReadRepository
+import com.hyoseok.member.repository.MemberReadRepository
 import com.hyoseok.post.entity.Post
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.repository.PostCacheRepository
@@ -31,13 +32,16 @@ class PostCreateService(
     private val postRepository: PostRepository,
     private val postCacheRepository: PostCacheRepository,
     private val followReadRepository: FollowReadRepository,
+    private val memberReadRepository: MemberReadRepository,
     private val kafkaProducer: KafkaProducer,
 ) {
 
     fun execute(dto: PostCreateDto): PostCreateResultDto {
         val post: Post = dto.toEntity()
 
-        postRepository.save(post = post)
+        if (memberReadRepository.exists(id = dto.memberId)) {
+            postRepository.save(post = post)
+        }
 
         CoroutineScope(context = Dispatchers.IO).launch {
             setPostCache(id = post.id!!, postCache = post.toPostCache())
