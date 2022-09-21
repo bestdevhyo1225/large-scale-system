@@ -6,6 +6,7 @@ import com.hyoseok.feed.repository.FeedCacheReadRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
+import java.util.concurrent.TimeUnit
 
 @Repository
 class FeedCacheReadRepositoryImpl(
@@ -14,6 +15,8 @@ class FeedCacheReadRepositoryImpl(
 ) : FeedCacheReadRepository, AbstractCacheRepository() {
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
+
+    override fun getExpire(key: String, timeUnit: TimeUnit): Long = redisTemplate.getExpire(key, timeUnit)
 
     override fun <T> zrevrange(key: String, start: Long, end: Long, clazz: Class<T>): List<T> {
         val values: Set<String?>? = redisTemplate.opsForZSet().reverseRange(key, start, end)

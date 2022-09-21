@@ -3,7 +3,7 @@ POST localhost:9000/api/v1/posts
 Content-Type: application/json
 
 {
-  "memberId": 1,
+  "memberId": 2,
   "title": "title",
   "contents": "contents",
   "writer": "writer",
