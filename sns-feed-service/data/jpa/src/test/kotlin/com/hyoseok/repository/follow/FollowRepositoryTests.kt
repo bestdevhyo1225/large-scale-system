@@ -39,7 +39,7 @@ internal class FollowRepositoryTests : RepositoryImplTests, DescribeSpec() {
             }
         }
 
-        this.describe("findAllByFolloweeIdAndLimitAndCount 메서드는") {
+        this.describe("findAllByFolloweeIdAndLimitAndOffset 메서드는") {
             it("나를 팔로우한 사람들을 조회한다") {
                 // given
                 val myMemberId = 1841104L
@@ -57,7 +57,7 @@ internal class FollowRepositoryTests : RepositoryImplTests, DescribeSpec() {
                 // when
                 val limit = 3L
                 val offset = 0L
-                val pairFollow: Pair<Long, List<Follow>> = followReadRepository.findAllByFolloweeIdAndLimitAndCount(
+                val pairFollow: Pair<Long, List<Follow>> = followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
                     followeeId = myMemberId,
                     limit = limit,
                     offset = offset,

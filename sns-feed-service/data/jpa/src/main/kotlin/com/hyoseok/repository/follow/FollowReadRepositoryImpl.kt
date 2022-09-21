@@ -15,7 +15,7 @@ class FollowReadRepositoryImpl(
     private val followJpaRepository: FollowJpaRepository,
 ) : FollowReadRepository {
 
-    override fun findAllByFollowerIdAndLimitAndCount(
+    override fun findAllByFollowerIdAndLimitAndOffset(
         followerId: Long,
         limit: Long,
         offset: Long,
@@ -23,7 +23,7 @@ class FollowReadRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun findAllByFolloweeIdAndLimitAndCount(
+    override fun findAllByFolloweeIdAndLimitAndOffset(
         followeeId: Long,
         limit: Long,
         offset: Long,

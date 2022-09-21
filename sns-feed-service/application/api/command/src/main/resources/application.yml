@@ -46,6 +46,16 @@ spring:
       nodes:
         server-1: localhost:6379
 
+  kafka:
+    producer:
+      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 500000 # 500KB
+      linger: 50
+
 logging:
   level:
     org.hibernate.SQL: debug
@@ -80,3 +90,13 @@ spring:
         mode: standalone
         nodes:
           node1: localhost:6379
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 500000 # 500KB
+      linger: 50
