@@ -16,6 +16,5 @@ class FeedController {
         @RequestParam start: Long,
         @RequestParam count: Long,
     ) {
-
     }
 }
