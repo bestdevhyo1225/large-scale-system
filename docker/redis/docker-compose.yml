@@ -65,9 +65,9 @@ services:
       - '6386:6386'
     restart: always
 
-  sns-friends-redis:
+  sns-follow-redis:
     image: redis:latest
-    container_name: sns-friends-redis
+    container_name: sns-follow-redis
     command: redis-server --port 6387
     ports:
       - '6387:6387'

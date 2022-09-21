@@ -42,9 +42,10 @@ spring:
 
   data:
     redis:
-      mode: standalone
-      nodes:
-        server-1: localhost:6379
+      post:
+        mode: standalone
+        nodes:
+          node1: localhost:6383
 
   kafka:
     producer:
@@ -89,7 +90,7 @@ spring:
       post:
         mode: standalone
         nodes:
-          node1: localhost:6379
+          node1: localhost:6383
 
   kafka:
     producer:
