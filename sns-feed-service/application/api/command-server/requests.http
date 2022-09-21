@@ -52,5 +52,5 @@ Content-Type: application/json
 
 {
   "followerId": 1,
-  "followeeId": 2,
+  "followeeId": 2
 }
