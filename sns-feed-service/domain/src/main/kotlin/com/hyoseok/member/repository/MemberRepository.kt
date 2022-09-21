@@ -1,3 +1,7 @@
 package com.hyoseok.member.repository
 
-interface MemberRepository
+import com.hyoseok.member.entity.Member
+
+interface MemberRepository {
+    fun save(member: Member)
+}
