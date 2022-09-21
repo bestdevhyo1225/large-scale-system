@@ -41,10 +41,11 @@ include(
     // sns-feed-service
     "sns-feed-service:application:api:command",
     "sns-feed-service:application:api:query",
-    "sns-feed-service:application:event-worker:feed",
+    "sns-feed-service:application:event-worker:feed-server",
     "sns-feed-service:common",
     "sns-feed-service:data:jpa",
-    "sns-feed-service:data:redis",
+    "sns-feed-service:data:redis:feed",
+    "sns-feed-service:data:redis:post",
     "sns-feed-service:domain",
     "sns-feed-service:infrastructure:aws",
     "sns-feed-service:infrastructure:kafka",
