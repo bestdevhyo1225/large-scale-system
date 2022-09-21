@@ -16,6 +16,16 @@ class MemberReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
 ) : MemberReadRepository {
 
+    override fun exists(id: Long): Boolean {
+        val fetchOne: Int = jpaQueryFactory
+            .selectOne()
+            .from(memberJpaEntity)
+            .where(memberJpaEntityIdEq(id = id))
+            .fetchFirst() ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
+
+        return fetchOne == 1
+    }
+
     override fun findById(id: Long): Member {
         val memberJpaEntity: MemberJpaEntity = jpaQueryFactory
             .selectFrom(memberJpaEntity)
