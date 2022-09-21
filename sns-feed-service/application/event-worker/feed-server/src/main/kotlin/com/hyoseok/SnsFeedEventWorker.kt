@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FeedEventWorker
+class SnsFeedEventWorker
 
 fun main(args: Array<String>) {
-    runApplication<FeedEventWorker>(*args)
+    runApplication<SnsFeedEventWorker>(*args)
 }
