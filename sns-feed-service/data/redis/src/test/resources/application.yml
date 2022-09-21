@@ -8,6 +8,10 @@ spring:
         mode: standalone
         nodes:
           node1: localhost:6379
+      feed:
+        mode: standalone
+        nodes:
+          node1: localhost:6380
 
 logging:
   level:
