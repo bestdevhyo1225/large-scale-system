@@ -1,5 +1,5 @@
 package com.hyoseok.config
 
-object RedisCommons {
+object RedisFeedCommons {
     const val ZSET_FEED_MAX_LIMIT = -101L
 }

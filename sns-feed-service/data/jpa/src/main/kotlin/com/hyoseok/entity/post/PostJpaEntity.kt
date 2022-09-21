@@ -78,6 +78,20 @@ class PostJpaEntity private constructor(
         }
     }
 
+    fun toDomainEntity(isFetchPostImages: Boolean = false) =
+        Post(
+            id = id!!,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            viewCount = viewCount,
+            images = if (isFetchPostImages) postImageJpaEntities.map { it.toDomainEntity() } else listOf(),
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+        )
+
     companion object {
         operator fun invoke(post: Post) =
             with(receiver = post) {

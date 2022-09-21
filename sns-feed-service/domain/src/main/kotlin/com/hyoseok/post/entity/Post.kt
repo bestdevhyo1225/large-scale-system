@@ -82,6 +82,30 @@ class Post private constructor(
             createdAt = LocalDateTime.now().withNano(0),
             updatedAt = LocalDateTime.now().withNano(0),
         )
+
+        operator fun invoke(
+            id: Long,
+            memberId: Long,
+            title: String,
+            contents: String,
+            writer: String,
+            viewCount: Long,
+            images: List<PostImage>,
+            createdAt: LocalDateTime,
+            updatedAt: LocalDateTime,
+            deletedAt: LocalDateTime?,
+        ) = Post(
+            id = id,
+            memberId = memberId,
+            title = title,
+            contents = contents,
+            writer = writer,
+            viewCount = viewCount,
+            images = images,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+        )
     }
 
     fun changeId(id: Long) {

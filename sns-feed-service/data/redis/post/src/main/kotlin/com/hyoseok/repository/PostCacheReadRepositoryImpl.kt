@@ -32,6 +32,21 @@ class PostCacheReadRepositoryImpl(
         return jacksonObjectMapper.readValue(value, clazz)
     }
 
+    override fun <T> mget(keys: List<String>, clazz: Class<T>): List<T> {
+        val values: List<String?>? = redisTemplate.opsForValue().multiGet(keys)
+
+        if (values.isNullOrEmpty()) {
+            return listOf()
+        }
+
+        return values.fold(mutableListOf()) { acc, value ->
+            if (!value.isNullOrBlank()) {
+                acc.add(jacksonObjectMapper.readValue(value, clazz))
+            }
+            acc
+        }
+    }
+
     override fun <T> zrevrange(key: String, start: Long, end: Long, clazz: Class<T>): List<T> {
         val values: Set<String?>? = redisTemplate.opsForZSet().reverseRange(key, start, end)
 

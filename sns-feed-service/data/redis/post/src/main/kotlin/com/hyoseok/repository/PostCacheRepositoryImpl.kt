@@ -23,6 +23,15 @@ class PostCacheRepositoryImpl(
             .set(key, jacksonObjectMapper.writeValueAsString(value), expireTime, timeUnit)
     }
 
+    override fun <T : Any> setAllUsePipeline(keysAndValues: Map<String, T>, expireTime: Long, timeUnit: TimeUnit) {
+        redisTemplate.executePipelined {
+            keysAndValues.forEach { (key: String, value: T) ->
+                set(key = key, value = value, expireTime = expireTime, timeUnit = timeUnit)
+            }
+            return@executePipelined null
+        }
+    }
+
     override fun <T : Any> zadd(key: String, value: T, score: Double) {
         redisTemplate.opsForZSet().add(key, jacksonObjectMapper.writeValueAsString(value), score)
     }

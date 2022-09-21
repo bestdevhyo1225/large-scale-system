@@ -1,5 +1,5 @@
 package com.hyoseok.config
 
-object RedisKeys {
+object RedisFeedKeys {
     fun getMemberFeedKey(id: Long) = "member:$id:feeds"
 }
