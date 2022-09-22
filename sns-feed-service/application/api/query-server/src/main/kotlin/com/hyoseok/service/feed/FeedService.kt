@@ -72,7 +72,7 @@ class FeedService(
             return postCaches
         }
 
-        val posts: List<Post> = postReadRepository.findAllByIds(ids = postIds)
+        val posts: List<Post> = postReadRepository.findRecentlyRegisteredAllByIds(ids = postIds)
 
         CoroutineScope(context = Dispatchers.IO).launch {
             postCacheRepository.setAllUsePipeline(

@@ -7,5 +7,5 @@ interface PostReadRepository {
     fun findByIdWithImages(id: Long): Post
     fun findAllByPLimitAndOffset(limit: Long, offset: Long): Pair<Long, List<Post>>
 
-    fun findAllByIds(ids: List<Long>): List<Post>
+    fun findRecentlyRegisteredAllByIds(ids: List<Long>): List<Post>
 }

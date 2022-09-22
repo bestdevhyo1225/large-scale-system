@@ -141,7 +141,7 @@ internal class PostRepositoryTests : RepositoryImplTests, DescribeSpec() {
             }
         }
 
-        this.describe("findAllByIds 메서드는") {
+        this.describe("findRecentlyRegisteredAllByIds 메서드는") {
             it("Post, PostImage 엔티티 리스트를 가져온다") {
                 // given
                 val memberId = 1L
@@ -165,7 +165,7 @@ internal class PostRepositoryTests : RepositoryImplTests, DescribeSpec() {
                 entityManager.clear()
 
                 // when
-                val posts: List<Post> = postReadRepository.findAllByIds(ids = listOf(post.id!!))
+                val posts: List<Post> = postReadRepository.findRecentlyRegisteredAllByIds(ids = listOf(post.id!!))
 
                 posts.shouldNotBeEmpty()
                 posts.size.shouldBe(1)
