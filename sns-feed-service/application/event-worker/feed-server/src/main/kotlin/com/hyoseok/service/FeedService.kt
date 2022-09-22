@@ -28,7 +28,7 @@ class FeedService(
     private suspend fun zaddFeedCache(key: String, postId: Long, createdAt: LocalDateTime) {
         feedCacheRepository.zadd(
             key = key,
-            value = FeedCache(postId = postId, createdAt = createdAt),
+            value = FeedCache(postId = postId),
             score = Timestamp.valueOf(createdAt).time.toDouble(),
         )
     }

@@ -59,7 +59,7 @@ internal class FeedCacheRepositoryTests : DescribeSpec() {
                 val memberId = 19283L
                 val key = RedisFeedKeys.getMemberFeedKey(id = memberId)
                 val createdAt = LocalDateTime.now().withNano(0)
-                val value = FeedCache(postId = postId, createdAt = createdAt)
+                val value = FeedCache(postId = postId)
                 val score = Timestamp.valueOf(createdAt).time.toDouble()
 
                 // when
@@ -81,7 +81,7 @@ internal class FeedCacheRepositoryTests : DescribeSpec() {
                 val memberId = 19283L
                 val key = RedisFeedKeys.getMemberFeedKey(id = memberId)
                 val createdAt = LocalDateTime.now().withNano(0)
-                val value = FeedCache(postId = postId, createdAt = createdAt)
+                val value = FeedCache(postId = postId)
                 val score = Timestamp.valueOf(createdAt).time.toDouble()
 
                 feedCacheRepository.zadd(key = key, value = value, score = score)
