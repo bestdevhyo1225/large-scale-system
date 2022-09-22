@@ -1,7 +1,7 @@
 package com.hyoseok.service
 
-import com.hyoseok.config.RedisCommons.ZSET_FEED_MAX_LIMIT
-import com.hyoseok.config.RedisKeys
+import com.hyoseok.config.RedisFeedCommons.ZSET_FEED_MAX_LIMIT
+import com.hyoseok.config.RedisFeedKeys
 import com.hyoseok.feed.entity.FeedCache
 import com.hyoseok.feed.repository.FeedCacheRepository
 import kotlinx.coroutines.CoroutineScope
@@ -17,7 +17,7 @@ class FeedService(
 ) {
 
     fun create(postId: Long, memberId: Long, createdAt: LocalDateTime) {
-        val key: String = RedisKeys.getMemberFeedKey(id = memberId)
+        val key: String = RedisFeedKeys.getMemberFeedKey(id = memberId)
 
         CoroutineScope(context = Dispatchers.IO).launch {
             zaddFeedCache(key = key, postId = postId, createdAt = createdAt)

@@ -1,5 +1,6 @@
 package com.hyoseok.entity.post
 
+import com.hyoseok.post.entity.PostImage
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -40,6 +41,8 @@ class PostImageJpaEntity private constructor(
     fun changePostJpaEntity(postJpaEntity: PostJpaEntity) {
         this.postJpaEntity = postJpaEntity
     }
+
+    fun toDomainEntity() = PostImage(id = id!!, url = url, sortOrder = sortOrder)
 
     companion object {
         operator fun invoke(url: String, sortOrder: Int) = PostImageJpaEntity(url = url, sortOrder = sortOrder)

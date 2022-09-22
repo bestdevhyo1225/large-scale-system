@@ -14,7 +14,7 @@ plugins {
 allprojects {
     apply(plugin = "java")
 
-    group = "com.fastcampus"
+    group = "com.hyoseok"
     version = "0.0.1-SNAPSHOT"
     java.sourceCompatibility = JavaVersion.VERSION_11
 

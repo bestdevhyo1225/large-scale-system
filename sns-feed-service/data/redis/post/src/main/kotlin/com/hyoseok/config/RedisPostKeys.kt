@@ -1,6 +1,6 @@
 package com.hyoseok.config
 
-object RedisKeys {
+object RedisPostKeys {
     const val POST_KEYS = "post:keys"
 
     fun getPostKey(id: Long) = "post:$id"
