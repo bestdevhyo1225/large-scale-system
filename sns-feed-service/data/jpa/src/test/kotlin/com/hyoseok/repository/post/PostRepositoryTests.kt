@@ -12,6 +12,7 @@ import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -182,6 +183,57 @@ internal class PostRepositoryTests : RepositoryImplTests, DescribeSpec() {
                     it.updatedAt.shouldBe(post.updatedAt)
                     it.deletedAt.shouldBe(post.deletedAt)
                 }
+            }
+        }
+
+        this.describe("findRecentlyRegisteredAllByMemberIdAndPage 메서드는") {
+            it("memberId 회원의 게시물 리스트를 조회한다") {
+                // given
+                val memberId = 1L
+                val size = 10L
+                (1L..size).forEach { _ ->
+                    postRepository.save(
+                        post = Post(
+                            memberId = memberId,
+                            title = "게시물 제목",
+                            contents = "내용",
+                            writer = "작성자",
+                            images = listOf(
+                                PostImage(url = "https://main/images.com", sortOrder = 0),
+                                PostImage(url = "https://list/images.com", sortOrder = 1),
+                            ),
+                        ),
+                    )
+                }
+                (1L..5L).forEach { _ ->
+                    postRepository.save(
+                        post = Post(
+                            memberId = 2L,
+                            title = "게시물 제목",
+                            contents = "내용",
+                            writer = "작성자",
+                            images = listOf(
+                                PostImage(url = "https://main/images.com", sortOrder = 0),
+                                PostImage(url = "https://list/images.com", sortOrder = 1),
+                            ),
+                        ),
+                    )
+                }
+
+                // when
+                val limit = 5L
+                val offset = 0L
+                val (total: Long, posts: List<Post>) = postReadRepository.findRecentlyRegisteredAllByMemberIdAndPage(
+                    memberId = memberId,
+                    limit = limit,
+                    offset = offset,
+                )
+
+                // then
+                total.shouldNotBeZero()
+                total.shouldBe(size)
+                posts.shouldNotBeEmpty()
+                posts.shouldHaveSize(limit.toInt())
             }
         }
     }
