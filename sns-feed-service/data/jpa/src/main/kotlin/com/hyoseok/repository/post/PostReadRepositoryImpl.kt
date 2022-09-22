@@ -40,10 +40,11 @@ class PostReadRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun findAllByIds(ids: List<Long>): List<Post> {
+    override fun findRecentlyRegisteredAllByIds(ids: List<Long>): List<Post> {
         val postJpaEntities: List<PostJpaEntity> = jpaQueryFactory
             .selectFrom(postJpaEntity)
             .where(postJpaEntityIdIn(ids = ids))
+            .orderBy(postJpaEntity.createdAt.desc())
             .fetch()
 
         return postJpaEntities.map { it.toDomainEntity(isFetchPostImages = true) }
