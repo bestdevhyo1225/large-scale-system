@@ -14,8 +14,7 @@ import javax.persistence.Table
 @Table(
     name = "follow",
     indexes = [
-        Index(name = "ix_follow_follower_id", columnList = "follower_id"),
-        Index(name = "ix_follow_followee_id", columnList = "followee_id"),
+        Index(name = "uix_follow_follower_id_followee_id", columnList = "follower_id,followee_id", unique = true),
     ],
 )
 @DynamicUpdate

@@ -44,6 +44,7 @@ class PostReadRepositoryImpl(
         val postJpaEntities: List<PostJpaEntity> = jpaQueryFactory
             .selectFrom(postJpaEntity)
             .where(postJpaEntityIdIn(ids = ids))
+            .orderBy(postJpaEntity.createdAt.desc())
             .fetch()
 
         return postJpaEntities.map { it.toDomainEntity(isFetchPostImages = true) }

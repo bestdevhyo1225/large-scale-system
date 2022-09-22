@@ -5,7 +5,6 @@ import com.hyoseok.config.RedisPostExpireTimes.POST
 import com.hyoseok.config.RedisPostKeys
 import com.hyoseok.feed.entity.FeedCache
 import com.hyoseok.feed.repository.FeedCacheReadRepository
-import com.hyoseok.feed.repository.FeedCacheRepository
 import com.hyoseok.member.entity.Member
 import com.hyoseok.member.repository.MemberReadRepository
 import com.hyoseok.post.entity.Post
@@ -25,7 +24,6 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
 class FeedService(
-    private val feedCacheRepository: FeedCacheRepository,
     private val feedCacheReadRepository: FeedCacheReadRepository,
     private val memberReadRepository: MemberReadRepository,
     private val postCacheRepository: PostCacheRepository,
@@ -38,36 +36,25 @@ class FeedService(
             getMember(memberId = memberId)
         }
         val deferredPostCaches: Deferred<List<PostCache>> = async(context = Dispatchers.IO) {
-            val postIds: List<Long> = getFeedCaches(memberId = memberId, start = start, count = count)
-                .map { it.postId }
-
-            getPostCaches(postIds = postIds, count = count)
+            getPostCaches(postIds = getFeedCaches(memberId = memberId, start = start, count = count).map { it.postId })
         }
 
         val member: Member = deferredMember.await()
         val postCaches: List<PostCache> = deferredPostCaches.await()
 
-        postCaches.map { PostFindResultDto.invoke(postCache = it, member = member) }
+        postCaches.map { PostFindResultDto(postCache = it, member = member) }
     }
 
     private suspend fun getFeedCaches(memberId: Long, start: Long, count: Long): List<FeedCache> {
-        val key: String = RedisFeedKeys.getMemberFeedKey(id = memberId)
-        val end: Long = start + count
-        val feedCaches: List<FeedCache> = feedCacheReadRepository.zrevrange(
-            key = key,
+        return feedCacheReadRepository.zrevrange(
+            key = RedisFeedKeys.getMemberFeedKey(id = memberId),
             start = start,
-            end = end,
+            end = start + count,
             clazz = FeedCache::class.java,
         )
-
-        if (feedCaches.isNotEmpty()) {
-            feedCacheRepository.zremRangeByRank(key = key, start = start, end = end)
-        }
-
-        return feedCaches
     }
 
-    private suspend fun getPostCaches(postIds: List<Long>, count: Long): List<PostCache> {
+    private suspend fun getPostCaches(postIds: List<Long>): List<PostCache> {
         if (postIds.isEmpty()) {
             return listOf()
         }
@@ -81,7 +68,7 @@ class FeedService(
 //            clazz = Long::class.java,
 //        )
 
-        if (postCaches.isNotEmpty() && postCaches.size.toLong() == count) {
+        if (postCaches.isNotEmpty()) {
             return postCaches
         }
 
