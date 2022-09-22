@@ -42,9 +42,14 @@ spring:
 
   data:
     redis:
-      mode: standalone
-      nodes:
-        server-1: localhost:6379
+      post:
+        mode: standalone
+        nodes:
+          node1: localhost:6383
+      feed:
+        mode: standalone
+        nodes:
+          node1: localhost:6384
 
 logging:
   level:
@@ -77,6 +82,11 @@ spring:
 
   data:
     redis:
-      mode: cluster
-      nodes:
-        server-1: cluster:6379
+      post:
+        mode: standalone
+        nodes:
+          node1: localhost:6383
+      feed:
+        mode: standalone
+        nodes:
+          node1: localhost:6384
