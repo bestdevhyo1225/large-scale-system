@@ -5,4 +5,5 @@ interface PostCacheReadRepository {
 
     fun <T> mget(keys: List<String>, clazz: Class<T>): List<T>
     fun <T> zrevrange(key: String, start: Long, end: Long, clazz: Class<T>): List<T>
+    fun zcard(key: String): Long
 }

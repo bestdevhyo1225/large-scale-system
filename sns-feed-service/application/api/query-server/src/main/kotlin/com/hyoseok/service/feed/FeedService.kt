@@ -49,7 +49,7 @@ class FeedService(
         return feedCacheReadRepository.zrevrange(
             key = RedisFeedKeys.getMemberFeedKey(id = memberId),
             start = start,
-            end = start + count,
+            end = start.plus(count).minus(1),
             clazz = FeedCache::class.java,
         )
     }

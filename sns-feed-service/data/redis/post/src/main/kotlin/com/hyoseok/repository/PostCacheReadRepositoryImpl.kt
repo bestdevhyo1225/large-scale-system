@@ -56,4 +56,6 @@ class PostCacheReadRepositoryImpl(
 
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
     }
+
+    override fun zcard(key: String): Long = redisTemplate.opsForZSet().zCard(key) ?: 0L
 }

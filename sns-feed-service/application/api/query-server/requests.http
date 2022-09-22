@@ -1,2 +1,5 @@
 ### 피드 요청
 GET localhost:9001/api/v1/feeds/1/posts?start=0&count=10
+
+### 나의 게시물 리스트 조회
+GET localhost:9001/api/v1/posts/1?start=0&count=10
