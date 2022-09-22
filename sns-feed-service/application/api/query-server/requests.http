@@ -1,0 +1,2 @@
+### 피드 요청
+GET localhost:9001/api/v1/feeds/1/posts?start=0&count=10
