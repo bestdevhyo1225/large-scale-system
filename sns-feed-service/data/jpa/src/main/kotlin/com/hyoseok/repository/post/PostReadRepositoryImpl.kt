@@ -9,12 +9,14 @@ import com.hyoseok.post.repository.PostReadRepository
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
 @Transactional(readOnly = true)
+@ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class PostReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
     private val postJpaRepository: PostJpaRepository,

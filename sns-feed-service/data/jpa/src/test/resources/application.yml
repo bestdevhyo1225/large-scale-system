@@ -2,6 +2,11 @@ spring:
   profiles:
     active: test
 
+data:
+  enable:
+    datasource: true
+    jpa: true
+
   datasource:
     hikari:
       driver-class-name: org.h2.Driver

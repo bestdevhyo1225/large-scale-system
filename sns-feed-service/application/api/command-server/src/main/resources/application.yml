@@ -8,6 +8,14 @@ spring:
   profiles:
     active: dev
 
+# Data 모듈 사용 여부 설정
+data:
+  enable:
+    datasource: true
+    jpa: true
+    redis:
+      post: true
+
   jpa:
     properties:
       hibernate:
@@ -15,6 +23,11 @@ spring:
           auto: update
         default_batch_fetch_size: 1000
     open-in-view: false
+
+# Infrastructure 모듈 사용 여부 설정
+infrastructure:
+  enable:
+    kafka: true
 
 #resilience4j:
 #  circuitbreaker:
@@ -34,28 +47,19 @@ spring:
     activate:
       on-profile: dev
 
+data:
   datasource:
     hikari:
       driver-class-name: org.h2.Driver
       jdbc-url: jdbc:h2:mem:issue-service
       username: sa
 
-# Data 모듈 사용 여부 설정
-data:
-  enable:
-    redis:
-      post: true
-
   redis:
     post:
       mode: standalone
       nodes: localhost:6383
 
-# Infrastructure 모듈 사용 여부 설정
 infrastructure:
-  enable:
-    kafka: true
-
   kafka:
     producer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
@@ -77,6 +81,8 @@ spring:
     activate:
       on-profile: prod
 
+# Data 모듈 사용 여부 설정
+data:
   datasource:
     hikari:
       write:
@@ -94,12 +100,6 @@ spring:
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
 
-# Data 모듈 사용 여부 설정
-data:
-  enable:
-    redis:
-      post: true
-
   redis:
     post:
       mode: standalone
@@ -107,9 +107,6 @@ data:
 
 # Infrastructure 모듈 사용 여부 설정
 infrastructure:
-  enable:
-    kafka: true
-
   kafka:
     producer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093

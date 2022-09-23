@@ -3,6 +3,7 @@ package com.hyoseok.config.mysql.replication
 import com.hyoseok.config.mysql.replication.property.ReadProperty
 import com.hyoseok.config.mysql.replication.property.WriteProperty
 import com.zaxxer.hikari.HikariDataSource
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -14,7 +15,8 @@ import javax.sql.DataSource
 @Configuration
 @EnableConfigurationProperties(value = [WriteProperty::class, ReadProperty::class])
 @Profile(value = ["prod"])
-class ReplicationDataSourceConfig(
+@ConditionalOnProperty(prefix = "data.enable", name = ["datasource"], havingValue = "true")
+class SnsReplicationDataSourceConfig(
     private val writeProperty: WriteProperty,
     private val readProperty: ReadProperty,
 ) {
