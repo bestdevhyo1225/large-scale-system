@@ -2,8 +2,6 @@ package com.hyoseok.config.post
 
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import redis.embedded.RedisServer
 import redis.embedded.exceptions.EmbeddedRedisException
