@@ -5,11 +5,13 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.feed.repository.FeedCacheReadRepository
 import com.hyoseok.repository.AbstractCacheRepository
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit
 
 @Repository
+@ConditionalOnProperty(prefix = "data.enable.redis", name = ["feed"], havingValue = "true")
 class FeedCacheReadRepositoryImpl(
     @Qualifier("redisFeedTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,

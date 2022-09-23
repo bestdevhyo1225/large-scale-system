@@ -6,7 +6,6 @@ import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.RedisKeys.POST_KEYS
 import com.hyoseok.config.post.RedisPostConfig
 import com.hyoseok.config.post.RedisPostEmbbededServerConfig
-import com.hyoseok.config.post.RedisPostServerProperties
 import com.hyoseok.config.post.RedisPostTemplateConfig
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImage
@@ -35,7 +34,6 @@ import java.util.concurrent.TimeUnit.SECONDS
 @EnableAutoConfiguration
 @ContextConfiguration(
     classes = [
-        RedisPostServerProperties::class,
         RedisPostEmbbededServerConfig::class,
         RedisPostConfig::class,
         RedisPostTemplateConfig::class,

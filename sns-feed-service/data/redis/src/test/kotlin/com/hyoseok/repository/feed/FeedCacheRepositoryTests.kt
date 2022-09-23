@@ -3,7 +3,6 @@ package com.hyoseok.repository.feed
 import com.hyoseok.config.RedisKeys
 import com.hyoseok.config.feed.RedisFeedConfig
 import com.hyoseok.config.feed.RedisFeedEmbbededServerConfig
-import com.hyoseok.config.feed.RedisFeedServerProperties
 import com.hyoseok.config.feed.RedisFeedTemplateConfig
 import com.hyoseok.feed.entity.FeedCache
 import com.hyoseok.feed.repository.FeedCacheReadRepository
@@ -27,7 +26,6 @@ import java.time.LocalDateTime
 @EnableAutoConfiguration
 @ContextConfiguration(
     classes = [
-        RedisFeedServerProperties::class,
         RedisFeedEmbbededServerConfig::class,
         RedisFeedConfig::class,
         RedisFeedTemplateConfig::class,

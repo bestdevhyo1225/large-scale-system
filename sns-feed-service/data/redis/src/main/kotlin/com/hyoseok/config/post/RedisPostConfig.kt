@@ -1,11 +1,12 @@
 package com.hyoseok.config.post
 
+import com.hyoseok.config.RedisMode
 import com.hyoseok.config.RedisMode.Cluster
 import com.hyoseok.config.RedisMode.Standalone
 import io.lettuce.core.ReadFrom
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,10 +19,12 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-@EnableConfigurationProperties(value = [RedisPostServerProperties::class])
 @ConditionalOnProperty(prefix = "data.enable.redis", name = ["post"], havingValue = "true")
 class RedisPostConfig(
-    private val redisPostServerProperties: RedisPostServerProperties,
+    @Value("\${data.redis.post.mode}")
+    private val mode: RedisMode,
+    @Value("\${data.redis.post.nodes}")
+    private val nodes: List<String>,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -29,7 +32,7 @@ class RedisPostConfig(
     @Bean
     @Primary
     fun redisPostConnectionFactory(): RedisConnectionFactory {
-        val lettuceConnectionFactory: LettuceConnectionFactory = when (redisPostServerProperties.mode) {
+        val lettuceConnectionFactory: LettuceConnectionFactory = when (mode) {
             Standalone -> {
                 logger.info { "redis post standalone mode" }
 
@@ -41,7 +44,7 @@ class RedisPostConfig(
                 logger.info { "redis post cluster mode" }
 
                 LettuceConnectionFactory(
-                    RedisClusterConfiguration(redisPostServerProperties.nodes.values.first()),
+                    RedisClusterConfiguration(nodes),
                     lettuceClientConfig(),
                 )
             }
@@ -60,7 +63,7 @@ class RedisPostConfig(
             .build()
 
     private fun getHostAndPort(): Pair<String, Int> {
-        val splits: List<String> = redisPostServerProperties.nodes.values.first().first().split(":")
+        val splits: List<String> = nodes.first().split(":")
         return Pair(first = splits[0], second = splits[1].toInt())
     }
 }

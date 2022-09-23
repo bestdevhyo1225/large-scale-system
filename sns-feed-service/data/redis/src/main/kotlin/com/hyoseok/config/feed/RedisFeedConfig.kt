@@ -1,11 +1,12 @@
 package com.hyoseok.config.feed
 
+import com.hyoseok.config.RedisMode
 import com.hyoseok.config.RedisMode.Cluster
 import com.hyoseok.config.RedisMode.Standalone
 import io.lettuce.core.ReadFrom
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,17 +18,19 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-@EnableConfigurationProperties(value = [RedisFeedServerProperties::class])
 @ConditionalOnProperty(prefix = "data.enable.redis", name = ["feed"], havingValue = "true")
 class RedisFeedConfig(
-    private val redisFeedServerProperties: RedisFeedServerProperties,
+    @Value("\${data.redis.feed.mode}")
+    private val mode: RedisMode,
+    @Value("\${data.redis.feed.nodes}")
+    private val nodes: List<String>,
 ) {
 
     private val logger = KotlinLogging.logger {}
 
     @Bean
     fun redisFeedConnectionFactory(): RedisConnectionFactory {
-        val lettuceConnectionFactory: LettuceConnectionFactory = when (redisFeedServerProperties.mode) {
+        val lettuceConnectionFactory: LettuceConnectionFactory = when (mode) {
             Standalone -> {
                 logger.info { "redis feed standalone mode" }
 
@@ -38,10 +41,7 @@ class RedisFeedConfig(
             Cluster -> {
                 logger.info { "redis feed cluster mode" }
 
-                LettuceConnectionFactory(
-                    RedisClusterConfiguration(redisFeedServerProperties.nodes.values.first()),
-                    lettuceClientConfig(),
-                )
+                LettuceConnectionFactory(RedisClusterConfiguration(nodes), lettuceClientConfig())
             }
         }
 
@@ -58,7 +58,7 @@ class RedisFeedConfig(
             .build()
 
     private fun getHostAndPort(): Pair<String, Int> {
-        val splits: List<String> = redisFeedServerProperties.nodes.values.first().first().split(":")
+        val splits: List<String> = nodes.first().split(":")
         return Pair(first = splits[0], second = splits[1].toInt())
     }
 }

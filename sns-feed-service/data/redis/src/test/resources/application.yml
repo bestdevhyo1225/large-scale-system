@@ -2,22 +2,20 @@ spring:
   profiles:
     active: test
 
-  data:
-    redis:
-      feed:
-        mode: standalone
-        nodes:
-          node1: localhost:6379
-      post:
-        mode: standalone
-        nodes:
-          node1: localhost:6379
-
+# Data 모듈 사용 여부 설정
 data:
   enable:
     redis:
       feed: true
       post: true
+
+  redis:
+    feed:
+      mode: standalone
+      nodes: localhost:6379,
+    post:
+      mode: standalone
+      nodes: localhost:6380
 
 logging:
   level:

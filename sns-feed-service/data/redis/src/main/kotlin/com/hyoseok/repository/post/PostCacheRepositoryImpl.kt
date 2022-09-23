@@ -1,14 +1,16 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.post
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.post.repository.PostCacheRepository
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit
 
 @Repository
+@ConditionalOnProperty(prefix = "data.enable.redis", name = ["post"], havingValue = "true")
 class PostCacheRepositoryImpl(
     @Qualifier("redisPostTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,

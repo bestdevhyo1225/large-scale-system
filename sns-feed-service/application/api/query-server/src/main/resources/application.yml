@@ -40,22 +40,20 @@ spring:
       jdbc-url: jdbc:h2:mem:issue-service
       username: sa
 
-  data:
-    redis:
-      post:
-        mode: standalone
-        nodes:
-          node1: localhost:6383
-      feed:
-        mode: standalone
-        nodes:
-          node1: localhost:6384
-
+# Data 모듈 사용 여부 설정
 data:
   enable:
     redis:
       post: true
       feed: true
+
+  redis:
+    post:
+      mode: standalone
+      nodes: localhost:6383
+    feed:
+      mode: standalone
+      nodes: localhost:6384
 
 logging:
   level:
@@ -86,19 +84,17 @@ spring:
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
 
-  data:
-    redis:
-      post:
-        mode: standalone
-        nodes:
-          node1: localhost:6383
-      feed:
-        mode: standalone
-        nodes:
-          node1: localhost:6384
-
+# Data 모듈 사용 여부 설정
 data:
   enable:
     redis:
       post: true
       feed: true
+
+  redis:
+    post:
+      mode: standalone
+      nodes: localhost:6383
+    feed:
+      mode: standalone
+      nodes: localhost:6384

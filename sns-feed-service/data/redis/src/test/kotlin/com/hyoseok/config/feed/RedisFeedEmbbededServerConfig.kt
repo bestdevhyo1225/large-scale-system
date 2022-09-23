@@ -1,8 +1,7 @@
 package com.hyoseok.config.feed
 
 import mu.KotlinLogging
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import redis.embedded.RedisServer
 import redis.embedded.exceptions.EmbeddedRedisException
@@ -10,10 +9,9 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 @Configuration
-@EnableConfigurationProperties(value = [RedisFeedServerProperties::class])
-@ConditionalOnProperty(prefix = "data.enable.redis", name = ["feed"], havingValue = "true")
 class RedisFeedEmbbededServerConfig(
-    private val redisFeedServerProperties: RedisFeedServerProperties,
+    @Value("\${data.redis.feed.nodes}")
+    private val nodes: List<String>,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -23,10 +21,8 @@ class RedisFeedEmbbededServerConfig(
     @PostConstruct
     fun startEmbeddedRedisServer() {
         try {
-            val feedSplits: List<String> = redisFeedServerProperties.nodes.values.first().first().split(":")
-
+            val feedSplits: List<String> = nodes.first().split(":")
             embeddedRedisFeedServer = RedisServer(feedSplits[1].toInt())
-
             embeddedRedisFeedServer.start()
         } catch (exception: EmbeddedRedisException) {
             logger.error { exception }

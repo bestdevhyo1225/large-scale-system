@@ -40,13 +40,6 @@ spring:
       jdbc-url: jdbc:h2:mem:issue-service
       username: sa
 
-  data:
-    redis:
-      post:
-        mode: standalone
-        nodes:
-          node1: localhost:6383
-
   kafka:
     producer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
@@ -57,10 +50,16 @@ spring:
       batch-size: 500000 # 500KB
       linger: 50
 
+# Data 모듈 사용 여부 설정
 data:
   enable:
     redis:
       post: true
+
+  redis:
+    post:
+      mode: standalone
+      nodes: localhost:6383
 
 logging:
   level:
@@ -90,13 +89,6 @@ spring:
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
 
-  data:
-    redis:
-      post:
-        mode: standalone
-        nodes:
-          node1: localhost:6383
-
   kafka:
     producer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
@@ -107,7 +99,13 @@ spring:
       batch-size: 500000 # 500KB, 해당 사이즈에 도달하게 되면, 메시지들을 전송한다.
       linger: 100 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
 
+# Data 모듈 사용 여부 설정
 data:
   enable:
     redis:
       post: true
+
+  redis:
+    post:
+      mode: standalone
+      nodes: localhost:6383

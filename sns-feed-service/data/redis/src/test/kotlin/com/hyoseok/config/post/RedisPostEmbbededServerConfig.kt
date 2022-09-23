@@ -1,6 +1,7 @@
 package com.hyoseok.config.post
 
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -10,10 +11,9 @@ import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
 @Configuration
-@EnableConfigurationProperties(value = [RedisPostServerProperties::class])
-@ConditionalOnProperty(prefix = "data.enable.redis", name = ["post"], havingValue = "true")
 class RedisPostEmbbededServerConfig(
-    private val redisPostServerProperties: RedisPostServerProperties,
+    @Value("\${data.redis.post.nodes}")
+    private val nodes: List<String>,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -23,7 +23,7 @@ class RedisPostEmbbededServerConfig(
     @PostConstruct
     fun startEmbeddedRedisServer() {
         try {
-            val postSplits: List<String> = redisPostServerProperties.nodes.values.first().first().split(":")
+            val postSplits: List<String> = nodes.first().split(":")
             embeddedRedisPostServer = RedisServer(postSplits[1].toInt())
             embeddedRedisPostServer.start()
         } catch (exception: EmbeddedRedisException) {
