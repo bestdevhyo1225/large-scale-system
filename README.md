@@ -109,7 +109,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### 팬 아웃(포스팅 전송) 프로세스
 
-<img width="1474" alt="image" src="https://user-images.githubusercontent.com/23515771/191922785-c6a794b0-3f5f-4ca6-8507-3c2158083b5b.png">
+<img width="1474" alt="image" src="https://user-images.githubusercontent.com/23515771/191925405-713596e6-a47c-4745-8862-309799f71558.png">
 
 1. `Post` 를 데이터베이스에 저장한다.
 
