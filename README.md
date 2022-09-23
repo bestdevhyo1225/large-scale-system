@@ -4,6 +4,11 @@
 
 - [가상 면접 사례로 배우는 대규모 시스템 설계 기초](http://www.yes24.com/Product/Goods/102819435)
 
+## 시스템 설계 리스트
+
+- [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
+- [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+
 ## URL 단축기 설계
 
 ### 요구 사항
