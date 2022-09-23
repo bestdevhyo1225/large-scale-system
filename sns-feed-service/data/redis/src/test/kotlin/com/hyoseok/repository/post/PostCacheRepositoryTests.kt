@@ -11,8 +11,6 @@ import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImage
 import com.hyoseok.post.repository.PostCacheReadRepository
 import com.hyoseok.post.repository.PostCacheRepository
-import com.hyoseok.repository.PostCacheReadRepositoryImpl
-import com.hyoseok.repository.PostCacheRepositoryImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
