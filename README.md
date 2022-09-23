@@ -108,7 +108,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 1. `Post` 를 데이터베이스에 저장한다.
 
-2. `PostCache`, `PostViewCount`, `PostKeys(Post Id 리스트)` 를 레디스에 캐싱한다.
+2. `PostCache`, `PostViewCount`, `PostKeys(Post Id 리스트를 담고 있는 데이터)` 를 레디스에 캐싱한다.
 
     - `PostKeys` 는 `Sorted Set` 컬렉션을 사용하여, 포스팅을 저장한 순서대로 `Id` 를 캐싱한다.
 
