@@ -51,6 +51,12 @@ spring:
         nodes:
           node1: localhost:6384
 
+data:
+  enable:
+    redis:
+      post: true
+      feed: true
+
 logging:
   level:
     org.hibernate.SQL: debug
@@ -90,3 +96,9 @@ spring:
         mode: standalone
         nodes:
           node1: localhost:6384
+
+data:
+  enable:
+    redis:
+      post: true
+      feed: true

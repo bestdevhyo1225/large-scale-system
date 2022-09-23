@@ -1,17 +1,19 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.post
 
-import com.hyoseok.config.RedisPostExpireTimes.POST
-import com.hyoseok.config.RedisPostExpireTimes.POST_VIEWS
-import com.hyoseok.config.RedisPostKeys
-import com.hyoseok.config.RedisPostKeys.POST_KEYS
-import com.hyoseok.config.RedisPostConfig
-import com.hyoseok.config.RedisPostEmbbededServerConfig
-import com.hyoseok.config.RedisPostServerProperties
-import com.hyoseok.config.RedisPostTemplateConfig
+import com.hyoseok.config.RedisExpireTimes.POST
+import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
+import com.hyoseok.config.RedisKeys
+import com.hyoseok.config.RedisKeys.POST_KEYS
+import com.hyoseok.config.post.RedisPostConfig
+import com.hyoseok.config.post.RedisPostEmbbededServerConfig
+import com.hyoseok.config.post.RedisPostServerProperties
+import com.hyoseok.config.post.RedisPostTemplateConfig
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImage
 import com.hyoseok.post.repository.PostCacheReadRepository
 import com.hyoseok.post.repository.PostCacheRepository
+import com.hyoseok.repository.PostCacheReadRepositoryImpl
+import com.hyoseok.repository.PostCacheRepositoryImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -43,7 +45,7 @@ import java.util.concurrent.TimeUnit.SECONDS
         PostCacheReadRepositoryImpl::class,
     ],
 )
-private class PostCacheRepositoryTests : DescribeSpec() {
+class PostCacheRepositoryTests : DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
@@ -59,7 +61,7 @@ private class PostCacheRepositoryTests : DescribeSpec() {
             it("key의 value를 1씩 증가 시킨다") {
                 // given
                 val id = 1L
-                val key: String = RedisPostKeys.getPostViewsKey(id = id)
+                val key: String = RedisKeys.getPostViewsKey(id = id)
                 val value = 0L
 
                 postCacheRepository.set(key = key, value = value, expireTime = POST_VIEWS, timeUnit = SECONDS)
@@ -75,7 +77,7 @@ private class PostCacheRepositoryTests : DescribeSpec() {
                 it("value의 초기 값은 1이다") {
                     // given
                     val id = 1L
-                    val key: String = RedisPostKeys.getPostViewsKey(id = id)
+                    val key: String = RedisKeys.getPostViewsKey(id = id)
 
                     // when
                     val result: Long = postCacheRepository.increment(key = key)
@@ -88,7 +90,7 @@ private class PostCacheRepositoryTests : DescribeSpec() {
             context("value가 정수형이 아닌 경우") {
                 it("예외를 던진다") {
                     val id = 1L
-                    val key: String = RedisPostKeys.getPostViewsKey(id = id)
+                    val key: String = RedisKeys.getPostViewsKey(id = id)
                     val value = "testValue"
 
                     postCacheRepository.set(key = key, value = value, expireTime = POST_VIEWS, timeUnit = SECONDS)
@@ -102,7 +104,7 @@ private class PostCacheRepositoryTests : DescribeSpec() {
             it("PostCache 엔티티를 저장한다") {
                 // given
                 val id = 1L
-                val key: String = RedisPostKeys.getPostKey(id = id)
+                val key: String = RedisKeys.getPostKey(id = id)
                 val snsCache = PostCache(
                     id = id,
                     memberId = 1234L,
@@ -127,7 +129,7 @@ private class PostCacheRepositoryTests : DescribeSpec() {
             it("key, value, score를 저장한다") {
                 // given
                 val key: String = POST_KEYS
-                val values = listOf(RedisPostKeys.getPostKey(id = 1L), RedisPostKeys.getPostKey(id = 2L))
+                val values = listOf(RedisKeys.getPostKey(id = 1L), RedisKeys.getPostKey(id = 2L))
                 val nowDateTime = LocalDateTime.now().withNano(0)
                 val scores = listOf(
                     Timestamp.valueOf(nowDateTime).time.toDouble(),

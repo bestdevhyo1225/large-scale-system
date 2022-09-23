@@ -1,9 +1,10 @@
-package com.hyoseok.config
+package com.hyoseok.config.post
 
 import com.hyoseok.config.RedisMode.Cluster
 import com.hyoseok.config.RedisMode.Standalone
 import io.lettuce.core.ReadFrom
 import mu.KotlinLogging
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
@@ -18,6 +19,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @Configuration
 @EnableCaching(proxyTargetClass = true)
 @EnableConfigurationProperties(value = [RedisPostServerProperties::class])
+@ConditionalOnProperty(prefix = "data.enable.redis", name = ["post"], havingValue = "true")
 class RedisPostConfig(
     private val redisPostServerProperties: RedisPostServerProperties,
 ) {

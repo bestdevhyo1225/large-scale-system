@@ -1,8 +1,9 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.feed
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.feed.repository.FeedCacheRepository
+import com.hyoseok.repository.AbstractCacheRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository

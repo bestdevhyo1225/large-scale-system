@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: test
+
+  data:
+    redis:
+      feed:
+        mode: standalone
+        nodes:
+          node1: localhost:6379
+      post:
+        mode: standalone
+        nodes:
+          node1: localhost:6379
+
+data:
+  enable:
+    redis:
+      feed: true
+      post: true
+
+logging:
+  level:
+    io.lettuce.core: debug

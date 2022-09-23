@@ -57,6 +57,11 @@ spring:
       batch-size: 500000 # 500KB
       linger: 50
 
+data:
+  enable:
+    redis:
+      post: true
+
 logging:
   level:
     org.hibernate.SQL: debug
@@ -101,3 +106,8 @@ spring:
       retries: 0
       batch-size: 500000 # 500KB, 해당 사이즈에 도달하게 되면, 메시지들을 전송한다.
       linger: 100 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
+
+data:
+  enable:
+    redis:
+      post: true
