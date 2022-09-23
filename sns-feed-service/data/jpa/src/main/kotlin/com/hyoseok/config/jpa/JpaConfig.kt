@@ -1,6 +1,7 @@
 package com.hyoseok.config.jpa
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -20,13 +21,14 @@ import javax.sql.DataSource
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "transactionManager",
 )
+@ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class JpaConfig(
-    @Value("\${spring.jpa.open-in-view}")
+    @Value("\${data.jpa.open-in-view}")
     private val openInView: Boolean,
 ) {
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.jpa")
+    @ConfigurationProperties(prefix = "data.jpa")
     fun jpaProperties(): JpaProperties {
         return JpaProperties()
     }

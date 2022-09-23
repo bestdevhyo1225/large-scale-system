@@ -3,11 +3,13 @@ package com.hyoseok.repository.post
 import com.hyoseok.entity.post.PostJpaEntity
 import com.hyoseok.post.entity.Post
 import com.hyoseok.post.repository.PostRepository
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional
+@ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class PostRepositoryImpl(
     private val postJpaRepository: PostJpaRepository,
 ) : PostRepository {

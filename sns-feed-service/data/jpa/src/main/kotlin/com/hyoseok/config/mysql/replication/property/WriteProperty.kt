@@ -1,12 +1,14 @@
 package com.hyoseok.config.mysql.replication.property
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.context.annotation.Profile
 
 @ConstructorBinding
-@ConfigurationProperties(value = "spring.datasource.hikari.write")
-@Profile(value = ["prod", "prod-docker"])
+@ConfigurationProperties(value = "data.datasource.hikari.write")
+@Profile(value = ["prod"])
+@ConditionalOnProperty(prefix = "data.enable", name = ["datasource"], havingValue = "true")
 data class WriteProperty(
     val driverClassName: String,
     val jdbcUrl: String,

@@ -1,6 +1,7 @@
 package com.hyoseok.config.mysql
 
 import com.zaxxer.hikari.HikariDataSource
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder
@@ -13,11 +14,12 @@ import javax.sql.DataSource
 @Configuration
 @EnableConfigurationProperties
 @Profile(value = ["test", "dev"])
+@ConditionalOnProperty(prefix = "data.enable", name = ["datasource"], havingValue = "true")
 class BasicDataSourceConfig {
 
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    @ConfigurationProperties(prefix = "data.datasource.hikari")
     fun dataSource(): DataSource {
         return DataSourceBuilder.create()
             .type(HikariDataSource::class.java)

@@ -22,25 +22,25 @@ import org.springframework.kafka.core.KafkaTemplate
 @EnableKafka
 @ConditionalOnProperty(prefix = "infrastructure.enable", name = ["kafka"], havingValue = "true")
 class KafkaProducerConfig(
-    @Value("\${spring.kafka.producer.bootstrap-servers}")
+    @Value("\${infrastructure.kafka.producer.bootstrap-servers}")
     private val bootstrapServers: String,
 
-    @Value("\${spring.kafka.producer.acks}")
+    @Value("\${infrastructure.kafka.producer.acks}")
     private val acks: String,
 
-    @Value("\${spring.kafka.producer.buffer-memory}")
+    @Value("\${infrastructure.kafka.producer.buffer-memory}")
     private val bufferMemory: Long,
 
-    @Value("\${spring.kafka.producer.compression-type}")
+    @Value("\${infrastructure.kafka.producer.compression-type}")
     private val compressionType: String,
 
-    @Value("\${spring.kafka.producer.retries}")
+    @Value("\${infrastructure.kafka.producer.retries}")
     private val retries: Int,
 
-    @Value("\${spring.kafka.producer.batch-size}")
+    @Value("\${infrastructure.kafka.producer.batch-size}")
     private val batchSize: Int,
 
-    @Value("\${spring.kafka.producer.linger}")
+    @Value("\${infrastructure.kafka.producer.linger}")
     private val linger: Int,
 ) {
 

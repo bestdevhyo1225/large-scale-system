@@ -8,6 +8,15 @@ spring:
   profiles:
     active: dev
 
+# Data 모듈 사용 여부 설정
+data:
+  enable:
+    datasource: true
+    jpa: true
+    redis:
+      post: true
+      feed: true
+
   jpa:
     properties:
       hibernate:
@@ -16,17 +25,17 @@ spring:
         default_batch_fetch_size: 1000
     open-in-view: false
 
-resilience4j:
-  circuitbreaker:
-    configs:
-      default:
-        # 최소요청 횟수 3회 이후, 통계 건수 최근 10건을 평가했을때,
-        # 실패율 60% 이상이 되면, Circuit Breaker가 Open되고, Circuit Breaker 지속시간은 10초동안 유지된다.
-        slidingWindowType: COUNT_BASED # 통계 건수로 측정 (TIME_BASED -> 시간 통계로 측정)
-        slidingWindowSize: 10 # 가장 최근의 통계 건수
-        minimumNumberOfCalls: 3 # 최소 요청 횟수
-        failureRateThreshold: 60 # 실패율
-        waitDurationInOpenState: 10000 # Circuit Breaker 지속 시간 (지속 시간동안 Backend Service를 호출하지 않는다.)
+#resilience4j:
+#  circuitbreaker:
+#    configs:
+#      default:
+#        # 최소요청 횟수 3회 이후, 통계 건수 최근 10건을 평가했을때,
+#        # 실패율 60% 이상이 되면, Circuit Breaker가 Open되고, Circuit Breaker 지속시간은 10초동안 유지된다.
+#        slidingWindowType: COUNT_BASED # 통계 건수로 측정 (TIME_BASED -> 시간 통계로 측정)
+#        slidingWindowSize: 10 # 가장 최근의 통계 건수
+#        minimumNumberOfCalls: 3 # 최소 요청 횟수
+#        failureRateThreshold: 60 # 실패율
+#        waitDurationInOpenState: 10000 # Circuit Breaker 지속 시간 (지속 시간동안 Backend Service를 호출하지 않는다.)
 
 ---
 spring:
@@ -34,18 +43,12 @@ spring:
     activate:
       on-profile: dev
 
+data:
   datasource:
     hikari:
       driver-class-name: org.h2.Driver
       jdbc-url: jdbc:h2:mem:issue-service
       username: sa
-
-# Data 모듈 사용 여부 설정
-data:
-  enable:
-    redis:
-      post: true
-      feed: true
 
   redis:
     post:
@@ -67,6 +70,8 @@ spring:
     activate:
       on-profile: prod
 
+# Data 모듈 사용 여부 설정
+data:
   datasource:
     hikari:
       write:
@@ -83,13 +88,6 @@ spring:
         maximum-pool-size: 20
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
-
-# Data 모듈 사용 여부 설정
-data:
-  enable:
-    redis:
-      post: true
-      feed: true
 
   redis:
     post:

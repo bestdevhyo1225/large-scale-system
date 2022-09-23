@@ -5,6 +5,12 @@ server:
       min-spare: 10
       max: 10
 
+# Data 모듈 사용 여부 설정
+data:
+  enable:
+    redis:
+      feed: true
+
 ---
 spring:
   config:
@@ -22,10 +28,6 @@ spring:
       allow-auto-create-topics: false # 토픽 자동 생성 X
 
 data:
-  enable:
-    redis:
-      feed: true
-
   redis:
     feed:
       mode: standalone
@@ -48,10 +50,6 @@ spring:
       allow-auto-create-topics: false # 토픽 자동 생성 X
 
 data:
-  enable:
-    redis:
-      feed: true
-
   redis:
     feed:
       mode: standalone

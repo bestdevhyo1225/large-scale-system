@@ -5,11 +5,13 @@ import com.hyoseok.entity.follow.QFollowJpaEntity.followJpaEntity
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.repository.FollowReadRepository
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional(readOnly = true)
+@ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class FollowReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
     private val followJpaRepository: FollowJpaRepository,
