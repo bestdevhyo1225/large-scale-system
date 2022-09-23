@@ -1,8 +1,7 @@
 package com.hyoseok.service.feed
 
-import com.hyoseok.config.RedisFeedKeys
-import com.hyoseok.config.RedisPostExpireTimes.POST
-import com.hyoseok.config.RedisPostKeys
+import com.hyoseok.config.RedisExpireTimes.POST
+import com.hyoseok.config.RedisKeys
 import com.hyoseok.feed.entity.FeedCache
 import com.hyoseok.feed.repository.FeedCacheReadRepository
 import com.hyoseok.member.entity.Member
@@ -47,7 +46,7 @@ class FeedService(
 
     private suspend fun getFeedCaches(memberId: Long, start: Long, count: Long): List<FeedCache> {
         return feedCacheReadRepository.zrevrange(
-            key = RedisFeedKeys.getMemberFeedKey(id = memberId),
+            key = RedisKeys.getMemberFeedKey(id = memberId),
             start = start,
             end = start.plus(count).minus(1),
             clazz = FeedCache::class.java,
@@ -60,7 +59,7 @@ class FeedService(
         }
 
         val postCaches: List<PostCache> = postCacheReadRepository.mget(
-            keys = postIds.map { RedisPostKeys.getPostKey(id = it) },
+            keys = postIds.map { RedisKeys.getPostKey(id = it) },
             clazz = PostCache::class.java,
         )
 //        val postViewCounts: List<Long> = postCacheReadRepository.mget(
@@ -76,7 +75,7 @@ class FeedService(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             postCacheRepository.setAllUsePipeline(
-                keysAndValues = posts.associate { RedisPostKeys.getPostKey(id = it.id!!) to it.toPostCache() },
+                keysAndValues = posts.associate { RedisKeys.getPostKey(id = it.id!!) to it.toPostCache() },
                 expireTime = POST,
                 timeUnit = SECONDS,
             )

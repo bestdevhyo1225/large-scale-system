@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: test
+
+# Data 모듈 사용 여부 설정
+data:
+  enable:
+    redis:
+      feed: true
+      post: true
+
+  redis:
+    feed:
+      mode: standalone
+      nodes: localhost:6379
+    post:
+      mode: standalone
+      nodes: localhost:6380
+
+logging:
+  level:
+    io.lettuce.core: debug

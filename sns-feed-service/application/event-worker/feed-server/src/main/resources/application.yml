@@ -11,13 +11,6 @@ spring:
     activate:
       on-profile: dev
 
-  data:
-    redis:
-      feed:
-        mode: standalone
-        nodes:
-          node1: localhost:6384
-
   kafka:
     consumer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
@@ -27,6 +20,16 @@ spring:
       max-poll-interval: 600000 # 10분
       max-poll-records: 250 # 최대 250개
       allow-auto-create-topics: false # 토픽 자동 생성 X
+
+data:
+  enable:
+    redis:
+      feed: true
+
+  redis:
+    feed:
+      mode: standalone
+      nodes: localhost:6384
 
 ---
 spring:
@@ -34,13 +37,6 @@ spring:
     activate:
       on-profile: prod
 
-  data:
-    redis:
-      feed:
-        mode: standalone
-        nodes:
-          node1: localhost:6384
-
   kafka:
     consumer:
       bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
@@ -50,3 +46,13 @@ spring:
       max-poll-interval: 600000 # 10분
       max-poll-records: 250 # 최대 250개
       allow-auto-create-topics: false # 토픽 자동 생성 X
+
+data:
+  enable:
+    redis:
+      feed: true
+
+  redis:
+    feed:
+      mode: standalone
+      nodes: localhost:6384

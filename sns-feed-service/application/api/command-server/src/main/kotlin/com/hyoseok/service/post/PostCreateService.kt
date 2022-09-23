@@ -1,11 +1,11 @@
 package com.hyoseok.service.post
 
 import com.hyoseok.config.KafkaTopics
-import com.hyoseok.config.RedisPostCommons.ZSET_POST_MAX_LIMIT
-import com.hyoseok.config.RedisPostExpireTimes.POST
-import com.hyoseok.config.RedisPostExpireTimes.POST_VIEWS
-import com.hyoseok.config.RedisPostKeys
-import com.hyoseok.config.RedisPostKeys.POST_KEYS
+import com.hyoseok.config.RedisCommons.ZSET_POST_MAX_LIMIT
+import com.hyoseok.config.RedisExpireTimes.POST
+import com.hyoseok.config.RedisExpireTimes.POST_VIEWS
+import com.hyoseok.config.RedisKeys
+import com.hyoseok.config.RedisKeys.POST_KEYS
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.repository.FollowReadRepository
 import com.hyoseok.member.repository.MemberReadRepository
@@ -56,7 +56,7 @@ class PostCreateService(
 
     private suspend fun setPostCache(id: Long, postCache: PostCache) {
         postCacheRepository.set(
-            key = RedisPostKeys.getPostKey(id = id),
+            key = RedisKeys.getPostKey(id = id),
             value = postCache,
             expireTime = POST,
             timeUnit = SECONDS,
@@ -65,7 +65,7 @@ class PostCreateService(
 
     private suspend fun setPostViewCount(id: Long, viewCount: Long) {
         postCacheRepository.set(
-            key = RedisPostKeys.getPostViewsKey(id = id),
+            key = RedisKeys.getPostViewsKey(id = id),
             value = viewCount,
             expireTime = POST_VIEWS,
             timeUnit = SECONDS,
