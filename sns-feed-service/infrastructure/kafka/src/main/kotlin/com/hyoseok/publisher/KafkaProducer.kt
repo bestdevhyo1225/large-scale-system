@@ -4,11 +4,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import mu.KotlinLogging
 import org.apache.kafka.common.KafkaException
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import java.util.concurrent.ExecutionException
 
 @Component
+@ConditionalOnProperty(prefix = "infrastructure.enable", name = ["kafka"], havingValue = "true")
 class KafkaProducer(
     private val kafkaTemplate: KafkaTemplate<String, String>,
 ) {
