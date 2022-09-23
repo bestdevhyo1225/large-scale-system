@@ -12,7 +12,7 @@ data:
   redis:
     feed:
       mode: standalone
-      nodes: localhost:6379,
+      nodes: localhost:6379
     post:
       mode: standalone
       nodes: localhost:6380
