@@ -101,3 +101,25 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 수행하는 `Command` 서버는 `최소 2대의 서버` 가 필요하며, `Query` 서버도 `최소 2대 서버` 가 필요하다.
 
 ## SNS 피드 시스템 설계
+
+### 팬 아웃(포스팅 전송) 프로세스
+
+<img width="1474" alt="image" src="https://user-images.githubusercontent.com/23515771/191922785-c6a794b0-3f5f-4ca6-8507-3c2158083b5b.png">
+
+1. `Post` 를 데이터베이스에 저장한다.
+
+2. `PostCache`, `PostViewCount`, `PostKeys(Post Id 리스트)` 를 레디스에 캐싱한다.
+
+    - `PostKeys` 는 `Sorted Set` 컬렉션을 사용하여, 포스팅을 저장한 순서대로 `Id` 를 캐싱한다.
+
+    - `PostKeys` 는 최대 `100,000` 개만 저장한다.
+
+        - `zremRangeByRank` 를 활용해서 `100,000` 개를 유지한다.
+
+3. 사용자를 팔로우한 `Followee` 리스트를 조회한다.
+
+4. `Feed` 이벤트를 만들어 카프카를 통해 메시지를 발행한다.
+
+5. `Feed Event Worker` 서버에서는 `Feed` 이벤트를 수신한다.
+
+6. `FeedCache` 를 만들어 `Followee` 의 Id를 기준으로 `Sorted Set` 컬렉션을 활용하여, `등록 순` 으로 피드 캐시를 저장한다.
