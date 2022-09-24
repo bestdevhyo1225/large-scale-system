@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  redis-stats:
+    image: insready/redis-stat:latest
+    container_name: redis-stats
+    ports:
+      - '63790:63790'
+    command: [
+      '--verbose', # 추가 정보 보기
+      '--server',
+      'host.docker.internal:6383', # Post
+      'host.docker.internal:6384', # Feed
+    ]
