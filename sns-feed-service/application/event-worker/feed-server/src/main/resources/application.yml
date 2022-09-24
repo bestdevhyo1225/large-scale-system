@@ -19,7 +19,7 @@ spring:
 
   kafka:
     consumer:
-      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
       auto-offset-reset: latest # 가장 마지막 오프셋 값
       session-timeout: 30000 # 30초
       heartbeat-interval: 10000 # 10초
@@ -41,7 +41,7 @@ spring:
 
   kafka:
     consumer:
-      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
       auto-offset-reset: latest # 가장 마지막 오프셋 값
       session-timeout: 30000 # 30초
       heartbeat-interval: 10000 # 10초

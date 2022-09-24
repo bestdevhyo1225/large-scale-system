@@ -62,7 +62,7 @@ data:
 infrastructure:
   kafka:
     producer:
-      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
       acks: 1
       buffer-memory: 33554432 # 33MB (default)
       compression-type: lz4
@@ -109,7 +109,7 @@ data:
 infrastructure:
   kafka:
     producer:
-      bootstrap-servers: localhost:19093,localhost:29093,localhost:39093
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
       acks: 1
       buffer-memory: 33554432 # 33MB (default)
       compression-type: lz4
