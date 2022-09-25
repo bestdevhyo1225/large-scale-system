@@ -17,6 +17,9 @@ class FollowReadRepositoryImpl(
     private val followJpaRepository: FollowJpaRepository,
 ) : FollowReadRepository {
 
+    override fun countByFollowerId(followerId: Long): Long =
+        followJpaRepository.countByFollowerId(followerId = followerId)
+
     override fun findAllByFollowerIdAndLimitAndOffset(
         followerId: Long,
         limit: Long,

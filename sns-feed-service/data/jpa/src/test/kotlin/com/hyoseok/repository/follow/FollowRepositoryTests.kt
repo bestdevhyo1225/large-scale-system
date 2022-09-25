@@ -8,6 +8,8 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.longs.shouldBeZero
+import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -69,6 +71,36 @@ internal class FollowRepositoryTests : RepositoryImplTests, DescribeSpec() {
                 findFollows[0].shouldBe(follows[0])
                 findFollows[1].shouldBe(follows[2])
                 findFollows[2].shouldBe(follows[3])
+            }
+        }
+
+        this.describe("countByFollowerId 메서드는") {
+            it("내가 팔로잉한 전체 수를 조회한다") {
+                // given
+                val followerId = 1523L
+                val follows: List<Follow> = (1L..10L).map { Follow(followerId = followerId, followeeId = it) }
+
+                follows.forEach { followRepository.save(follow = it) }
+
+                // when
+                val total: Long = followReadRepository.countByFollowerId(followerId = followerId)
+
+                // then
+                total.shouldNotBeZero()
+                total.shouldBe(follows.size)
+            }
+
+            context("팔로잉한 내역이 없으면") {
+                it("0을 반환한다") {
+                    // given
+                    val followerId = 271523L
+
+                    // when
+                    val total: Long = followReadRepository.countByFollowerId(followerId = followerId)
+
+                    // then
+                    total.shouldBeZero()
+                }
             }
         }
     }
