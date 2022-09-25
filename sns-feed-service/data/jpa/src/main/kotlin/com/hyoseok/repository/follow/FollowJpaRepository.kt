@@ -8,4 +8,7 @@ interface FollowJpaRepository : JpaRepository<FollowJpaEntity, Long> {
 
     @Query("SELECT COUNT(f) FROM FollowJpaEntity f WHERE f.followeeId = :followeeId")
     fun countByFolloweeId(followeeId: Long): Long
+
+    @Query("SELECT COUNT(f) FROM FollowJpaEntity f WHERE f.followerId = :followerId")
+    fun countByFollowerId(followerId: Long): Long
 }

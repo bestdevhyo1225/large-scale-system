@@ -1,5 +1,6 @@
 package com.hyoseok.follow.entity
 
+import com.hyoseok.exception.DomainExceptionMessage.FAIL_ADD_FOLLOWEE
 import java.util.Objects
 
 class Follow private constructor(
@@ -28,11 +29,19 @@ class Follow private constructor(
     }
 
     companion object {
+        const val MAX_FOLLOWEE_LIMIT: Long = 10_000
+
         operator fun invoke(followerId: Long, followeeId: Long) =
             Follow(followerId = followerId, followeeId = followeeId)
 
         operator fun invoke(id: Long, followerId: Long, followeeId: Long) =
             Follow(id = id, followerId = followerId, followeeId = followeeId)
+
+        fun checkFolloweeCount(value: Long) {
+            if (value > MAX_FOLLOWEE_LIMIT) {
+                throw RuntimeException(FAIL_ADD_FOLLOWEE)
+            }
+        }
     }
 
     fun changeId(id: Long) {
