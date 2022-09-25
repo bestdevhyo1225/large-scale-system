@@ -48,7 +48,7 @@ class PostCreateService(
             setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
-            sendFeedToFollower(post = post, followeeId = post.memberId)
+            findFollowerAndSendFeed(post = post, followeeId = post.memberId)
         }
 
         return PostCreateResultDto(post = post)
@@ -84,7 +84,7 @@ class PostCreateService(
         postCacheRepository.zremRangeByRank(key = POST_KEYS, start = ZSET_POST_MAX_LIMIT, end = ZSET_POST_MAX_LIMIT)
     }
 
-    private suspend fun sendFeedToFollower(post: Post, followeeId: Long) {
+    private suspend fun findFollowerAndSendFeed(post: Post, followeeId: Long) {
         val limit = 1000L
         var offset = 0L
         var isProgress = true
@@ -96,10 +96,9 @@ class PostCreateService(
             )
 
             follows.forEach {
-                kafkaProducer.send(
-                    event = FollowerSendEventDto(post = post, followerId = it.followerId),
-                    topic = KafkaTopics.SNS_FEED,
-                )
+                CoroutineScope(context = Dispatchers.IO).launch {
+                    sendFeedToFollower(post = post, followerId = it.followerId)
+                }
             }
 
             offset += limit
@@ -108,5 +107,12 @@ class PostCreateService(
                 isProgress = false
             }
         }
+    }
+
+    private suspend fun sendFeedToFollower(post: Post, followerId: Long) {
+        kafkaProducer.send(
+            event = FollowerSendEventDto(post = post, followerId = followerId),
+            topic = KafkaTopics.SNS_FEED,
+        )
     }
 }
