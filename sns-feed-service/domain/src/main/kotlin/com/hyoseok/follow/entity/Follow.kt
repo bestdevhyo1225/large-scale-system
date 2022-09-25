@@ -1,6 +1,7 @@
 package com.hyoseok.follow.entity
 
 import com.hyoseok.exception.DomainExceptionMessage.FAIL_ADD_FOLLOWEE
+import com.hyoseok.exception.DomainExceptionMessage.INVALID_FOLLOWER_ID_FOLLOWEE_ID
 import java.util.Objects
 
 class Follow private constructor(
@@ -31,8 +32,10 @@ class Follow private constructor(
     companion object {
         const val MAX_FOLLOWEE_LIMIT: Long = 10_000
 
-        operator fun invoke(followerId: Long, followeeId: Long) =
-            Follow(followerId = followerId, followeeId = followeeId)
+        operator fun invoke(followerId: Long, followeeId: Long): Follow {
+            checkFollowerIdAndFolloweeId(followerId = followerId, followeeId = followeeId)
+            return Follow(followerId = followerId, followeeId = followeeId)
+        }
 
         operator fun invoke(id: Long, followerId: Long, followeeId: Long) =
             Follow(id = id, followerId = followerId, followeeId = followeeId)
@@ -40,6 +43,12 @@ class Follow private constructor(
         fun checkFolloweeCount(value: Long) {
             if (value > MAX_FOLLOWEE_LIMIT) {
                 throw RuntimeException(FAIL_ADD_FOLLOWEE)
+            }
+        }
+
+        private fun checkFollowerIdAndFolloweeId(followerId: Long, followeeId: Long) {
+            if (followerId == followeeId) {
+                throw IllegalArgumentException(INVALID_FOLLOWER_ID_FOLLOWEE_ID)
             }
         }
     }

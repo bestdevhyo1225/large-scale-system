@@ -1,6 +1,7 @@
 package com.hyoseok.follow
 
 import com.hyoseok.exception.DomainExceptionMessage.FAIL_ADD_FOLLOWEE
+import com.hyoseok.exception.DomainExceptionMessage.INVALID_FOLLOWER_ID_FOLLOWEE_ID
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.entity.Follow.Companion.MAX_FOLLOWEE_LIMIT
 import io.kotest.assertions.throwables.shouldThrow
@@ -20,6 +21,24 @@ internal class FollowTests : DescribeSpec(
 
                     // then
                     exception.localizedMessage.shouldBe(FAIL_ADD_FOLLOWEE)
+                }
+            }
+        }
+
+        describe("Follow 엔티티 생성시") {
+            context("자신이 자신을 팔로우 하는 경우") {
+                it("예외를 던진다") {
+                    // given
+                    val followerId = 1L
+                    val followeeId = 1L
+
+                    // when
+                    val exception: IllegalArgumentException = shouldThrow {
+                        Follow(followerId = followerId, followeeId = followeeId)
+                    }
+
+                    // then
+                    exception.localizedMessage.shouldBe(INVALID_FOLLOWER_ID_FOLLOWEE_ID)
                 }
             }
         }
