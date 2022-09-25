@@ -101,7 +101,9 @@ class PostCreateService(
 
             // 우선 메시지를 발행하지 말고 테스트 해보자
 //            follows.forEach {
-//                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+//                CoroutineScope(context = Dispatchers.IO).launch {
+//                    sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+//                }
 //            }
 
             offset += limit
