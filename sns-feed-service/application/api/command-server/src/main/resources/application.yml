@@ -88,15 +88,15 @@ data:
       write:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://masteruser:masterpassword@localhost:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-        minimum-idle: 10
-        maximum-pool-size: 10
+        minimum-idle: 20
+        maximum-pool-size: 20
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
       read:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://slaveuser:slavepassword@localhost:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-        minimum-idle: 20
-        maximum-pool-size: 20
+        minimum-idle: 30
+        maximum-pool-size: 30
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
 

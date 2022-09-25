@@ -1,6 +1,5 @@
 package com.hyoseok.service.dto
 
-import com.hyoseok.post.entity.Post
 import java.time.LocalDateTime
 
 data class FollowerSendEventDto(
@@ -9,8 +8,8 @@ data class FollowerSendEventDto(
     val memberId: Long,
 ) {
     companion object {
-        operator fun invoke(post: Post, followerId: Long) =
-            FollowerSendEventDto(postId = post.id!!, createdAt = post.createdAt, memberId = followerId)
+        operator fun invoke(postId: Long, createdAt: LocalDateTime, followerId: Long) =
+            FollowerSendEventDto(postId = postId, createdAt = createdAt, memberId = followerId)
     }
 }
 
