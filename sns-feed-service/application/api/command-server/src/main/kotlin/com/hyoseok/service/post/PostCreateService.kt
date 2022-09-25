@@ -99,9 +99,10 @@ class PostCreateService(
                 offset = offset,
             )
 
-            follows.forEach {
-                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
-            }
+            // 우선 메시지를 발행하지 말고 테스트 해보자
+//            follows.forEach {
+//                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+//            }
 
             offset += limit
 
