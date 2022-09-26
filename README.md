@@ -128,3 +128,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 5. `Feed Event Worker` 서버에서는 `Feed` 이벤트를 수신한다.
 
 6. `FeedCache` 를 만들어 `Followee` 의 Id를 기준으로 `Sorted Set` 컬렉션을 활용하여, `등록 순` 으로 피드 캐시를 저장한다.
+
+### 팬 아웃(포스팅 전송) 성능 테스트 결과
+
+- `Number Of Threads (users)` : 2,000명, `Ramp-up Period (seoncds)` : 1초
+
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| /api/v1/posts | 16,328회 | 3,824ms | 1ms | 6,707ms | 0.02% | 476.8/sec |
