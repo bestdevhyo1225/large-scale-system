@@ -7,6 +7,7 @@ import org.apache.kafka.clients.producer.ProducerConfig.BUFFER_MEMORY_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.COMPRESSION_TYPE_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.LINGER_MS_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.RETRIES_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
 import org.apache.kafka.common.serialization.StringSerializer
@@ -42,6 +43,9 @@ class KafkaProducerConfig(
 
     @Value("\${infrastructure.kafka.producer.linger}")
     private val linger: Int,
+
+    @Value("\${infrastructure.kafka.producer.request-timeout-ms}")
+    private val requestTimeoutMs: Long,
 ) {
 
     @Bean
@@ -55,6 +59,7 @@ class KafkaProducerConfig(
         props[RETRIES_CONFIG] = retries
         props[BATCH_SIZE_CONFIG] = batchSize
         props[LINGER_MS_CONFIG] = linger
+        props[REQUEST_TIMEOUT_MS_CONFIG] = requestTimeoutMs
         props[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
 
