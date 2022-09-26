@@ -19,7 +19,6 @@ import com.hyoseok.service.dto.PostCreateDto
 import com.hyoseok.service.dto.PostCreateResultDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
@@ -105,12 +104,7 @@ class PostCreateService(
                 offset = offset,
             )
 
-            follows.forEach {
-//                CoroutineScope(context = Dispatchers.IO).launch {
-//                    sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
-//                }
-                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
-            }
+            follows.forEach { sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId) }
 
             offset += limit
 
@@ -124,12 +118,12 @@ class PostCreateService(
         followeeId: Long,
         limit: Long,
         offset: Long,
-    ): Pair<Long, List<Follow>> {
-        delay(timeMillis = 300)
-        val total: Long = 10_000
-        val follows: List<Follow> = (1L..1000L).map { Follow(id = it, followeeId = 1L, followerId = it) }
-        return Pair(first = total, second = follows)
-    }
+    ): Pair<Long, List<Follow>> =
+        followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
+            followeeId = followeeId,
+            limit = limit,
+            offset = offset,
+        )
 
     private suspend fun sendFeedToFollower(postId: Long, createdAt: LocalDateTime, followerId: Long) {
         kafkaProducer.send(
