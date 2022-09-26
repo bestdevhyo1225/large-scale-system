@@ -46,10 +46,10 @@ class KafkaProducerConfig(
     private val lingerMs: Int,
 
     @Value("\${infrastructure.kafka.producer.request-timeout-ms}")
-    private val requestTimeoutMs: Long,
+    private val requestTimeoutMs: Int,
 
     @Value("\${infrastructure.kafka.producer.delivery-timeout-ms}")
-    private val deliveryTimeoutMs: Long,
+    private val deliveryTimeoutMs: Int,
 ) {
 
     @Bean
