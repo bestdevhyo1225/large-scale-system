@@ -44,13 +44,11 @@ class PostCreateService(
         }
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            launch { setPostCache(id = post.id!!, postCache = post.toPostCache()) }
-            launch { setPostViewCount(id = post.id!!, viewCount = post.viewCount) }
-            launch { zaddPostKeys(id = post.id!!, createdAt = post.createdAt) }
-            launch { zremPostKeysRangeByRank() }
-            launch {
-                findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
-            }
+            setPostCache(id = post.id!!, postCache = post.toPostCache())
+            setPostViewCount(id = post.id!!, viewCount = post.viewCount)
+            zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
+            zremPostKeysRangeByRank()
+            findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
         }
 
         return PostCreateResultDto(post = post)
