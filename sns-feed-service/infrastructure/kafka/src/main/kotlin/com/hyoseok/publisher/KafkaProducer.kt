@@ -29,6 +29,14 @@ class KafkaProducer(
         }
     }
 
+    fun <T : Any> sendAsync(event: T, topic: String) {
+        execute {
+            kafkaTemplate
+                .send(topic, jacksonObjectMapper.writeValueAsString(event))
+                .addCallback(KafkaProducerCallback())
+        }
+    }
+
     private fun execute(func: () -> Unit) {
         try {
             func()
