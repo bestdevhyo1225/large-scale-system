@@ -93,7 +93,7 @@ class PostCreateService(
         var offset = 0L
         var isProgress = true
         while (isProgress) {
-            val (total: Long, follows: List<Follow>) = findAllByFolloweeIdAndLimitAndOffset(
+            val (total: Long, follows: List<Follow>) = followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
                 followeeId = followeeId,
                 limit = limit,
                 offset = offset,
@@ -101,9 +101,19 @@ class PostCreateService(
 
             follows.forEach {
 //                CoroutineScope(context = Dispatchers.IO).launch {
-//                    sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+//                    kafkaProducer.send(
+//                        event = FollowerSendEventDto(
+//                            postId = postId,
+//                            createdAt = createdAt,
+//                            followerId = it.followerId,
+//                        ),
+//                        topic = KafkaTopics.SNS_FEED,
+//                    )
 //                }
-                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+                kafkaProducer.send(
+                    event = FollowerSendEventDto(postId = postId, createdAt = createdAt, followerId = it.followerId),
+                    topic = KafkaTopics.SNS_FEED,
+                )
             }
 
             offset += limit
@@ -112,23 +122,5 @@ class PostCreateService(
                 isProgress = false
             }
         }
-    }
-
-    private suspend fun findAllByFolloweeIdAndLimitAndOffset(
-        followeeId: Long,
-        limit: Long,
-        offset: Long,
-    ): Pair<Long, List<Follow>> =
-        followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
-            followeeId = followeeId,
-            limit = limit,
-            offset = offset,
-        )
-
-    private suspend fun sendFeedToFollower(postId: Long, createdAt: LocalDateTime, followerId: Long) {
-        kafkaProducer.send(
-            event = FollowerSendEventDto(postId = postId, createdAt = createdAt, followerId = followerId),
-            topic = KafkaTopics.SNS_FEED,
-        )
     }
 }
