@@ -48,7 +48,7 @@ class PostCreateService(
             setPostViewCount(id = post.id!!, viewCount = post.viewCount)
             zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
             zremPostKeysRangeByRank()
-//            findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
+            findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
         }
 
         return PostCreateResultDto(post = post)
@@ -93,18 +93,18 @@ class PostCreateService(
         var offset = 0L
         var isProgress = true
         while (isProgress) {
-            val (total: Long, follows: List<Follow>) = followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
+            val (total: Long, follows: List<Follow>) = findAllByFolloweeIdAndLimitAndOffset(
                 followeeId = followeeId,
                 limit = limit,
                 offset = offset,
             )
 
-            // 우선 메시지를 발행하지 말고 테스트 해보자
-//            follows.forEach {
+            follows.forEach {
 //                CoroutineScope(context = Dispatchers.IO).launch {
 //                    sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
 //                }
-//            }
+                sendFeedToFollower(postId = postId, createdAt = createdAt, followerId = it.followerId)
+            }
 
             offset += limit
 
@@ -113,6 +113,17 @@ class PostCreateService(
             }
         }
     }
+
+    private suspend fun findAllByFolloweeIdAndLimitAndOffset(
+        followeeId: Long,
+        limit: Long,
+        offset: Long,
+    ): Pair<Long, List<Follow>> =
+        followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
+            followeeId = followeeId,
+            limit = limit,
+            offset = offset,
+        )
 
     private suspend fun sendFeedToFollower(postId: Long, createdAt: LocalDateTime, followerId: Long) {
         kafkaProducer.send(
