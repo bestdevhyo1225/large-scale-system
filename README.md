@@ -136,3 +136,4 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | Label | Samples | Average | Min | Max | Erros (%) | Throughput |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | /api/v1/posts | 16,328회 | 3,824ms | 1ms | 6,707ms | 0.02% | 476.8/sec |
+| /api/v1/posts | 17,136회 | 3,649ms | 2ms | 8,303ms | 0.06% | 504.3/sec |
