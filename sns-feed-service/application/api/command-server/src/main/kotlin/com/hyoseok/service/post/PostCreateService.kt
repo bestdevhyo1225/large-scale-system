@@ -20,6 +20,7 @@ import com.hyoseok.service.dto.PostCreateResultDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
@@ -35,6 +36,8 @@ class PostCreateService(
     private val memberReadRepository: MemberReadRepository,
     private val kafkaProducer: KafkaProducer,
 ) {
+
+    private val logger = KotlinLogging.logger {}
 
     fun execute(dto: PostCreateDto): PostCreateResultDto {
         val post: Post = dto.toEntity()
@@ -121,7 +124,7 @@ class PostCreateService(
         )
 
     private suspend fun sendFeedToFollower(postId: Long, createdAt: LocalDateTime, followerId: Long) {
-        kafkaProducer.send(
+        kafkaProducer.sendAsync(
             event = FollowerSendEventDto(postId = postId, createdAt = createdAt, followerId = followerId),
             topic = KafkaTopics.SNS_FEED,
         )
