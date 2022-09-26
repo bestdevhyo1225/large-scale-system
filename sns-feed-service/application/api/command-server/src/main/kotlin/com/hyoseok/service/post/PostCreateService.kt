@@ -19,7 +19,9 @@ import com.hyoseok.service.dto.PostCreateDto
 import com.hyoseok.service.dto.PostCreateResultDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.sql.Timestamp
@@ -36,6 +38,8 @@ class PostCreateService(
     private val kafkaProducer: KafkaProducer,
 ) {
 
+    private val logger = KotlinLogging.logger {}
+
     fun execute(dto: PostCreateDto): PostCreateResultDto {
         val post: Post = dto.toEntity()
 
@@ -44,11 +48,13 @@ class PostCreateService(
         }
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            setPostCache(id = post.id!!, postCache = post.toPostCache())
-            setPostViewCount(id = post.id!!, viewCount = post.viewCount)
-            zaddPostKeys(id = post.id!!, createdAt = post.createdAt)
-            zremPostKeysRangeByRank()
-            findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
+            launch { setPostCache(id = post.id!!, postCache = post.toPostCache()) }
+            launch { setPostViewCount(id = post.id!!, viewCount = post.viewCount) }
+            launch { zaddPostKeys(id = post.id!!, createdAt = post.createdAt) }
+            launch { zremPostKeysRangeByRank() }
+            launch {
+                findFollowerAndSendFeed(postId = post.id!!, createdAt = post.createdAt, followeeId = dto.memberId)
+            }
         }
 
         return PostCreateResultDto(post = post)
@@ -118,12 +124,12 @@ class PostCreateService(
         followeeId: Long,
         limit: Long,
         offset: Long,
-    ): Pair<Long, List<Follow>> =
-        followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
-            followeeId = followeeId,
-            limit = limit,
-            offset = offset,
-        )
+    ): Pair<Long, List<Follow>> {
+        delay(timeMillis = 300)
+        val total: Long = 10_000
+        val follows: List<Follow> = (1L..1000L).map { Follow(id = it, followeeId = 1L, followerId = it) }
+        return Pair(first = total, second = follows)
+    }
 
     private suspend fun sendFeedToFollower(postId: Long, createdAt: LocalDateTime, followerId: Long) {
         kafkaProducer.send(
