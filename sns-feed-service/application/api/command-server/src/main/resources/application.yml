@@ -68,7 +68,7 @@ infrastructure:
       compression-type: lz4
       retries: 0
       batch-size: 100000 # 100KB
-      linger: 50
+      linger-ms: 50
       request-timeout-ms: 60000 # 60초
       delivery-timeout-ms: 120000 # 120초
 
@@ -117,6 +117,6 @@ infrastructure:
       compression-type: lz4
       retries: 0
       batch-size: 100000 # 100KB, 해당 사이즈에 도달하게 되면, 메시지들을 전송한다.
-      linger: 100 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
+      linger-ms: 500 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
       request-timeout-ms: 60000 # 60초
       delivery-timeout-ms: 120000 # 120초

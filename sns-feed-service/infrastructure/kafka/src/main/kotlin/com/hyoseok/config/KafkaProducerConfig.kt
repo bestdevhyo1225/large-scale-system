@@ -42,8 +42,8 @@ class KafkaProducerConfig(
     @Value("\${infrastructure.kafka.producer.batch-size}")
     private val batchSize: Int,
 
-    @Value("\${infrastructure.kafka.producer.linger}")
-    private val linger: Int,
+    @Value("\${infrastructure.kafka.producer.linger-ms}")
+    private val lingerMs: Int,
 
     @Value("\${infrastructure.kafka.producer.request-timeout-ms}")
     private val requestTimeoutMs: Long,
@@ -62,7 +62,7 @@ class KafkaProducerConfig(
         props[COMPRESSION_TYPE_CONFIG] = compressionType
         props[RETRIES_CONFIG] = retries
         props[BATCH_SIZE_CONFIG] = batchSize
-        props[LINGER_MS_CONFIG] = linger
+        props[LINGER_MS_CONFIG] = lingerMs
         props[REQUEST_TIMEOUT_MS_CONFIG] = requestTimeoutMs
         props[DELIVERY_TIMEOUT_MS_CONFIG] = deliveryTimeoutMs
         props[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
