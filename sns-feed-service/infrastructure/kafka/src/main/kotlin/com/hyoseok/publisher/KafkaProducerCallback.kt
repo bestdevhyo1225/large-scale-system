@@ -17,6 +17,6 @@ class KafkaProducerCallback : ListenableFutureCallback<SendResult<String, String
     }
 
     override fun onFailure(ex: Throwable) {
-        logger.error { ex.localizedMessage }
+        logger.error { ex }
     }
 }
