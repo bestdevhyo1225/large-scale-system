@@ -3,6 +3,7 @@ server:
   tomcat:
     threads:
       min-spare: 20
+      max: 100
 
 spring:
   profiles:
@@ -90,15 +91,15 @@ data:
       write:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://masteruser:masterpassword@localhost:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-        minimum-idle: 20
-        maximum-pool-size: 20
+        minimum-idle: 50
+        maximum-pool-size: 50
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
       read:
         driver-class-name: com.mysql.cj.jdbc.Driver
         jdbc-url: jdbc:mysql://slaveuser:slavepassword@localhost:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-        minimum-idle: 30
-        maximum-pool-size: 30
+        minimum-idle: 50
+        maximum-pool-size: 50
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
 
@@ -117,6 +118,6 @@ infrastructure:
       compression-type: lz4
       retries: 0
       batch-size: 1000 # 1KB, 해당 사이즈에 도달하게 되면, 메시지들을 전송한다.
-      linger-ms: 100 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
-      request-timeout-ms: 60000 # 60초
-      delivery-timeout-ms: 180000 # 180초
+      linger-ms: 500 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
+      request-timeout-ms: 120000 # 120초
+      delivery-timeout-ms: 300000 # 300초
