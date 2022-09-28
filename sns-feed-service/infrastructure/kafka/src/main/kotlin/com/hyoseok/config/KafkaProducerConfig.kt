@@ -1,5 +1,6 @@
 package com.hyoseok.config
 
+import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.BATCH_SIZE_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
@@ -8,9 +9,11 @@ import org.apache.kafka.clients.producer.ProducerConfig.COMPRESSION_TYPE_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.LINGER_MS_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.PARTITIONER_CLASS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.RETRIES_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG
+import org.apache.kafka.clients.producer.UniformStickyPartitioner
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -65,6 +68,10 @@ class KafkaProducerConfig(
         props[LINGER_MS_CONFIG] = lingerMs
         props[REQUEST_TIMEOUT_MS_CONFIG] = requestTimeoutMs
         props[DELIVERY_TIMEOUT_MS_CONFIG] = deliveryTimeoutMs
+        // 카프카로 전송하는 메시지의 순서가 그다지 중요하지 않다면, 스티키 파티셔닝 전략을 적용하기를 권장한다.
+        // 피드 발행의 경우, 메시지 순서가 중요하지 않다.
+        // 파티션을 2개 이상 나눈 경우에 사용해야 한다.
+//        props[PARTITIONER_CLASS_CONFIG] = UniformStickyPartitioner::class.java
         props[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
 
