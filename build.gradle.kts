@@ -58,7 +58,7 @@ subprojects {
         testImplementation("io.kotest:kotest-assertions-core-jvm:5.4.1")
         testImplementation("io.kotest:kotest-extensions-spring:4.4.3")
         testImplementation("io.kotest:kotest-runner-junit5-jvm:5.4.1")
-        testImplementation("io.mockk:mockk:1.12.5")
+        testImplementation("io.mockk:mockk:1.13.1")
 
         // Reactor Test
         testImplementation("io.projectreactor:reactor-test")
