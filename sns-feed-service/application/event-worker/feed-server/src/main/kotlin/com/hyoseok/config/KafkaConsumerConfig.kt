@@ -12,7 +12,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_RECORDS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG
-import org.apache.kafka.clients.consumer.RoundRobinAssignor
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -69,7 +69,7 @@ class KafkaConsumerConfig(
         props[HEARTBEAT_INTERVAL_MS_CONFIG] = heartbeatInterval
         props[MAX_POLL_INTERVAL_MS_CONFIG] = maxPollInterval
         props[MAX_POLL_RECORDS_CONFIG] = maxPollRecords
-        props[PARTITION_ASSIGNMENT_STRATEGY_CONFIG] = listOf(RoundRobinAssignor::class.java) // 라운드 로빈 방식으로 할당
+        props[PARTITION_ASSIGNMENT_STRATEGY_CONFIG] = listOf(CooperativeStickyAssignor::class.java) // 협력적 스티키 파티션 할당 전략
         props[KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
 
