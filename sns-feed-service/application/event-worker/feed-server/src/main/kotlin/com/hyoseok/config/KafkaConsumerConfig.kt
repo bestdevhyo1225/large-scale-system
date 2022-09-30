@@ -4,6 +4,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS
 import org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_INSTANCE_ID_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG
@@ -20,10 +21,14 @@ import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ContainerProperties.AckMode
+import java.util.UUID
 
 @Configuration
 @EnableKafka
 class KafkaConsumerConfig(
+    @Value("\${spring.kafka.consumer.group-instance-id}")
+    private val groupInstanceId: String,
+
     @Value("\${spring.kafka.consumer.allow-auto-create-topics}")
     private val allowAutoCreateTopics: Boolean,
 
@@ -50,6 +55,12 @@ class KafkaConsumerConfig(
     fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
         val props = mutableMapOf<String, Any>()
 
+        /*
+        * 스태틱 멤버십 -> 컨슈머 그룹 내에서 컨슈머가 재시작 등으로 그룹에서 나갔다가 다시 합류하더라도 리밸런싱이 일어나지 않도록 한다.
+        * 스태틱 멤버십 적용을 위해 'GROUP_INSTANCE_ID' 를 설정했음
+        * 다만 session.timeout.ms에 지정된 시간을 넘어가도록 컨슈머가 재실행 되지 않으면 리밸런싱 동작이 발생함
+        * */
+        props[GROUP_INSTANCE_ID_CONFIG] = "$groupInstanceId-${UUID.randomUUID()}"
         props[ALLOW_AUTO_CREATE_TOPICS_CONFIG] = allowAutoCreateTopics
         props[BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
         props[ENABLE_AUTO_COMMIT_CONFIG] = false // 수동 커밋
