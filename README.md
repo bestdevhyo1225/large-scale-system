@@ -137,3 +137,13 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | /api/v1/posts | 16,328회 | 3,824ms | 1ms | 6,707ms | 0.02% | 476.8/sec |
 | /api/v1/posts | 17,136회 | 3,649ms | 2ms | 8,303ms | 0.06% | 504.3/sec |
+
+### 피드 조회 성능 테스트 결과
+
+- `Number Of Threads (users)` : 1,000명, `Ramp-up Period (seoncds)` : 1초
+
+| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| /api/v1/feeds/{memberId}/posts | 142,327회 | 843ms | 19ms | 3,813ms | 0.00% | 1175.4/sec |
+| /api/v1/feeds/{memberId}/posts | 105,393회 | 1,138ms | 31ms | 3,847ms | 0.00% | 870.6/sec |
+| /api/v1/feeds/{memberId}/posts | 122,928회 | 975ms | 163ms | 2,192ms | 0.00% | 1016.2/sec |
