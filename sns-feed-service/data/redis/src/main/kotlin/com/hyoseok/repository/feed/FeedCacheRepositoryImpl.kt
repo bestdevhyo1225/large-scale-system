@@ -25,4 +25,17 @@ class FeedCacheRepositoryImpl(
     override fun zremRangeByRank(key: String, start: Long, end: Long) {
         redisTemplate.opsForZSet().removeRange(key, start, end)
     }
+
+    override fun zremRangeByScore(key: String, min: Double, max: Double) {
+        redisTemplate.opsForZSet().removeRangeByScore(key, min, max)
+    }
+
+    override fun zremRangeByScoreUsedPipeline(keysAndScores: List<Triple<String, Double, Double>>) {
+        redisTemplate.executePipelined {
+            keysAndScores.forEach { (key: String, min: Double, max: Double) ->
+                zremRangeByScore(key = key, min = min, max = max)
+            }
+            return@executePipelined null
+        }
+    }
 }

@@ -11,6 +11,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.ints.shouldBeZero
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -89,6 +90,82 @@ internal class FeedCacheRepositoryTests : DescribeSpec() {
                     feedCacheReadRepository.zrevrange(key = key, start = 0, end = 1, clazz = FeedCache::class.java)
 
                 feedCaches.size.shouldBeZero()
+            }
+        }
+
+        this.describe("zremRangeByScore 메서드는") {
+            it("min, max 사이의 데이터를 삭제한다") {
+                // given
+                val postId = 1245L
+                val memberId = 19283L
+                val key: String = RedisKeys.getMemberFeedKey(id = memberId)
+                val createdAt: LocalDateTime = LocalDateTime.now().withNano(0)
+                val value = FeedCache(postId = postId)
+                val score: Double = Timestamp.valueOf(createdAt).time.toDouble()
+                val min: Double = score.minus(1000)
+                val max: Double = score.plus(1000)
+
+                feedCacheRepository.zadd(key = key, value = value, score = score)
+
+                // when
+                feedCacheRepository.zremRangeByScore(key = key, min = min, max = max)
+
+                // then
+                val start: Long = 0
+                val end: Long = 100
+                val values: List<FeedCache> = feedCacheReadRepository.zrevrangebyscore(
+                    key = key,
+                    min = min,
+                    max = max,
+                    start = start,
+                    end = end,
+                    clazz = FeedCache::class.java,
+                )
+
+                // then
+                values.shouldBeEmpty()
+            }
+        }
+
+        this.describe("zremRangeByScoreUsedPipeline 메서드는") {
+            it("Pipeline 기능을 사용해서 데이터를 삭제 한다") {
+                // given
+                val postId = 1245L
+                val memberId = 19283L
+                val key: String = RedisKeys.getMemberFeedKey(id = memberId)
+                val createdAt: LocalDateTime = LocalDateTime.now().withNano(0)
+                val value = FeedCache(postId = postId)
+                val score: Double = Timestamp.valueOf(createdAt).time.toDouble()
+                val min: Double = score.minus(1000)
+                val max: Double = score.plus(1000)
+
+                feedCacheRepository.zadd(key = key, value = value, score = score)
+
+                // when
+                feedCacheRepository.zremRangeByScoreUsedPipeline(
+                    keysAndScores = listOf(
+                        Triple(
+                            first = key,
+                            second = min,
+                            third = max,
+                        ),
+                    ),
+                )
+
+                // then
+                val start: Long = 0
+                val end: Long = 100
+                val values: List<FeedCache> = feedCacheReadRepository.zrevrangebyscore(
+                    key = key,
+                    min = min,
+                    max = max,
+                    start = start,
+                    end = end,
+                    clazz = FeedCache::class.java,
+                )
+
+                // then
+                values.shouldBeEmpty()
             }
         }
     }
