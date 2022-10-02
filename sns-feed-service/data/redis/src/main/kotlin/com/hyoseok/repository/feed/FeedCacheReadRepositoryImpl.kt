@@ -30,4 +30,21 @@ class FeedCacheReadRepositoryImpl(
 
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
     }
+
+    override fun <T> zrevrangebyscore(
+        key: String,
+        min: Double,
+        max: Double,
+        start: Long,
+        end: Long,
+        clazz: Class<T>
+    ): List<T> {
+        val values: Set<String?>? = redisTemplate.opsForZSet().reverseRangeByScore(key, min, max, start, end)
+
+        if (values.isNullOrEmpty()) {
+            return listOf()
+        }
+
+        return values.map { jacksonObjectMapper.readValue(it, clazz) }
+    }
 }
