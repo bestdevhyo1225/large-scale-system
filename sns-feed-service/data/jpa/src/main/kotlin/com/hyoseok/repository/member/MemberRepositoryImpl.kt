@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional
+@Transactional(transactionManager = "jpaTransactionManager")
 @ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class MemberRepositoryImpl(
     private val memberJpaRepository: MemberJpaRepository,

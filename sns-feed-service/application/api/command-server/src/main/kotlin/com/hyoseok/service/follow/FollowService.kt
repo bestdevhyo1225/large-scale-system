@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
+@Transactional(transactionManager = "jpaTransactionManager")
 class FollowService(
     private val followRepository: FollowRepository,
     private val followReadRepository: FollowReadRepository,

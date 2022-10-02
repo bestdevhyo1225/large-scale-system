@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional(readOnly = true)
+@Transactional(transactionManager = "jpaTransactionManager", readOnly = true)
 @ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class FollowReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
