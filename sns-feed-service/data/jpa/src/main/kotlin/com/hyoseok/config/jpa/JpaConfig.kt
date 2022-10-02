@@ -19,7 +19,7 @@ import javax.sql.DataSource
 @EnableJpaRepositories(
     basePackages = ["com.hyoseok.repository"],
     entityManagerFactoryRef = "entityManagerFactory",
-    transactionManagerRef = "transactionManager",
+    transactionManagerRef = "jpaTransactionManager",
 )
 @ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class JpaConfig(
@@ -49,7 +49,7 @@ class JpaConfig(
     }
 
     @Bean
-    fun transactionManager(dataSource: DataSource): PlatformTransactionManager {
+    fun jpaTransactionManager(dataSource: DataSource): PlatformTransactionManager {
         val jpaTransactionManager = JpaTransactionManager()
         jpaTransactionManager.entityManagerFactory = entityManagerFactory(dataSource = dataSource).`object`
 

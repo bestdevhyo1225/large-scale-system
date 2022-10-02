@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
-@Transactional(readOnly = true)
+@Transactional(transactionManager = "jpaTransactionManager", readOnly = true)
 @ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class PostReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,

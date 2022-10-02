@@ -28,7 +28,7 @@ import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
-@Transactional
+@Transactional(transactionManager = "jpaTransactionManager")
 class PostCreateService(
     private val postRepository: PostRepository,
     private val postCacheRepository: PostCacheRepository,
