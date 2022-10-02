@@ -37,7 +37,7 @@ class FeedCacheReadRepositoryImpl(
         max: Double,
         start: Long,
         end: Long,
-        clazz: Class<T>
+        clazz: Class<T>,
     ): List<T> {
         val values: Set<String?>? = redisTemplate.opsForZSet().reverseRangeByScore(key, min, max, start, end)
 
