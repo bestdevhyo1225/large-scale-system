@@ -2,7 +2,7 @@ package com.hyoseok.repository
 
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.config.jpa.JpaQueryFactoryConfig
-import com.hyoseok.config.mysql.BasicDataSourceConfig
+import com.hyoseok.config.datasource.BasicDataSourceConfig
 import com.hyoseok.follow.repository.FollowReadRepository
 import com.hyoseok.follow.repository.FollowRepository
 import com.hyoseok.member.repository.MemberReadRepository

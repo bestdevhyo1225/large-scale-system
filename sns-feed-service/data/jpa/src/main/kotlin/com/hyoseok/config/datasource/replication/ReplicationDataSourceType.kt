@@ -1,3 +1,3 @@
-package com.hyoseok.config.mysql.replication
+package com.hyoseok.config.datasource.replication
 
 enum class ReplicationDataSourceType { WRITE, READ }
