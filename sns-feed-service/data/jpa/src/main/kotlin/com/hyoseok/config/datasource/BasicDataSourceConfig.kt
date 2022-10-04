@@ -1,4 +1,4 @@
-package com.hyoseok.config.mysql
+package com.hyoseok.config.datasource
 
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

@@ -1,4 +1,4 @@
-package com.hyoseok.config.mysql.replication
+package com.hyoseok.config.datasource.replication
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource
 import org.springframework.transaction.support.TransactionSynchronizationManager

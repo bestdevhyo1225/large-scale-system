@@ -1,4 +1,4 @@
-package com.hyoseok.config.mysql.replication.property
+package com.hyoseok.config.datasource.replication.property
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -6,10 +6,10 @@ import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.context.annotation.Profile
 
 @ConstructorBinding
-@ConfigurationProperties(value = "data.datasource.hikari.read")
+@ConfigurationProperties(value = "data.datasource.hikari.write")
 @Profile(value = ["prod"])
 @ConditionalOnProperty(prefix = "data.enable", name = ["datasource"], havingValue = "true")
-data class ReadProperty(
+data class WriteProperty(
     val driverClassName: String,
     val jdbcUrl: String,
     val minimumIdle: Int,

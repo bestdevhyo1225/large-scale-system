@@ -1,7 +1,7 @@
-package com.hyoseok.config.mysql.replication
+package com.hyoseok.config.datasource.replication
 
-import com.hyoseok.config.mysql.replication.property.ReadProperty
-import com.hyoseok.config.mysql.replication.property.WriteProperty
+import com.hyoseok.config.datasource.replication.property.ReadProperty
+import com.hyoseok.config.datasource.replication.property.WriteProperty
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
