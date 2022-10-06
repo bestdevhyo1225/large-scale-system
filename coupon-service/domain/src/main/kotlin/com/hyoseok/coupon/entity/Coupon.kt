@@ -109,4 +109,8 @@ class Coupon private constructor(
             deletedAt = deletedAt,
         )
     }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
 }
