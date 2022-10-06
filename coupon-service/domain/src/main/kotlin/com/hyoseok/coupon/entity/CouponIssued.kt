@@ -58,4 +58,8 @@ class CouponIssued private constructor(
             deletedAt = deletedAt,
         )
     }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
 }

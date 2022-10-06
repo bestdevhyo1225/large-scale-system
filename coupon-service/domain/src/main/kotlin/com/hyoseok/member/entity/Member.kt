@@ -38,4 +38,8 @@ class Member private constructor(
         operator fun invoke(id: Long, name: String, createdAt: LocalDateTime, deletedAt: LocalDateTime?) =
             Member(id = id, name = name, createdAt = createdAt, deletedAt = deletedAt)
     }
+
+    fun changeId(id: Long) {
+        this.id = id
+    }
 }
