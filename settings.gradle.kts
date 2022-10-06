@@ -49,4 +49,14 @@ include(
     "sns-feed-service:infrastructure:aws",
     "sns-feed-service:infrastructure:kafka",
     "sns-feed-service:infrastructure:okhttp3",
+    // coupon-service
+    "coupon-service:application:coupon-command-api",
+    "coupon-service:application:coupon-query-api",
+    "coupon-service:application:coupon-issue-event-worker",
+    "coupon-service:common",
+    "coupon-service:data:jpa",
+    "coupon-service:data:redis",
+    "coupon-service:domain",
+    "coupon-service:infrastructure:kafka",
+    "coupon-service:infrastructure:okhttp3",
 )

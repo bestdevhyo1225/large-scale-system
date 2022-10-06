@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  coupon:
+    image: redis:latest
+    container_name: coupon
+    command: redis-server --port 6379
+    ports:
+      - '6379:6379'
+    restart: always
