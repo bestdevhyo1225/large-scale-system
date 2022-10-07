@@ -14,7 +14,7 @@ data class MemberCreateResultDto(
     companion object {
         operator fun invoke(member: Member) =
             with(receiver = member) {
-                MemberCreateResultDto(memberId = id!!)
+                MemberCreateResultDto(memberId = id)
             }
     }
 }

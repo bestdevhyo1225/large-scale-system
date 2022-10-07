@@ -4,13 +4,13 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class Member private constructor(
-    id: Long? = null,
+    id: Long = 0,
     name: String,
     createdAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
 ) {
 
-    var id: Long? = id
+    var id: Long = id
         private set
 
     var name: String = name

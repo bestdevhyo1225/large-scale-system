@@ -28,7 +28,7 @@ data class CouponCreateResultDto(
     companion object {
         operator fun invoke(coupon: Coupon) =
             with(receiver = coupon) {
-                CouponCreateResultDto(couponId = id!!)
+                CouponCreateResultDto(couponId = id)
             }
     }
 }
