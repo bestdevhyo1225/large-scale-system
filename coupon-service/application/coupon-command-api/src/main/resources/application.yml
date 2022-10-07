@@ -1,0 +1,65 @@
+server:
+  port: 9000
+  tomcat:
+    threads:
+      min-spare: 20
+      max: 100
+
+spring:
+  profiles:
+    active: dev
+
+data:
+  enable:
+    datasource: true
+    jpa: true
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+data:
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:issue-service
+      username: sa
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+data:
+  datasource:
+    hikari:
+      write:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://masteruser:masterpassword@localhost:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 50
+        maximum-pool-size: 50
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+      read:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://slaveuser:slavepassword@localhost:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 50
+        maximum-pool-size: 50
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
