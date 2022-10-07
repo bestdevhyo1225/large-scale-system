@@ -16,9 +16,9 @@ class CouponIssuedService(
 
     fun create(dto: CouponIssuedCreateDto): CouponIssuedCreateResultDto {
         val totalIssuedQuantity: Long = 5_000 // CouponReadRepository 로 issuedLimitCount 조회
-        val key: String =
-            RedisKey.getCouponIssuedKey(couponId = dto.couponId, issuedDate = LocalDate.now()) // issuedStartedAt 변경
         val result: Long = couponRedisRepository.executeUsingTransaction {
+            // issuedDate를 LocalDate.now() 값이 아닌 issuedStartedAt 변경
+            val key: String = RedisKey.getCouponIssuedKey(couponId = dto.couponId, issuedDate = LocalDate.now())
             val realtimeIssuedQuantity: Long = couponRedisRepository.scard(key = key)
 
             if (realtimeIssuedQuantity < totalIssuedQuantity) {
