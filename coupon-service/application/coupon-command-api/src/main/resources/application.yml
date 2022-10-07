@@ -13,12 +13,12 @@ data:
   enable:
     datasource: true
     jpa: true
+    redis:
+      coupon: true
 
   jpa:
     properties:
       hibernate:
-        hbm2ddl:
-          auto: update
         default_batch_fetch_size: 1000
     open-in-view: false
 
@@ -32,8 +32,19 @@ data:
   datasource:
     hikari:
       driver-class-name: org.h2.Driver
-      jdbc-url: jdbc:h2:mem:issue-service
+      jdbc-url: jdbc:h2:mem:dev-db
       username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+
+  redis:
+    coupon:
+      mode: standalone
+      nodes: localhost:6379
 
 logging:
   level:
@@ -63,3 +74,14 @@ data:
         maximum-pool-size: 50
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+
+  redis:
+    coupon:
+      mode: standalone
+      nodes: localhost:6379

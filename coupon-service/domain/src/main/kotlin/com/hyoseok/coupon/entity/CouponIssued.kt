@@ -4,14 +4,14 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class CouponIssued private constructor(
-    id: Long? = null,
+    id: Long = 0,
     couponId: Long,
     memberId: Long,
     createdAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
 ) {
 
-    var id: Long? = id
+    var id: Long = id
         private set
 
     var couponId: Long = couponId

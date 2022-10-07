@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: test
+
+data:
+  enable:
+    datasource: true
+    jpa: true
+    redis:
+      coupon: true
+
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:testdb
+      username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+  redis:
+    coupon:
+      mode: standalone
+      nodes: localhost:6379
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug

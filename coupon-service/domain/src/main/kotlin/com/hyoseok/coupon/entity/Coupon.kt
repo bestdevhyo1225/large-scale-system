@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.util.Objects
 
 class Coupon private constructor(
-    id: Long? = null,
+    id: Long = 0,
     name: String,
     issuedLimitCount: Int,
     issuedStartedAt: LocalDateTime,
@@ -16,7 +16,7 @@ class Coupon private constructor(
     deletedAt: LocalDateTime? = null,
 ) {
 
-    var id: Long? = id
+    var id: Long = id
         private set
 
     var name: String = name

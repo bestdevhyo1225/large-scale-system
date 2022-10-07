@@ -1,4 +1,4 @@
-package com.hyoseok.repository
+package com.hyoseok.repository.coupon
 
 import com.hyoseok.config.RedisKey
 import com.hyoseok.config.coupon.RedisCouponConfig
