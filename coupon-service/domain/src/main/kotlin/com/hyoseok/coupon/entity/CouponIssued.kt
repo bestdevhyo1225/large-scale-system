@@ -41,6 +41,10 @@ class CouponIssued private constructor(
     }
 
     companion object {
+        const val EXIT: Long = -1
+        const val ALREADY_COMPLETE: Long = 0
+        const val READY: Long = 1
+
         operator fun invoke(couponId: Long, memberId: Long) =
             CouponIssued(couponId = couponId, memberId = memberId, createdAt = LocalDateTime.now().withNano(0))
 
