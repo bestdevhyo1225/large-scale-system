@@ -1,4 +1,4 @@
-package com.hyoseok.service.dto
+package com.hyoseok.coupon.service.dto
 
 import com.hyoseok.coupon.entity.CouponIssued
 import com.hyoseok.coupon.entity.CouponIssuedFail

@@ -1,6 +1,6 @@
-package com.hyoseok.controller.request
+package com.hyoseok.member.controller.request
 
-import com.hyoseok.service.dto.MemberCreateDto
+import com.hyoseok.member.service.dto.MemberCreateDto
 import javax.validation.constraints.NotBlank
 
 data class MemberCreateRequest(

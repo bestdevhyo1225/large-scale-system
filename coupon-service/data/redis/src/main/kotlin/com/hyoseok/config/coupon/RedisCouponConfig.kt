@@ -7,7 +7,6 @@ import io.lettuce.core.ReadFrom
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
-import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisClusterConfiguration
@@ -17,7 +16,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceClientConfigurat
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 
 @Configuration
-@EnableCaching(proxyTargetClass = true)
 @ConditionalOnProperty(prefix = "data.enable.redis", name = ["coupon"], havingValue = "true")
 class RedisCouponConfig(
     @Value("\${data.redis.coupon.mode}")

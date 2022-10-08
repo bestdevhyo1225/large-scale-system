@@ -1,9 +1,9 @@
-package com.hyoseok.service.member
+package com.hyoseok.member.service
 
 import com.hyoseok.member.entity.Member
 import com.hyoseok.member.repository.MemberRepository
-import com.hyoseok.service.dto.MemberCreateDto
-import com.hyoseok.service.dto.MemberCreateResultDto
+import com.hyoseok.member.service.dto.MemberCreateDto
+import com.hyoseok.member.service.dto.MemberCreateResultDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

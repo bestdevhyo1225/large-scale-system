@@ -2,8 +2,8 @@ package com.hyoseok.publisher
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.exception.KafkaProducerSendFailedException
-import com.hyoseok.service.MessageBrokerProducer
+import com.hyoseok.coupon.service.CouponMessageBrokerProducer
+import com.hyoseok.coupon.exception.CouponProducerSendFailedException
 import mu.KotlinLogging
 import org.apache.kafka.common.KafkaException
 import org.springframework.beans.factory.annotation.Value
@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ExecutionException
 
 @Component
-@ConditionalOnProperty(prefix = "infrastructure.enable", name = ["kafka"], havingValue = "true")
-class KafkaProducer(
+@ConditionalOnProperty(prefix = "infrastructure.enable.kafka.producer", name = ["coupon"], havingValue = "true")
+class KafkaCouponProducer(
     @Value("\${infrastructure.kafka.topic.coupon-issued}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
-) : MessageBrokerProducer {
+) : CouponMessageBrokerProducer {
 
     private val logger = KotlinLogging.logger {}
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
@@ -38,7 +38,7 @@ class KafkaProducer(
         execute {
             kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
-                .addCallback(KafkaProducerCallback())
+                .addCallback(KafkaCouponProducerCallback())
         }
     }
 
@@ -46,11 +46,11 @@ class KafkaProducer(
         try {
             func()
         } catch (exception: InterruptedException) {
-            throw KafkaProducerSendFailedException(message = exception.localizedMessage)
+            throw CouponProducerSendFailedException(message = exception.localizedMessage)
         } catch (exception: ExecutionException) {
-            throw KafkaProducerSendFailedException(message = exception.localizedMessage)
+            throw CouponProducerSendFailedException(message = exception.localizedMessage)
         } catch (exception: KafkaException) {
-            throw KafkaProducerSendFailedException(message = exception.localizedMessage)
+            throw CouponProducerSendFailedException(message = exception.localizedMessage)
         }
     }
 }

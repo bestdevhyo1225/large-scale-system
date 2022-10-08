@@ -4,7 +4,7 @@ import mu.KotlinLogging
 import org.springframework.kafka.support.SendResult
 import org.springframework.util.concurrent.ListenableFutureCallback
 
-class KafkaProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
+class KafkaCouponProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
 
     private val logger = KotlinLogging.logger {}
 

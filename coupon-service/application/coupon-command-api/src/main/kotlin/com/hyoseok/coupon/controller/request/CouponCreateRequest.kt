@@ -1,7 +1,7 @@
-package com.hyoseok.controller.request
+package com.hyoseok.coupon.controller.request
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.hyoseok.service.dto.CouponCreateDto
+import com.hyoseok.coupon.service.dto.CouponCreateDto
 import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull

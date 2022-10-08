@@ -1,9 +1,9 @@
-package com.hyoseok.controller.member
+package com.hyoseok.member.controller
 
-import com.hyoseok.controller.request.MemberCreateRequest
-import com.hyoseok.service.dto.MemberCreateResultDto
-import com.hyoseok.service.member.MemberService
-import com.hyoseok.web.response.SuccessResponse
+import com.hyoseok.member.controller.request.MemberCreateRequest
+import com.hyoseok.member.service.MemberService
+import com.hyoseok.member.service.dto.MemberCreateResultDto
+import com.hyoseok.response.SuccessResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping

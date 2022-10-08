@@ -1,4 +1,4 @@
-package com.hyoseok.service.dto
+package com.hyoseok.member.service.dto
 
 import com.hyoseok.member.entity.Member
 

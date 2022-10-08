@@ -15,7 +15,6 @@ import org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_C
 import org.apache.kafka.clients.producer.UniformStickyPartitioner
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
@@ -24,7 +23,6 @@ import org.springframework.kafka.core.KafkaTemplate
 
 @Configuration
 @EnableKafka
-@ConditionalOnProperty(prefix = "infrastructure.enable", name = ["kafka"], havingValue = "true")
 class KafkaProducerConfig(
     @Value("\${infrastructure.kafka.producer.bootstrap-servers}")
     private val bootstrapServers: String,

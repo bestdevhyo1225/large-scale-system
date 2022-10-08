@@ -1,9 +1,9 @@
-package com.hyoseok.service.coupon
+package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.repository.CouponRepository
-import com.hyoseok.service.dto.CouponCreateDto
-import com.hyoseok.service.dto.CouponCreateResultDto
+import com.hyoseok.coupon.service.dto.CouponCreateDto
+import com.hyoseok.coupon.service.dto.CouponCreateResultDto
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
