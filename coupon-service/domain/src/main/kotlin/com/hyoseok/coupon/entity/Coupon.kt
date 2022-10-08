@@ -6,7 +6,7 @@ import java.util.Objects
 class Coupon private constructor(
     id: Long = 0,
     name: String,
-    issuedLimitCount: Int,
+    totalIssuedQuantity: Int,
     issuedStartedAt: LocalDateTime,
     issuedEndedAt: LocalDateTime,
     availableStartedAt: LocalDateTime,
@@ -22,7 +22,7 @@ class Coupon private constructor(
     var name: String = name
         private set
 
-    var issuedLimitCount: Int = issuedLimitCount
+    var totalIssuedQuantity: Int = totalIssuedQuantity
         private set
 
     var issuedStartedAt: LocalDateTime = issuedStartedAt
@@ -47,7 +47,7 @@ class Coupon private constructor(
         private set
 
     override fun hashCode(): Int = Objects.hash(id)
-    override fun toString(): String = "Coupon(id=$id, name=$name, issuedLimitCount=$issuedLimitCount, " +
+    override fun toString(): String = "Coupon(id=$id, name=$name, totalIssuedQuantity=$totalIssuedQuantity, " +
         "issuedStartedAt=$issuedStartedAt, issuedEndedAt=$issuedEndedAt, availableStartedAt=$availableStartedAt, " +
         "availableEndedAt=$availableEndedAt, createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
@@ -56,7 +56,7 @@ class Coupon private constructor(
         val otherCoupon: Coupon = (other as? Coupon) ?: return false
         return this.id == otherCoupon.id &&
             this.name == otherCoupon.name &&
-            this.issuedLimitCount == otherCoupon.issuedLimitCount &&
+            this.totalIssuedQuantity == otherCoupon.totalIssuedQuantity &&
             this.issuedStartedAt == otherCoupon.issuedStartedAt &&
             this.issuedEndedAt == otherCoupon.issuedEndedAt &&
             this.availableStartedAt == otherCoupon.availableStartedAt &&
@@ -69,14 +69,14 @@ class Coupon private constructor(
     companion object {
         operator fun invoke(
             name: String,
-            issuedLimitCount: Int,
+            totalIssuedQuantity: Int,
             issuedStartedAt: LocalDateTime,
             issuedEndedAt: LocalDateTime,
             availableStartedAt: LocalDateTime,
             availableEndedAt: LocalDateTime,
         ) = Coupon(
             name = name,
-            issuedLimitCount = issuedLimitCount,
+            totalIssuedQuantity = totalIssuedQuantity,
             issuedStartedAt = issuedStartedAt,
             issuedEndedAt = issuedEndedAt,
             availableStartedAt = availableStartedAt,
@@ -88,7 +88,7 @@ class Coupon private constructor(
         operator fun invoke(
             id: Long,
             name: String,
-            issuedLimitCount: Int,
+            totalIssuedQuantity: Int,
             issuedStartedAt: LocalDateTime,
             issuedEndedAt: LocalDateTime,
             availableStartedAt: LocalDateTime,
@@ -99,7 +99,7 @@ class Coupon private constructor(
         ) = Coupon(
             id = id,
             name = name,
-            issuedLimitCount = issuedLimitCount,
+            totalIssuedQuantity = totalIssuedQuantity,
             issuedStartedAt = issuedStartedAt,
             issuedEndedAt = issuedEndedAt,
             availableStartedAt = availableStartedAt,

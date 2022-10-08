@@ -22,6 +22,10 @@ data:
         default_batch_fetch_size: 1000
     open-in-view: false
 
+infrastructure:
+  enable:
+    kafka: true
+
 ---
 spring:
   config:
@@ -45,6 +49,21 @@ data:
     coupon:
       mode: standalone
       nodes: localhost:6379
+
+infrastructure:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 100000 # 100KB
+      linger-ms: 50
+      request-timeout-ms: 60000 # 60초
+      delivery-timeout-ms: 120000 # 120초
+    topic:
+      coupon-issued: coupon-issued-topic
 
 logging:
   level:
@@ -85,3 +104,18 @@ data:
     coupon:
       mode: standalone
       nodes: localhost:6379
+
+infrastructure:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 1000 # 1KB, 해당 사이즈에 도달하게 되면, 메시지들을 전송한다.
+      linger-ms: 500 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
+      request-timeout-ms: 120000 # 120초
+      delivery-timeout-ms: 300000 # 300초
+    topic:
+      coupon-issued: coupon-issued-topic

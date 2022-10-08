@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class CouponCreateDto(
     val name: String,
-    val issuedLimitCount: Int,
+    val totalIssuedQuantity: Int,
     val issuedStartedAt: LocalDateTime,
     val issuedEndedAt: LocalDateTime,
     val availableStartedAt: LocalDateTime,
@@ -14,7 +14,7 @@ data class CouponCreateDto(
     fun toEntity() =
         Coupon(
             name = name,
-            issuedLimitCount = issuedLimitCount,
+            totalIssuedQuantity = totalIssuedQuantity,
             issuedStartedAt = issuedStartedAt,
             issuedEndedAt = issuedEndedAt,
             availableStartedAt = availableStartedAt,
