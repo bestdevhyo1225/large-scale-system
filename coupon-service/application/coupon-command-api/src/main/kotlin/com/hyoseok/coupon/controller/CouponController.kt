@@ -32,12 +32,12 @@ class CouponController(
         request: CouponCreateRequest,
     ): ResponseEntity<SuccessResponse<CouponCreateResultDto>> {
         val couponCreateResultDto: CouponCreateResultDto = couponService.create(dto = request.toServiceDto())
-        return ResponseEntity.created(URI.create("/coupons/${couponCreateResultDto.couponId}"))
+        return ResponseEntity
+            .created(URI.create("/coupons/${couponCreateResultDto.couponId}"))
             .body(SuccessResponse(data = couponCreateResultDto))
     }
 
     @PostMapping("/{id}/issued")
-    @ResponseStatus(HttpStatus.CREATED)
     fun createCouponIssued(
         @PathVariable
         id: Long,
@@ -46,6 +46,8 @@ class CouponController(
     ): ResponseEntity<SuccessResponse<CouponIssuedCreateResultDto>> {
         val couponIssuedCreateResultDto: CouponIssuedCreateResultDto =
             couponIssuedService.create(dto = request.toServiceDto(couponId = id))
-        return ResponseEntity.ok(SuccessResponse(data = couponIssuedCreateResultDto))
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(SuccessResponse(data = couponIssuedCreateResultDto))
     }
 }

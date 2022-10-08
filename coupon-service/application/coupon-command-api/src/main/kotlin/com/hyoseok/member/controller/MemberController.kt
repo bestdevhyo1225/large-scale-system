@@ -27,7 +27,8 @@ class MemberController(
         request: MemberCreateRequest,
     ): ResponseEntity<SuccessResponse<MemberCreateResultDto>> {
         val memberCreateResultDto: MemberCreateResultDto = memberService.create(dto = request.toServiceDto())
-        return ResponseEntity.created(URI.create("/members/${memberCreateResultDto.memberId}"))
+        return ResponseEntity
+            .created(URI.create("/members/${memberCreateResultDto.memberId}"))
             .body(SuccessResponse(data = memberCreateResultDto))
     }
 }
