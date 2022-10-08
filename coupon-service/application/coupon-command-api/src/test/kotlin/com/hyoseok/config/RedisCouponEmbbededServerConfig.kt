@@ -1,4 +1,4 @@
-package com.hyoseok.coupon.config
+package com.hyoseok.config
 
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value

@@ -3,7 +3,7 @@ package com.hyoseok.coupon.integration
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.CouponCommandApiApplication
-import com.hyoseok.coupon.config.RedisCouponEmbbededServerConfig
+import com.hyoseok.config.RedisCouponEmbbededServerConfig
 import com.hyoseok.coupon.controller.request.CouponCreateRequest
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
