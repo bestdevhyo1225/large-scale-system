@@ -17,9 +17,10 @@ data class CouponIssuedCreateResultDto(
     companion object {
         operator fun invoke(result: Long): CouponIssuedCreateResultDto {
             val message: String = when (result) {
-                CouponIssued.EXIT -> "쿠폰 발급이 종료됨"
-                CouponIssued.ALREADY_COMPLETE -> "쿠폰 발급이 이미 완료됨"
-                CouponIssued.READY -> "쿠폰 발급 준비중"
+                CouponIssued.FAILED -> "쿠폰 발급 실패"
+                CouponIssued.COMPLETE -> "쿠폰 발급 완료"
+                CouponIssued.READY -> "쿠폰 발급 준비"
+                CouponIssued.EXIT -> "쿠폰 발급 종료"
                 else -> "존재하지 않는 code"
             }
             return CouponIssuedCreateResultDto(code = result, message = message)
