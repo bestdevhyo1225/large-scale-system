@@ -105,19 +105,19 @@ internal class CouponRedisRepositoryImplTests : DescribeSpec() {
                     }
                     val memberId: Long = 1
 
-                    couponRedisRepository.createCouponIssued(
+                    // when
+                    val firstResult: Long = couponRedisRepository.createCouponIssued(
                         coupon = coupon,
                         memberId = memberId,
                     )
-
-                    // when
-                    val result: Long = couponRedisRepository.createCouponIssued(
+                    val secondResult: Long = couponRedisRepository.createCouponIssued(
                         coupon = coupon,
                         memberId = memberId,
                     )
 
                     // then
-                    result.shouldBe(CouponIssued.COMPLETE)
+                    firstResult.shouldBe(CouponIssued.READY)
+                    secondResult.shouldBe(CouponIssued.COMPLETE)
                 }
             }
         }
