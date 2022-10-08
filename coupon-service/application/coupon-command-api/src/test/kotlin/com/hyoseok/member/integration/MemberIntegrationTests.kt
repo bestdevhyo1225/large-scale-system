@@ -9,7 +9,6 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -25,7 +24,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest(classes = [CouponCommandApiApplication::class, RedisCouponEmbbededServerConfig::class])
 @DirtiesContext
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class MemberIntegrationTests : DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
@@ -44,11 +42,12 @@ internal class MemberIntegrationTests : DescribeSpec() {
                     val request = MemberCreateRequest(name = "Jang")
 
                     // when
-                    val resultActions: ResultActions = mockMvc.perform(
-                        post("/members")
-                            .contentType(APPLICATION_JSON_VALUE)
-                            .content(jacksonObjectMapper.writeValueAsString(request)),
-                    ).andDo(print())
+                    val resultActions: ResultActions = mockMvc
+                        .perform(
+                            post("/members")
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(jacksonObjectMapper.writeValueAsString(request)),
+                        ).andDo(print())
 
                     // then
                     resultActions
