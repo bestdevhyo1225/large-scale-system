@@ -1,27 +1,39 @@
 package com.hyoseok.service.coupon
 
 import com.hyoseok.config.RedisKey
+import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.repository.CouponIssuedFailRepository
+import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.exception.CommandApiMessage.COUPON_ISSUED_RESULT_IS_NULL
+import com.hyoseok.exception.KafkaProducerSendFailedException
+import com.hyoseok.service.MessageBrokerProducer
 import com.hyoseok.service.dto.CouponIssuedCreateDto
 import com.hyoseok.service.dto.CouponIssuedCreateResultDto
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
 @Service
 class CouponIssuedService(
+    private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
+    private val couponIssuedFailRepository: CouponIssuedFailRepository,
+    private val messageBrokerProducer: MessageBrokerProducer,
 ) {
 
+    private val logger = KotlinLogging.logger {}
+
     fun create(dto: CouponIssuedCreateDto): CouponIssuedCreateResultDto {
-        val totalIssuedQuantity: Long = 5_000 // CouponReadRepository 로 issuedLimitCount 조회
+        val coupon: Coupon = couponReadRepository.findById(couponId = dto.couponId)
         val result: Long = couponRedisRepository.executeUsingTransaction {
-            // issuedDate를 LocalDate.now() 값이 아닌 issuedStartedAt 변경
-            val key: String = RedisKey.getCouponIssuedKey(couponId = dto.couponId, issuedDate = LocalDate.now())
+            val key: String = RedisKey.getCouponIssuedKey(
+                couponId = dto.couponId,
+                issuedDate = coupon.issuedStartedAt.toLocalDate(),
+            )
             val realtimeIssuedQuantity: Long = couponRedisRepository.scard(key = key)
 
-            if (realtimeIssuedQuantity < totalIssuedQuantity) {
+            if (realtimeIssuedQuantity < coupon.totalIssuedQuantity) {
                 return@executeUsingTransaction couponRedisRepository.sadd(key = key, value = dto.memberId)
             }
 
@@ -32,8 +44,12 @@ class CouponIssuedService(
             return CouponIssuedCreateResultDto(result = result)
         }
 
-        // Kafka 메시지 발행
-        // KafkaProducer.sendAsync()
+        try {
+            messageBrokerProducer.sendAsync(event = dto)
+        } catch (exception: KafkaProducerSendFailedException) {
+            couponIssuedFailRepository.save(couponIssuedFail = dto.toCouponIssuedFailEntity())
+            logger.error { exception }
+        }
 
         return CouponIssuedCreateResultDto(result = result)
     }

@@ -11,8 +11,8 @@ data class CouponCreateRequest(
     @field:NotBlank(message = "name을 입력하세요")
     val name: String,
 
-    @field:Positive(message = "issuedLimitCount는 0보다 큰 값을 입력하세요")
-    val issuedLimitCount: Int,
+    @field:Positive(message = "totalIssuedQuantity는 0보다 큰 값을 입력하세요")
+    val totalIssuedQuantity: Int,
 
     @field:NotNull(message = "issuedStartedAt를 입력하세요")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -33,7 +33,7 @@ data class CouponCreateRequest(
     fun toServiceDto() =
         CouponCreateDto(
             name = name,
-            issuedLimitCount = issuedLimitCount,
+            totalIssuedQuantity = totalIssuedQuantity,
             issuedStartedAt = issuedStartedAt,
             issuedEndedAt = issuedEndedAt,
             availableStartedAt = availableStartedAt,

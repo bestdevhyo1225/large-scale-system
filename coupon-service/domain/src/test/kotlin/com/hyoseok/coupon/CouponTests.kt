@@ -11,7 +11,7 @@ internal class CouponTests : DescribeSpec(
             it("Coupon 엔티티를 생성한다") {
                 // given
                 val name = "XXX 쿠폰 데이"
-                val issuedLimitCount = 5_000
+                val totalIssuedQuantity = 5_000
                 val now: LocalDateTime = LocalDateTime.now()
                 val issuedStartedAt: LocalDateTime = now
                 val issuedEndedAt: LocalDateTime = now.plusDays(5)
@@ -21,7 +21,7 @@ internal class CouponTests : DescribeSpec(
                 // when
                 val coupon = Coupon(
                     name = name,
-                    issuedLimitCount = issuedLimitCount,
+                    totalIssuedQuantity = totalIssuedQuantity,
                     issuedStartedAt = issuedStartedAt,
                     issuedEndedAt = issuedEndedAt,
                     availableStartedAt = availableStartedAt,
@@ -30,7 +30,7 @@ internal class CouponTests : DescribeSpec(
 
                 // then
                 coupon.name.shouldBe(name)
-                coupon.issuedLimitCount.shouldBe(issuedLimitCount)
+                coupon.totalIssuedQuantity.shouldBe(totalIssuedQuantity)
                 coupon.issuedStartedAt.shouldBe(issuedStartedAt)
                 coupon.issuedEndedAt.shouldBe(issuedEndedAt)
                 coupon.availableStartedAt.shouldBe(availableStartedAt)

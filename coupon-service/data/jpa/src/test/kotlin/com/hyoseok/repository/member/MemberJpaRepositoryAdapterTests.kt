@@ -7,6 +7,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -30,6 +31,7 @@ internal class MemberJpaRepositoryAdapterTests : JpaRepositoryAdapterTests, Desc
 
                 // then
                 member.id.shouldNotBeNull()
+                member.id.shouldNotBeZero()
             }
         }
     }

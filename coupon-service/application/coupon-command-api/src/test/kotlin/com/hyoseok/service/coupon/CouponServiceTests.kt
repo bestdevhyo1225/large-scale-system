@@ -21,7 +21,7 @@ internal class CouponServiceTests : DescribeSpec(
                 val now: LocalDateTime = LocalDateTime.now().withNano(0)
                 val dto = CouponCreateDto(
                     name = "쿠폰1",
-                    issuedLimitCount = 5_000,
+                    totalIssuedQuantity = 5_000,
                     issuedStartedAt = now,
                     issuedEndedAt = now.plusDays(5),
                     availableStartedAt = now,

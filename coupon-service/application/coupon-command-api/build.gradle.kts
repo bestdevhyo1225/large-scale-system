@@ -5,6 +5,7 @@ dependencies {
     implementation(project(":coupon-service:data:jpa"))
     implementation(project(":coupon-service:data:redis"))
     implementation(project(":coupon-service:domain"))
+    implementation(project(":coupon-service:infrastructure:kafka"))
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")

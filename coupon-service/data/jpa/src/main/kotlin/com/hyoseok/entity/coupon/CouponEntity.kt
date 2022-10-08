@@ -13,7 +13,7 @@ import javax.persistence.Table
 @Table(name = "coupon")
 class CouponEntity private constructor(
     name: String,
-    issuedLimitCount: Int,
+    totalIssuedQuantity: Int,
     issuedStartedAt: LocalDateTime,
     issuedEndedAt: LocalDateTime,
     availableStartedAt: LocalDateTime,
@@ -33,7 +33,7 @@ class CouponEntity private constructor(
         protected set
 
     @Column(nullable = false)
-    var issuedLimitCount: Int = issuedLimitCount
+    var totalIssuedQuantity: Int = totalIssuedQuantity
         protected set
 
     @Column(nullable = false, columnDefinition = "DATETIME")
@@ -69,7 +69,7 @@ class CouponEntity private constructor(
             with(receiver = coupon) {
                 CouponEntity(
                     name = name,
-                    issuedLimitCount = issuedLimitCount,
+                    totalIssuedQuantity = totalIssuedQuantity,
                     issuedStartedAt = issuedStartedAt,
                     issuedEndedAt = issuedEndedAt,
                     availableStartedAt = availableStartedAt,
@@ -80,4 +80,18 @@ class CouponEntity private constructor(
                 )
             }
     }
+
+    fun toDomain() =
+        Coupon(
+            id = id!!,
+            name = name,
+            totalIssuedQuantity = totalIssuedQuantity,
+            issuedStartedAt = issuedStartedAt,
+            issuedEndedAt = issuedEndedAt,
+            availableStartedAt = availableStartedAt,
+            availableEndedAt = availableEndedAt,
+            createdAt = createdAt,
+            updatedAt = updatedAt,
+            deletedAt = deletedAt,
+        )
 }
