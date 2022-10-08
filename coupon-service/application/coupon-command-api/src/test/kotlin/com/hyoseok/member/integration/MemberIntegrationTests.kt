@@ -2,8 +2,7 @@ package com.hyoseok.member.integration
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.CouponCommandApiApplication
-import com.hyoseok.config.RedisCouponEmbbededServerConfig
+import com.hyoseok.config.IntegrationTests
 import com.hyoseok.member.controller.request.MemberCreateRequest
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -11,9 +10,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -21,10 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest(classes = [CouponCommandApiApplication::class, RedisCouponEmbbededServerConfig::class])
-@DirtiesContext
 @AutoConfigureMockMvc
-internal class MemberIntegrationTests : DescribeSpec() {
+internal class MemberIntegrationTests : IntegrationTests, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
