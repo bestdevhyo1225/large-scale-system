@@ -7,7 +7,7 @@ import com.hyoseok.coupon.service.CouponService
 import com.hyoseok.coupon.service.dto.CouponCreateResultDto
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateResultDto
 import com.hyoseok.response.SuccessResponse
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -45,7 +45,7 @@ class CouponController(
         val couponIssuedCreateResultDto: CouponIssuedCreateResultDto =
             couponIssuedService.create(dto = request.toServiceDto(couponId = id))
         return ResponseEntity
-            .status(HttpStatus.CREATED)
+            .status(CREATED)
             .body(SuccessResponse(data = couponIssuedCreateResultDto))
     }
 }
