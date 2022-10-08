@@ -24,7 +24,9 @@ data:
 
 infrastructure:
   enable:
-    kafka: true
+    kafka:
+      producer:
+        coupon: true
 
 ---
 spring:

@@ -1,4 +1,4 @@
-package com.hyoseok.web.response
+package com.hyoseok.response
 
 data class FailResponse(
     val status: String = "fail",

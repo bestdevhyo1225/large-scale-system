@@ -1,7 +1,7 @@
 package com.hyoseok.exception
 
-import com.hyoseok.web.response.ErrorResponse
-import com.hyoseok.web.response.FailResponse
+import com.hyoseok.response.ErrorResponse
+import com.hyoseok.response.FailResponse
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
