@@ -2,13 +2,13 @@ package com.hyoseok.config.coupon
 
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.test.context.TestConfiguration
 import redis.embedded.RedisServer
 import redis.embedded.exceptions.EmbeddedRedisException
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
-@Configuration
+@TestConfiguration
 class RedisCouponEmbbededServerConfig(
     @Value("\${data.redis.coupon.nodes}")
     private val nodes: List<String>,
