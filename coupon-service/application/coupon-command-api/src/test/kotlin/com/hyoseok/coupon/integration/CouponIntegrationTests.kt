@@ -70,7 +70,6 @@ internal class CouponIntegrationTests : DescribeSpec() {
         this.describe("POST /coupons/{id}/issued") {
             context("회원에게 쿠폰을 발급하고") {
                 it("201 Created 응답을 반환한다") {
-
                 }
             }
         }

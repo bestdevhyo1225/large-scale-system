@@ -3,7 +3,6 @@ package com.hyoseok.coupon.config
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Configuration
 import redis.embedded.RedisServer
 import redis.embedded.exceptions.EmbeddedRedisException
 import javax.annotation.PostConstruct

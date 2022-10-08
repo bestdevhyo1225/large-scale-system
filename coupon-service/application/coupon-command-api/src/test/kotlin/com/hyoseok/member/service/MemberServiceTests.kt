@@ -1,7 +1,6 @@
 package com.hyoseok.member.service
 
 import com.hyoseok.member.repository.MemberRepository
-import com.hyoseok.member.service.MemberService
 import com.hyoseok.member.service.dto.MemberCreateDto
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.every
