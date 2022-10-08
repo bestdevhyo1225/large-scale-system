@@ -1,7 +1,7 @@
 package com.hyoseok.coupon.repository
 
+import com.hyoseok.coupon.entity.Coupon
+
 interface CouponRedisRepository {
-    fun <T : Any> sadd(key: String, value: T): Long
-    fun scard(key: String): Long
-    fun <T : Any> executeUsingTransaction(func: () -> T): T?
+    fun createCouponIssued(coupon: Coupon, memberId: Long): Long
 }

@@ -41,9 +41,10 @@ class CouponIssued private constructor(
     }
 
     companion object {
+        const val FAILED: Long = -2
         const val EXIT: Long = -1
-        const val ALREADY_COMPLETE: Long = 0
-        const val READY: Long = 1
+        const val COMPLETE: Long = 0 // 변경하면 안됨
+        const val READY: Long = 1 // 변경하면 안됨
 
         operator fun invoke(couponId: Long, memberId: Long) =
             CouponIssued(couponId = couponId, memberId = memberId, createdAt = LocalDateTime.now().withNano(0))
