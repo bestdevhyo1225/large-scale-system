@@ -2,8 +2,7 @@ package com.hyoseok.coupon.integration
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.CouponCommandApiApplication
-import com.hyoseok.config.RedisCouponEmbbededServerConfig
+import com.hyoseok.config.IntegrationTests
 import com.hyoseok.coupon.controller.request.CouponCreateRequest
 import com.hyoseok.coupon.controller.request.CouponIssuedCreateRequest
 import com.hyoseok.coupon.service.dto.CouponCreateResultDto
@@ -14,10 +13,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.kafka.test.context.EmbeddedKafka
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.MvcResult
 import org.springframework.test.web.servlet.ResultActions
@@ -27,15 +24,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
 
-@SpringBootTest(classes = [CouponCommandApiApplication::class, RedisCouponEmbbededServerConfig::class])
-@DirtiesContext
 @AutoConfigureMockMvc
 @EmbeddedKafka(
     brokerProperties = ["listeners=PLAINTEXT://localhost:9092", "port=9092"],
     topics = ["coupon-issued-topic"],
     partitions = 1,
 )
-internal class CouponIntegrationTests : DescribeSpec() {
+internal class CouponIntegrationTests : IntegrationTests, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
