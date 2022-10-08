@@ -1,3 +1,3 @@
 package com.hyoseok.exception
 
-class KafkaProducerSendFailedException(message: String): RuntimeException(message)
+class KafkaProducerSendFailedException(message: String) : RuntimeException(message)
