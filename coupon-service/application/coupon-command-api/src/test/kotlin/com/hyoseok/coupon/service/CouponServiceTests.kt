@@ -1,7 +1,8 @@
-package com.hyoseok.service.coupon
+package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.repository.CouponRepository
-import com.hyoseok.service.dto.CouponCreateDto
+import com.hyoseok.coupon.service.CouponService
+import com.hyoseok.coupon.service.dto.CouponCreateDto
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.every
 import io.mockk.mockk

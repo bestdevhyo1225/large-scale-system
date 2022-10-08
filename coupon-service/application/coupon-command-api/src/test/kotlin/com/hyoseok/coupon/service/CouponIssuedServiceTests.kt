@@ -1,13 +1,12 @@
-package com.hyoseok.service.coupon
+package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.CouponIssued
 import com.hyoseok.coupon.repository.CouponIssuedFailRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
+import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.exception.DataJpaMessage.NOT_FOUND_COUPON_ENTITY
-import com.hyoseok.service.MessageBrokerProducer
-import com.hyoseok.service.dto.CouponIssuedCreateDto
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -21,12 +20,12 @@ internal class CouponIssuedServiceTests : DescribeSpec(
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
         val mockCouponIssuedFailRepository: CouponIssuedFailRepository = mockk()
-        val mockMessageBrokerProducer: MessageBrokerProducer = mockk()
+        val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
         val couponIssuedService = CouponIssuedService(
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
             couponIssuedFailRepository = mockCouponIssuedFailRepository,
-            messageBrokerProducer = mockMessageBrokerProducer,
+            couponMessageBrokerProducer = mockCouponMessageBrokerProducer,
         )
 
         describe("create 메서드는") {
@@ -54,7 +53,7 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 } returns CouponIssued.READY
-                every { mockMessageBrokerProducer.sendAsync(event = dto) } returns Unit
+                every { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
 
                 // when
                 couponIssuedService.create(dto = dto).code.shouldBe(CouponIssued.READY)
@@ -67,7 +66,7 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 }
-                verify { mockMessageBrokerProducer.sendAsync(event = dto) }
+                verify { mockCouponMessageBrokerProducer.sendAsync(event = dto) }
             }
 
             context("해당 회원이 이미 발급받은 경우") {

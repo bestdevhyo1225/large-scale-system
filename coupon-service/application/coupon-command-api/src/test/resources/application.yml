@@ -28,7 +28,28 @@ data:
       mode: standalone
       nodes: localhost:6379
 
+infrastructure:
+  enable:
+    kafka:
+      producer:
+        coupon: true
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:19092
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 100000 # 100KB
+      linger-ms: 50
+      request-timeout-ms: 60000 # 60초
+      delivery-timeout-ms: 120000 # 120초
+    topic:
+      coupon-issued: coupon-issued-topic
+
 logging:
   level:
     org.hibernate.SQL: debug
     org.springframework.orm.jpa: debug
+    io.lettuce.core.protocol.CommandHandler: debug

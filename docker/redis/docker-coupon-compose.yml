@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   coupon:
-    image: redis:latest
+    image: redis:6.0-alpine
     container_name: coupon
     command: redis-server --port 6379
     ports:
