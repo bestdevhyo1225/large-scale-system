@@ -17,7 +17,7 @@ import javax.sql.DataSource
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-    basePackages = ["com.hyoseok.repository"],
+    basePackages = ["com.hyoseok.*.repository"],
     entityManagerFactoryRef = "entityManagerFactory",
     transactionManagerRef = "jpaTransactionManager",
 )
