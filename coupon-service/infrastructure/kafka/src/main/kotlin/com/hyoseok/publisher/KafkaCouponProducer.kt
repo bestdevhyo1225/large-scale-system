@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException
 @Component
 @ConditionalOnProperty(prefix = "infrastructure.enable.kafka.producer", name = ["coupon"], havingValue = "true")
 class KafkaCouponProducer(
-    @Value("\${infrastructure.kafka.topic.coupon-issued}")
+    @Value("\${infrastructure.kafka.topics.coupon-issued}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
 ) : CouponMessageBrokerProducer {

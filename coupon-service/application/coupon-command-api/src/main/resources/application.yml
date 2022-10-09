@@ -64,7 +64,7 @@ infrastructure:
       linger-ms: 50
       request-timeout-ms: 60000 # 60초
       delivery-timeout-ms: 120000 # 120초
-    topic:
+    topics:
       coupon-issued: coupon-issued-topic
 
 logging:
@@ -119,5 +119,5 @@ infrastructure:
       linger-ms: 500 # batch-size 값에 도달하지 못한 상황에서 linger.ms 제한 시간에 도달 했을때, 메시지들을 전송한다.
       request-timeout-ms: 120000 # 120초
       delivery-timeout-ms: 300000 # 300초
-    topic:
+    topics:
       coupon-issued: coupon-issued-topic

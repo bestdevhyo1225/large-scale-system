@@ -49,4 +49,7 @@ class CouponIssuedEntity private constructor(
                 )
             }
     }
+
+    fun toDomain() =
+        CouponIssued(id = id!!, couponId = couponId, memberId = memberId, createdAt = createdAt, deletedAt = deletedAt)
 }
