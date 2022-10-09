@@ -39,6 +39,17 @@ internal class CouponIssuedJpaRepositoryAdapterTests : JpaRepositoryAdapterTests
                 couponIssued.id.shouldNotBeNull()
                 couponIssued.id.shouldNotBeZero()
             }
+
+            context("중복된 couponId, memberId 인 경우") {
+                it("에러 로그만 출력하고 정상 응답한다") {
+                    val couponId = 1L
+                    val memberId = 1L
+                    val couponIssued = CouponIssued(couponId = couponId, memberId = memberId)
+
+                    couponIssuedRepository.save(couponIssued = couponIssued)
+                    couponIssuedRepository.save(couponIssued = couponIssued)
+                }
+            }
         }
 
         this.describe("findByCouponIdAndMemberId 메서드는") {

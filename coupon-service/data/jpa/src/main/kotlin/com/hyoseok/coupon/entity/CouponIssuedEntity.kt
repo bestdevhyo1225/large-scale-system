@@ -6,10 +6,16 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(name = "coupon_issued")
+@Table(
+    name = "coupon_issued",
+    indexes = [
+        Index(name = "uk_coupon_id_member_id", columnList = "couponId,memberId", unique = true),
+    ],
+)
 class CouponIssuedEntity private constructor(
     couponId: Long,
     memberId: Long,
