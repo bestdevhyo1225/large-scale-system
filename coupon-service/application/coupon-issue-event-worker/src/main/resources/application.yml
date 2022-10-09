@@ -1,0 +1,98 @@
+server:
+  port: 9001
+  tomcat:
+    threads:
+      min-spare: 10
+      max: 10
+
+spring:
+  profiles:
+    active: dev
+
+data:
+  enable:
+    datasource: true
+    jpa: true
+
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+      auto-offset-reset: latest # 가장 마지막 오프셋 값
+      session-timeout: 30000 # 30초
+      heartbeat-interval: 10000 # 10초
+      max-poll-interval: 600000 # 10분
+      max-poll-records: 250 # 최대 250개
+      allow-auto-create-topics: false # 토픽 자동 생성 X
+      group-id: coupon-issued-group
+      group-instance-id: coupon-issued-group-instance # Static Membership 사용하기 위해
+    topics:
+      coupon-issued: coupon-issued-topic
+
+data:
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:dev-db
+      username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
+      auto-offset-reset: latest # 가장 마지막 오프셋 값
+      session-timeout: 120000 # 2분 (120초)
+      heartbeat-interval: 40000 # 40초, 그룹 코디네이터와 하트비트 인터벌 시간이며, session.timeout.ms보다 낮게 설정해야 함 (1/3 수준으로)
+      max-poll-interval: 600000 # 10분 (600초)
+      max-poll-records: 250 # 최대 250개
+      allow-auto-create-topics: false # 토픽 자동 생성 X
+      group-id: coupon-issued-group
+      group-instance-id: coupon-issued-group-instance # Static Membership 사용하기 위해
+    topics:
+      coupon-issued: coupon-issued-topic
+
+data:
+  datasource:
+    hikari:
+      write:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://masteruser:masterpassword@localhost:9770/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 50
+        maximum-pool-size: 50
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+      read:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://slaveuser:slavepassword@localhost:9771/large-scale-system?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+        minimum-idle: 50
+        maximum-pool-size: 50
+        max-lifetime: 18000000 # 5 hour
+        connection-timeout: 5000 # 5 second
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
