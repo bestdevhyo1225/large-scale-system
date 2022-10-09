@@ -1,5 +1,6 @@
 package com.hyoseok.member.entity
 
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -10,6 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "member")
+@DynamicUpdate
 class MemberEntity private constructor(
     name: String,
     createdAt: LocalDateTime,
@@ -25,11 +27,11 @@ class MemberEntity private constructor(
     var name: String = name
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
         protected set
 
-    @Column(columnDefinition = "DATETIME")
+    @Column(name = "deleted_at", columnDefinition = "DATETIME")
     var deletedAt: LocalDateTime? = deletedAt
         protected set
 

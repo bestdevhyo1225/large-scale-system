@@ -1,15 +1,23 @@
 package com.hyoseok.coupon.entity
 
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(name = "coupon_issued")
+@Table(
+    name = "coupon_issued",
+    indexes = [
+        Index(name = "uk_coupon_id_member_id", columnList = "coupon_id,member_id", unique = true),
+    ],
+)
+@DynamicUpdate
 class CouponIssuedEntity private constructor(
     couponId: Long,
     memberId: Long,
@@ -22,19 +30,19 @@ class CouponIssuedEntity private constructor(
     var id: Long? = null
         protected set
 
-    @Column(nullable = false)
+    @Column(name = "coupon_id", nullable = false)
     var couponId: Long = couponId
         protected set
 
-    @Column(nullable = false)
+    @Column(name = "member_id", nullable = false)
     var memberId: Long = memberId
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
         protected set
 
-    @Column(columnDefinition = "DATETIME")
+    @Column(name = "deleted_at", columnDefinition = "DATETIME")
     var deletedAt: LocalDateTime? = deletedAt
         protected set
 
