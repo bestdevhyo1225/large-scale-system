@@ -1,5 +1,6 @@
 package com.hyoseok.coupon.entity
 
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -10,6 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "coupon")
+@DynamicUpdate
 class CouponEntity private constructor(
     name: String,
     totalIssuedQuantity: Int,
@@ -31,35 +33,35 @@ class CouponEntity private constructor(
     var name: String = name
         protected set
 
-    @Column(nullable = false)
+    @Column(name = "total_issued_quantity", nullable = false)
     var totalIssuedQuantity: Int = totalIssuedQuantity
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "issued_started_at", nullable = false, columnDefinition = "DATETIME")
     var issuedStartedAt: LocalDateTime = issuedStartedAt
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "issued_ended_at", nullable = false, columnDefinition = "DATETIME")
     var issuedEndedAt: LocalDateTime = issuedEndedAt
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "available_started_at", nullable = false, columnDefinition = "DATETIME")
     var availableStartedAt: LocalDateTime = availableStartedAt
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "available_ended_at", nullable = false, columnDefinition = "DATETIME")
     var availableEndedAt: LocalDateTime = availableEndedAt
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME")
     var updatedAt: LocalDateTime = updatedAt
         protected set
 
-    @Column(columnDefinition = "DATETIME")
+    @Column(name = "deleted_at", columnDefinition = "DATETIME")
     var deletedAt: LocalDateTime? = deletedAt
         protected set
 

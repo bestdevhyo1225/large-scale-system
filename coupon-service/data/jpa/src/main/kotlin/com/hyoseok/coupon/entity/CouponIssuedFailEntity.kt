@@ -1,5 +1,6 @@
 package com.hyoseok.coupon.entity
 
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -9,7 +10,8 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "coupon_issued")
+@Table(name = "coupon_issued_fail")
+@DynamicUpdate
 class CouponIssuedFailEntity private constructor(
     couponId: Long,
     memberId: Long,
@@ -22,19 +24,19 @@ class CouponIssuedFailEntity private constructor(
     var id: Long? = null
         protected set
 
-    @Column(nullable = false)
+    @Column(name = "coupon_id", nullable = false)
     var couponId: Long = couponId
         protected set
 
-    @Column(nullable = false)
+    @Column(name = "member_id", nullable = false)
     var memberId: Long = memberId
         protected set
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
         protected set
 
-    @Column(columnDefinition = "DATETIME")
+    @Column(name = "published_at", columnDefinition = "DATETIME")
     var publishedAt: LocalDateTime? = publishedAt
         protected set
 
