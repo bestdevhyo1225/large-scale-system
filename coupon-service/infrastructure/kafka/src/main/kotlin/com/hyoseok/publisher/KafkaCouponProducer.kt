@@ -2,9 +2,10 @@ package com.hyoseok.publisher
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.coupon.service.CouponMessageBrokerProducer
 import com.hyoseok.coupon.exception.CouponProducerSendFailedException
+import com.hyoseok.coupon.service.CouponMessageBrokerProducer
 import mu.KotlinLogging
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.KafkaException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -25,7 +26,7 @@ class KafkaCouponProducer(
 
     override fun <T : Any> send(event: T) {
         execute {
-            val recordMetadata = kafkaTemplate
+            val recordMetadata: RecordMetadata = kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
                 .get()
                 .recordMetadata
