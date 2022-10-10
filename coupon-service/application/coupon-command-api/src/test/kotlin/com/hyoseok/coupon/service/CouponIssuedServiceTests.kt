@@ -2,7 +2,7 @@ package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
-import com.hyoseok.coupon.repository.CouponIssuedFailRepository
+import com.hyoseok.coupon.repository.CouponIssuedFailLogRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
@@ -19,12 +19,12 @@ internal class CouponIssuedServiceTests : DescribeSpec(
     {
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
-        val mockCouponIssuedFailRepository: CouponIssuedFailRepository = mockk()
+        val mockCouponIssuedFailRepository: CouponIssuedFailLogRepository = mockk()
         val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
         val couponIssuedService = CouponIssuedService(
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
-            couponIssuedFailRepository = mockCouponIssuedFailRepository,
+            couponIssuedFailLogRepository = mockCouponIssuedFailRepository,
             couponMessageBrokerProducer = mockCouponMessageBrokerProducer,
         )
 

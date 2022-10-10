@@ -1,13 +1,21 @@
 package com.hyoseok.coupon.service.dto
 
-import com.hyoseok.coupon.entity.CouponIssuedFail
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.hyoseok.coupon.entity.CouponIssuedFailLog
+import com.hyoseok.coupon.entity.enum.CouponIssuedFailLogApplicationType
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 
 data class CouponIssuedCreateDto(
     val memberId: Long,
     val couponId: Long,
 ) {
-    fun toCouponIssuedFailEntity() = CouponIssuedFail(couponId = couponId, memberId = memberId)
+    fun toFailLogEntity(errorMessage: String) =
+        CouponIssuedFailLog(
+            applicationType = CouponIssuedFailLogApplicationType.PRODUCER,
+            data = jacksonObjectMapper().registerModule(JavaTimeModule()).writeValueAsString(this),
+            errorMessage = errorMessage,
+        )
 }
 
 data class CouponIssuedCreateResultDto(
