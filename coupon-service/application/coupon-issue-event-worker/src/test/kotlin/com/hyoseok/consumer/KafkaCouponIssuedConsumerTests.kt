@@ -6,11 +6,17 @@ import com.hyoseok.CouponIssuedEventWorker
 import com.hyoseok.config.TestKafkaProducer
 import com.hyoseok.consumer.dto.CouponIssuedCreateDto
 import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.CouponIssuedFailLog
+import com.hyoseok.coupon.entity.enum.CouponIssuedFailLogApplicationType
+import com.hyoseok.coupon.repository.CouponIssuedFailLogReadRepository
 import com.hyoseok.coupon.repository.CouponIssuedReadRepository
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.delay
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,6 +39,9 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
 
     @Autowired
     private lateinit var couponIssuedReadRepository: CouponIssuedReadRepository
+
+    @Autowired
+    private lateinit var couponIssuedFailLogReadRepository: CouponIssuedFailLogReadRepository
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
@@ -64,7 +73,7 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
             context("중복된 메시지를 수신하는 경우") {
                 it("쿠폰 발급을 처리하지 않는다") {
                     // given
-                    val couponIssuedCreateDto = CouponIssuedCreateDto(couponId = 1L, memberId = 1L)
+                    val couponIssuedCreateDto = CouponIssuedCreateDto(couponId = 1L, memberId = 2L)
                     val payload: String = jacksonObjectMapper.writeValueAsString(couponIssuedCreateDto)
 
                     testKafkaProducer.send(payload = payload)
@@ -82,6 +91,18 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
                         couponIssued.couponId.shouldBe(couponId)
                         couponIssued.memberId.shouldBe(memberId)
                     }
+
+                    val result: Pair<Long, List<CouponIssuedFailLog>> =
+                        couponIssuedFailLogReadRepository.findByApplicationTypeAndlimitAndOffset(
+                            applicationType = CouponIssuedFailLogApplicationType.CONSUMER,
+                            limit = 10,
+                            offset = 0,
+                        )
+
+                    result.first.shouldNotBeZero()
+                    result.first.shouldBe(1)
+                    result.second.shouldNotBeEmpty()
+                    result.second.shouldHaveSize(1)
                 }
             }
         }

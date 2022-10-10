@@ -3,6 +3,7 @@ package com.hyoseok.config
 import com.hyoseok.config.datasource.DataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.config.jpa.JpaQueryFactoryConfig
+import com.hyoseok.coupon.repository.CouponIssuedFailLogJpaReadRepositoryAdapter
 import com.hyoseok.coupon.repository.CouponIssuedFailLogJpaRepository
 import com.hyoseok.coupon.repository.CouponIssuedFailLogJpaRepositoryAdapter
 import com.hyoseok.coupon.repository.CouponIssuedJpaReadRepositoryAdapter
@@ -31,6 +32,7 @@ import org.springframework.test.context.ContextConfiguration
         CouponIssuedJpaReadRepositoryAdapter::class,
         CouponIssuedJpaRepositoryAdapter::class,
         CouponIssuedFailLogJpaRepositoryAdapter::class,
+        CouponIssuedFailLogJpaReadRepositoryAdapter::class,
         MemberJpaRepositoryAdapter::class,
     ],
 )
