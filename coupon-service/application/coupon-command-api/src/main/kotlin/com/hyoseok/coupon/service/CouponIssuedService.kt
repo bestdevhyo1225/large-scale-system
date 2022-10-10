@@ -1,11 +1,12 @@
 package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
+import com.hyoseok.coupon.entity.CouponIssuedFailLog
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.COMPLETE
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.EXIT
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.FAILED
 import com.hyoseok.coupon.exception.CouponProducerSendFailedException
-import com.hyoseok.coupon.repository.CouponIssuedFailRepository
+import com.hyoseok.coupon.repository.CouponIssuedFailLogRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service
 class CouponIssuedService(
     private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
-    private val couponIssuedFailRepository: CouponIssuedFailRepository,
+    private val couponIssuedFailLogRepository: CouponIssuedFailLogRepository,
     private val couponMessageBrokerProducer: CouponMessageBrokerProducer,
 ) {
 
@@ -34,7 +35,9 @@ class CouponIssuedService(
         try {
             couponMessageBrokerProducer.sendAsync(event = dto)
         } catch (exception: CouponProducerSendFailedException) {
-            couponIssuedFailRepository.save(couponIssuedFail = dto.toCouponIssuedFailEntity())
+            val errorMessage: String = exception.cause?.localizedMessage ?: exception.localizedMessage
+            val couponIssuedFailLog: CouponIssuedFailLog = dto.toFailLogEntity(errorMessage = errorMessage)
+            couponIssuedFailLogRepository.save(couponIssuedFailLog = couponIssuedFailLog)
             logger.error { exception }
         }
 
