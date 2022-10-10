@@ -2,6 +2,7 @@ package com.hyoseok.coupon.repository
 
 import com.hyoseok.config.JpaRepositoryAdapterTests
 import com.hyoseok.coupon.entity.CouponIssued
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -13,6 +14,7 @@ import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 
 internal class CouponIssuedJpaRepositoryAdapterTests : JpaRepositoryAdapterTests, DescribeSpec() {
 
@@ -53,7 +55,9 @@ internal class CouponIssuedJpaRepositoryAdapterTests : JpaRepositoryAdapterTests
                     val duplicateCouponIssued = CouponIssued(couponId = couponId, memberId = memberId)
 
                     // when
-                    couponIssuedRepository.save(couponIssued = duplicateCouponIssued)
+                    shouldThrow<DataIntegrityViolationException> {
+                        couponIssuedRepository.save(couponIssued = duplicateCouponIssued)
+                    }
 
                     // then
                     duplicateCouponIssued.id.shouldBeZero()
