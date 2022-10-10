@@ -8,6 +8,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
@@ -42,12 +43,20 @@ internal class CouponIssuedJpaRepositoryAdapterTests : JpaRepositoryAdapterTests
 
             context("중복된 couponId, memberId 인 경우") {
                 it("에러 로그만 출력하고 정상 응답한다") {
+                    // given
                     val couponId = 1L
                     val memberId = 1L
                     val couponIssued = CouponIssued(couponId = couponId, memberId = memberId)
 
                     couponIssuedRepository.save(couponIssued = couponIssued)
-                    couponIssuedRepository.save(couponIssued = couponIssued)
+
+                    val duplicateCouponIssued = CouponIssued(couponId = couponId, memberId = memberId)
+
+                    // when
+                    couponIssuedRepository.save(couponIssued = duplicateCouponIssued)
+
+                    // then
+                    duplicateCouponIssued.id.shouldBeZero()
                 }
             }
         }
