@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.DAYS
 
@@ -27,9 +28,7 @@ class CouponRedisRepositoryImpl(
 
     override fun createCouponIssued(coupon: Coupon, memberId: Long): Long =
         redisTemplate.execute { redisConnection ->
-            val key: String = with(receiver = coupon) {
-                RedisKey.getCouponIssuedKey(couponId = id, issuedDate = issuedStartedAt.toLocalDate())
-            }
+            val key: String = RedisKey.getCouponIssuedKey(couponId = coupon.id, issuedDate = LocalDate.now())
             var result: Long = CouponIssuedStatus.EXIT.code
 
             try {
