@@ -1,0 +1,28 @@
+### 쿠폰 생성
+POST localhost:9000/coupons
+Content-Type: application/json
+
+{
+  "name": "쿠폰1",
+  "totalIssuedQuantity": 1000,
+  "issuedStartedAt": "2022-10-10 00:00:00",
+  "issuedEndedAt": "2022-10-15 23:59:59",
+  "availableStartedAt": "2022-10-10 00:00:00",
+  "availableEndedAt": "2022-11-10 23:59:59"
+}
+
+### 회원 생성
+POST localhost:9000/members
+Content-Type: application/json
+
+{
+  "name": "장효석"
+}
+
+### 쿠폰 발급
+POST localhost:9000/coupons/1/issued
+Content-Type: application/json
+
+{
+  "memberId": 1
+}
