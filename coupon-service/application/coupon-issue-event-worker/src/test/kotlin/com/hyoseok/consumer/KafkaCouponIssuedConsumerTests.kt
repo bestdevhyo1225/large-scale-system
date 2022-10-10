@@ -73,7 +73,7 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
             context("중복된 메시지를 수신하는 경우") {
                 it("쿠폰 발급을 처리하지 않는다") {
                     // given
-                    val couponIssuedCreateDto = CouponIssuedCreateDto(couponId = 1L, memberId = 2L)
+                    val couponIssuedCreateDto = CouponIssuedCreateDto(couponId = 2L, memberId = 2L)
                     val payload: String = jacksonObjectMapper.writeValueAsString(couponIssuedCreateDto)
 
                     testKafkaProducer.send(payload = payload)
