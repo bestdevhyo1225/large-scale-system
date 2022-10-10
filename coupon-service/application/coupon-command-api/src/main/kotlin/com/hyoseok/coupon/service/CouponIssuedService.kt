@@ -1,7 +1,9 @@
 package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
-import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.COMPLETE
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.EXIT
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.FAILED
 import com.hyoseok.coupon.exception.CouponProducerSendFailedException
 import com.hyoseok.coupon.repository.CouponIssuedFailRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
@@ -25,7 +27,7 @@ class CouponIssuedService(
         val coupon: Coupon = couponReadRepository.findById(couponId = dto.couponId)
         val result: Long = couponRedisRepository.createCouponIssued(coupon = coupon, memberId = dto.memberId)
 
-        if (result == CouponIssued.FAILED || result == CouponIssued.COMPLETE || result == CouponIssued.EXIT) {
+        if (result == FAILED.code || result == COMPLETE.code || result == EXIT.code) {
             return CouponIssuedCreateResultDto(result = result)
         }
 

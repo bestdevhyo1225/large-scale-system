@@ -1,7 +1,7 @@
 package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
-import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 import com.hyoseok.coupon.repository.CouponIssuedFailRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
@@ -52,11 +52,11 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         coupon = coupon,
                         memberId = dto.memberId,
                     )
-                } returns CouponIssued.READY
+                } returns CouponIssuedStatus.READY.code
                 every { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
 
                 // when
-                couponIssuedService.create(dto = dto).code.shouldBe(CouponIssued.READY)
+                couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.READY.name)
 
                 // then
                 verify { mockCouponReadRepository.findById(couponId = dto.couponId) }
@@ -78,10 +78,10 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                             coupon = coupon,
                             memberId = dto.memberId,
                         )
-                    } returns CouponIssued.COMPLETE
+                    } returns CouponIssuedStatus.COMPLETE.code
 
                     // when
-                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssued.COMPLETE)
+                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.COMPLETE.name)
 
                     // then
                     verify { mockCouponReadRepository.findById(couponId = dto.couponId) }
@@ -103,10 +103,10 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                             coupon = coupon,
                             memberId = dto.memberId,
                         )
-                    } returns CouponIssued.EXIT
+                    } returns CouponIssuedStatus.EXIT.code
 
                     // when
-                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssued.EXIT)
+                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.EXIT.name)
 
                     // then
                     verify { mockCouponReadRepository.findById(couponId = dto.couponId) }
@@ -128,10 +128,10 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                             coupon = coupon,
                             memberId = dto.memberId,
                         )
-                    } returns CouponIssued.FAILED
+                    } returns CouponIssuedStatus.FAILED.code
 
                     // when
-                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssued.FAILED)
+                    couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.FAILED.name)
 
                     // then
                     verify { mockCouponReadRepository.findById(couponId = dto.couponId) }

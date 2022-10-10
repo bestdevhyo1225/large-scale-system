@@ -114,6 +114,63 @@ internal class CouponIntegrationTests : IntegrationTests, DescribeSpec() {
                     resultActions
                         .andExpect(status().isCreated)
                         .andExpect(jsonPath("$.status").value("success"))
+                        .andExpect(jsonPath("$.data.code").value("READY"))
+                        .andExpect(jsonPath("$.data.message").value("쿠폰 발급 준비"))
+                }
+            }
+
+            context("회원에게 쿠폰 발급이 중복으로 요청되는 경우") {
+                it("201 Created 응답 및 중복 메시지를 반환한다") {
+                    // given
+                    val now: LocalDateTime = LocalDateTime.now().withNano(0)
+                    val couponCreateRequest = CouponCreateRequest(
+                        name = "쿠폰1",
+                        totalIssuedQuantity = 1_000,
+                        issuedStartedAt = now,
+                        issuedEndedAt = now.plusDays(5),
+                        availableStartedAt = now,
+                        availableEndedAt = now.plusMonths(1),
+                    )
+                    val couponIssuedCreateRequest = CouponIssuedCreateRequest(memberId = 1)
+                    val couponsMvcResult: MvcResult = mockMvc
+                        .perform(
+                            post("/coupons")
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(jacksonObjectMapper.writeValueAsString(couponCreateRequest)),
+                        )
+                        .andDo(print())
+                        .andReturn()
+                    val successResponse: SuccessResponse<*> = jacksonObjectMapper.readValue(
+                        couponsMvcResult.response.contentAsString,
+                        SuccessResponse::class.java,
+                    )
+                    val data: String = jacksonObjectMapper.writeValueAsString(successResponse.data)
+                    val couponCreateResultDto: CouponCreateResultDto =
+                        jacksonObjectMapper.readValue(data, CouponCreateResultDto::class.java)
+
+                    mockMvc
+                        .perform(
+                            post("/coupons/${couponCreateResultDto.couponId}/issued")
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(jacksonObjectMapper.writeValueAsString(couponIssuedCreateRequest)),
+                        )
+                        .andDo(print())
+
+                    // when
+                    val resultActions: ResultActions = mockMvc
+                        .perform(
+                            post("/coupons/${couponCreateResultDto.couponId}/issued")
+                                .contentType(APPLICATION_JSON_VALUE)
+                                .content(jacksonObjectMapper.writeValueAsString(couponIssuedCreateRequest)),
+                        )
+                        .andDo(print())
+
+                    // then
+                    resultActions
+                        .andExpect(status().isCreated)
+                        .andExpect(jsonPath("$.status").value("success"))
+                        .andExpect(jsonPath("$.data.code").value("COMPLETE"))
+                        .andExpect(jsonPath("$.data.message").value("쿠폰 발급 완료"))
                 }
             }
         }

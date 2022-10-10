@@ -4,7 +4,7 @@ import com.hyoseok.config.coupon.RedisCouponConfig
 import com.hyoseok.config.coupon.RedisCouponEmbbededServerConfig
 import com.hyoseok.config.coupon.RedisCouponTemplateConfig
 import com.hyoseok.coupon.entity.Coupon
-import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -66,7 +66,7 @@ internal class CouponRedisRepositoryImplTests : DescribeSpec() {
                 )
 
                 // then
-                result.shouldBe(CouponIssued.READY)
+                result.shouldBe(CouponIssuedStatus.READY.code)
             }
 
             context("totalIssuedQuantity 값을 넘어간 경우") {
@@ -89,8 +89,8 @@ internal class CouponRedisRepositoryImplTests : DescribeSpec() {
                     )
 
                     // then
-                    firstResult.shouldBe(CouponIssued.READY)
-                    secondResult.shouldBe(CouponIssued.EXIT)
+                    firstResult.shouldBe(CouponIssuedStatus.READY.code)
+                    secondResult.shouldBe(CouponIssuedStatus.EXIT.code)
                 }
             }
 
@@ -115,8 +115,8 @@ internal class CouponRedisRepositoryImplTests : DescribeSpec() {
                     )
 
                     // then
-                    firstResult.shouldBe(CouponIssued.READY)
-                    secondResult.shouldBe(CouponIssued.COMPLETE)
+                    firstResult.shouldBe(CouponIssuedStatus.READY.code)
+                    secondResult.shouldBe(CouponIssuedStatus.COMPLETE.code)
                 }
             }
         }
