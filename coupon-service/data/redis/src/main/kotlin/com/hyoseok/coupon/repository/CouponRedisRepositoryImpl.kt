@@ -4,7 +4,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.config.RedisKey
 import com.hyoseok.coupon.entity.Coupon
-import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 import com.hyoseok.exception.DataRedisMessage.SADD_RETURN_NULL
 import com.hyoseok.exception.DataRedisMessage.SCARD_RETURN_NULL
 import org.springframework.beans.factory.annotation.Qualifier
@@ -26,7 +26,7 @@ class CouponRedisRepositoryImpl(
             val key: String = with(receiver = coupon) {
                 RedisKey.getCouponIssuedKey(couponId = id, issuedDate = issuedStartedAt.toLocalDate())
             }
-            var result: Long = CouponIssued.EXIT
+            var result: Long = CouponIssuedStatus.EXIT.code
 
             try {
                 redisConnection.multi()
@@ -39,7 +39,7 @@ class CouponRedisRepositoryImpl(
                 redisConnection.exec()
             } catch (exception: RuntimeException) { // RedisConnectionFailureException, QueryTimeoutException 포함
                 redisConnection.discard()
-                result = CouponIssued.FAILED
+                result = CouponIssuedStatus.FAILED.code
             }
 
             result
