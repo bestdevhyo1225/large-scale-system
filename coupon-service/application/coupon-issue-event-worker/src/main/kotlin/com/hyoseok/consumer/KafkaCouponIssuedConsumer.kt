@@ -23,7 +23,7 @@ class KafkaCouponIssuedConsumer(
     @KafkaListener(
         topics = ["\${spring.kafka.topics.coupon-issued}"],
         containerFactory = "kafkaListenerContainerFactory",
-        errorHandler = "kafkaCouponIssuedErrorHandler"
+        errorHandler = "kafkaCouponIssuedErrorHandler",
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
         logger.info { "partition: ${data.partition()}, offset: ${data.offset()}" }
