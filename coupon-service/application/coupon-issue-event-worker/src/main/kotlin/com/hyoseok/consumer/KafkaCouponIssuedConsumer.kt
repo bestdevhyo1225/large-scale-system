@@ -21,8 +21,9 @@ class KafkaCouponIssuedConsumer(
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     @KafkaListener(
-        containerFactory = "kafkaListenerContainerFactory",
         topics = ["\${spring.kafka.topics.coupon-issued}"],
+        containerFactory = "kafkaListenerContainerFactory",
+        errorHandler = "kafkaCouponIssuedErrorHandler"
     )
     override fun onMessage(data: ConsumerRecord<String, String>, acknowledgment: Acknowledgment?) {
         logger.info { "partition: ${data.partition()}, offset: ${data.offset()}" }
@@ -32,5 +33,7 @@ class KafkaCouponIssuedConsumer(
         }
 
         acknowledgment?.acknowledge() ?: throw RuntimeException(ACKNOWLEDGMENT_IS_NULL)
+
+        logger.info { "completed acknowledge()" }
     }
 }

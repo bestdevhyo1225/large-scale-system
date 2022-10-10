@@ -60,6 +60,30 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
                     }
                 }
             }
+
+            context("중복된 메시지를 수신하는 경우") {
+                it("쿠폰 발급을 처리하지 않는다") {
+                    // given
+                    val couponIssuedCreateDto = CouponIssuedCreateDto(couponId = 1L, memberId = 1L)
+                    val payload: String = jacksonObjectMapper.writeValueAsString(couponIssuedCreateDto)
+
+                    testKafkaProducer.send(payload = payload)
+                    testKafkaProducer.send(payload = payload)
+
+                    // when
+                    delay(timeMillis = 1_000) // 1초 동안 대기해야 컨슈머에서 메시지를 수신 받음
+
+                    // then
+                    with(receiver = couponIssuedCreateDto) {
+                        val couponIssued: CouponIssued = couponIssuedReadRepository.findByCouponIdAndMemberId(
+                            couponId = couponId,
+                            memberId = memberId,
+                        )
+                        couponIssued.couponId.shouldBe(couponId)
+                        couponIssued.memberId.shouldBe(memberId)
+                    }
+                }
+            }
         }
     }
 }
