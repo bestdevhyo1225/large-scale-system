@@ -5,8 +5,6 @@ import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.EnumType
-import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -16,7 +14,7 @@ import javax.persistence.Table
 @Table(name = "coupon_issued_fail_log")
 @DynamicUpdate
 class CouponIssuedFailLogEntity private constructor(
-    applicationType: CouponIssuedFailLogApplicationType,
+    applicationType: String,
     data: String,
     errorMessage: String? = null,
     createdAt: LocalDateTime,
@@ -27,9 +25,8 @@ class CouponIssuedFailLogEntity private constructor(
     var id: Long? = null
         protected set
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "application_type", nullable = false)
-    var applicationType: CouponIssuedFailLogApplicationType = applicationType
+    @Column(name = "application_type", length = 50, nullable = false)
+    var applicationType: String = applicationType
         protected set
 
     @Column(nullable = false)
@@ -48,7 +45,7 @@ class CouponIssuedFailLogEntity private constructor(
         operator fun invoke(couponIssuedFailLog: CouponIssuedFailLog) =
             with(receiver = couponIssuedFailLog) {
                 CouponIssuedFailLogEntity(
-                    applicationType = applicationType,
+                    applicationType = applicationType.name,
                     data = data,
                     errorMessage = errorMessage,
                     createdAt = createdAt,
@@ -59,7 +56,7 @@ class CouponIssuedFailLogEntity private constructor(
     fun toDomain() =
         CouponIssuedFailLog(
             id = id!!,
-            applicationType = applicationType,
+            applicationType = CouponIssuedFailLogApplicationType(value = applicationType),
             data = data,
             errorMessage = errorMessage,
             createdAt = createdAt,

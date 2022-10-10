@@ -1,7 +1,8 @@
 package com.hyoseok.coupon.service
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.coupon.entity.Coupon
-import com.hyoseok.coupon.entity.CouponIssuedFailLog
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.COMPLETE
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.EXIT
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.FAILED
@@ -23,6 +24,7 @@ class CouponIssuedService(
 ) {
 
     private val logger = KotlinLogging.logger {}
+    private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     fun create(dto: CouponIssuedCreateDto): CouponIssuedCreateResultDto {
         val coupon: Coupon = couponReadRepository.findById(couponId = dto.couponId)
@@ -35,9 +37,12 @@ class CouponIssuedService(
         try {
             couponMessageBrokerProducer.sendAsync(event = dto)
         } catch (exception: CouponProducerSendFailedException) {
-            val errorMessage: String = exception.cause?.localizedMessage ?: exception.localizedMessage
-            val couponIssuedFailLog: CouponIssuedFailLog = dto.toFailLogEntity(errorMessage = errorMessage)
-            couponIssuedFailLogRepository.save(couponIssuedFailLog = couponIssuedFailLog)
+            couponIssuedFailLogRepository.save(
+                couponIssuedFailLog = dto.toFailLogEntity(
+                    data = jacksonObjectMapper.writeValueAsString(dto),
+                    errorMessage = exception.cause?.localizedMessage ?: exception.localizedMessage,
+                ),
+            )
             logger.error { exception }
         }
 
