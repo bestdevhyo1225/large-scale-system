@@ -24,8 +24,8 @@ class KafkaCouponIssuedErrorHandler : KafkaListenerErrorHandler {
         consumer: Consumer<*, *>,
     ): Any {
         if (exception.cause is DataIntegrityViolationException) {
-            logger.error { "DataIntegrityViolationException has occured, and commitSync() is called" }
             consumer.commitSync()
+            logger.error { "DataIntegrityViolationException has occured, and commitSync() is called" }
         } else {
             logger.error { exception.cause }
         }
