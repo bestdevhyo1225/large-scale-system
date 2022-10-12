@@ -4,6 +4,7 @@ import org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.BATCH_SIZE_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.BUFFER_MEMORY_CONFIG
+import org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.COMPRESSION_TYPE_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG
 import org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG
@@ -20,6 +21,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
+import java.net.InetAddress
+import java.util.UUID
 
 @Configuration
 @EnableKafka
@@ -50,6 +53,9 @@ class KafkaProducerConfig(
 
     @Value("\${infrastructure.kafka.producer.delivery-timeout-ms}")
     private val deliveryTimeoutMs: Int,
+
+    @Value("\${infrastructure.kafka.producer.instance-id}")
+    private val instanceId: String,
 ) {
 
     @Bean
@@ -69,6 +75,7 @@ class KafkaProducerConfig(
         // 피드 발행의 경우, 메시지 순서가 중요하지 않다.
         // 파티션을 2개 이상으로 나눈 경우에 효과가 있다.
         props[PARTITIONER_CLASS_CONFIG] = UniformStickyPartitioner::class.java
+        props[CLIENT_ID_CONFIG] = "$instanceId-${InetAddress.getLocalHost().hostAddress}-${UUID.randomUUID()}"
         props[KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
 
