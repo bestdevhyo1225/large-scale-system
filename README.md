@@ -8,7 +8,7 @@
 
 - [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
 - [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
-- [쿠폰 이벤트 선착순 시스템 설계]()
+- [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 
 ## URL 단축기 설계
 
