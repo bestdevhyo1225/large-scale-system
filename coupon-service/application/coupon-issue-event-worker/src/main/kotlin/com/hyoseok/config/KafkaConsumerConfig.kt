@@ -22,6 +22,7 @@ import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ContainerProperties.AckMode
+import java.net.InetAddress
 import java.util.UUID
 
 @Configuration
@@ -72,7 +73,8 @@ class KafkaConsumerConfig(
          * 스태틱 멤버십 적용을 위해 'GROUP_INSTANCE_ID' 를 설정했음
          * 다만 session.timeout.ms에 지정된 시간을 넘어가도록 컨슈머가 재실행 되지 않으면 리밸런싱 동작이 발생함
         * */
-        props[GROUP_INSTANCE_ID_CONFIG] = "$groupInstanceId-${UUID.randomUUID()}"
+        props[GROUP_INSTANCE_ID_CONFIG] =
+            "$groupInstanceId-${InetAddress.getLocalHost().hostAddress}-${UUID.randomUUID()}"
         props[GROUP_ID_CONFIG] = groupId
         props[PARTITION_ASSIGNMENT_STRATEGY_CONFIG] = listOf(CooperativeStickyAssignor::class.java) // 협력적 스티키 파티션 할당 전략
         props[KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
