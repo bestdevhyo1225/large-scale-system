@@ -17,11 +17,13 @@ import java.time.LocalDateTime
 
 internal class CouponIssuedServiceTests : DescribeSpec(
     {
+        val mockProducerInstanceId = "producer-test"
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
         val mockSendMessageFailLogRepository: SendMessageFailLogRepository = mockk()
         val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
         val couponIssuedService = CouponIssuedService(
+            producerInstanceId = mockProducerInstanceId,
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
             sendMessageFailLogRepository = mockSendMessageFailLogRepository,
