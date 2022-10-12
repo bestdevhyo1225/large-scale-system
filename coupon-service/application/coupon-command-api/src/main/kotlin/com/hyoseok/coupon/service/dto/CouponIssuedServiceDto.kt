@@ -1,20 +1,11 @@
 package com.hyoseok.coupon.service.dto
 
-import com.hyoseok.coupon.entity.CouponIssuedFailLog
-import com.hyoseok.coupon.entity.enum.CouponIssuedFailLogApplicationType
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 
 data class CouponIssuedCreateDto(
     val memberId: Long,
     val couponId: Long,
-) {
-    fun toFailLogEntity(data: String, errorMessage: String) =
-        CouponIssuedFailLog(
-            applicationType = CouponIssuedFailLogApplicationType.PRODUCER,
-            data = data,
-            errorMessage = errorMessage,
-        )
-}
+)
 
 data class CouponIssuedCreateResultDto(
     val code: String,

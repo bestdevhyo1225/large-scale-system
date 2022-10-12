@@ -2,9 +2,8 @@ package com.hyoseok.consumer
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.coupon.entity.CouponIssuedFailLog
-import com.hyoseok.coupon.entity.enum.CouponIssuedFailLogApplicationType
-import com.hyoseok.coupon.repository.CouponIssuedFailLogRepository
+import com.hyoseok.message.entity.ReceiveMessageFailLog
+import com.hyoseok.message.repository.ReceiveMessageFailLogRepository
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -13,10 +12,11 @@ import org.springframework.kafka.listener.KafkaListenerErrorHandler
 import org.springframework.kafka.listener.ListenerExecutionFailedException
 import org.springframework.messaging.Message
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class KafkaCouponIssuedErrorHandler(
-    private val couponIssuedFailLogRepository: CouponIssuedFailLogRepository,
+    private val receiveMessageFailLogRepository: ReceiveMessageFailLogRepository,
 ) : KafkaListenerErrorHandler {
 
     private val logger = KotlinLogging.logger {}
@@ -39,13 +39,17 @@ class KafkaCouponIssuedErrorHandler(
             logger.error { exception.cause }
         }
 
+        val instanceId: String = consumer.groupMetadata()
+            .groupInstanceId()
+            .orElseGet { "consumer-default-${UUID.randomUUID()}" }
         val consumerRecord: ConsumerRecord<*, *> = message.payload as ConsumerRecord<*, *>
 
-        couponIssuedFailLogRepository.save(
-            couponIssuedFailLog = CouponIssuedFailLog(
-                applicationType = CouponIssuedFailLogApplicationType.CONSUMER,
+        receiveMessageFailLogRepository.save(
+            receiveMessageFailLog = ReceiveMessageFailLog(
+                instanceId = instanceId,
                 data = jacksonObjectMapper.writeValueAsString(consumerRecord.value()),
                 errorMessage = exception.cause?.localizedMessage ?: exception.localizedMessage,
+                useRetry = false,
             ),
         )
 

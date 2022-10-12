@@ -7,20 +7,22 @@ import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.COMPLETE
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.EXIT
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.FAILED
 import com.hyoseok.coupon.exception.CouponProducerSendFailedException
-import com.hyoseok.coupon.repository.CouponIssuedFailLogRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateResultDto
+import com.hyoseok.message.entity.SendMessageFailLog
+import com.hyoseok.message.repository.SendMessageFailLogRepository
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import java.net.InetAddress
 
 @Service
 class CouponIssuedService(
     private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
-    private val couponIssuedFailLogRepository: CouponIssuedFailLogRepository,
     private val couponMessageBrokerProducer: CouponMessageBrokerProducer,
+    private val sendMessageFailLogRepository: SendMessageFailLogRepository,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -37,8 +39,9 @@ class CouponIssuedService(
         try {
             couponMessageBrokerProducer.sendAsync(event = dto)
         } catch (exception: CouponProducerSendFailedException) {
-            couponIssuedFailLogRepository.save(
-                couponIssuedFailLog = dto.toFailLogEntity(
+            sendMessageFailLogRepository.save(
+                sendMessageFailLog = SendMessageFailLog(
+                    instanceId = "producer-${InetAddress.getLocalHost().hostAddress}",
                     data = jacksonObjectMapper.writeValueAsString(dto),
                     errorMessage = exception.cause?.localizedMessage ?: exception.localizedMessage,
                 ),
