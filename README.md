@@ -8,6 +8,7 @@
 
 - [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
 - [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+- [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 
 ## URL 단축기 설계
 
@@ -147,3 +148,9 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | /api/v1/feeds/{memberId}/posts | 142,327회 | 843ms | 19ms | 3,813ms | 0.00% | 1175.4/sec |
 | /api/v1/feeds/{memberId}/posts | 105,393회 | 1,138ms | 31ms | 3,847ms | 0.00% | 870.6/sec |
 | /api/v1/feeds/{memberId}/posts | 122,928회 | 975ms | 163ms | 2,192ms | 0.00% | 1016.2/sec |
+
+## 쿠폰 이벤트 선착순 시스템 설계
+
+### 쿠폰 이벤트 선착순 프로세스
+
+<img width="1840" alt="image" src="https://user-images.githubusercontent.com/23515771/195263645-0e82e11e-1159-475e-9002-b8922afe9788.png">
