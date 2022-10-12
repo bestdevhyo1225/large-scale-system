@@ -11,8 +11,10 @@ import com.hyoseok.coupon.repository.CouponJpaRepository
 import com.hyoseok.coupon.repository.CouponJpaRepositoryAdapter
 import com.hyoseok.member.repository.MemberJpaRepository
 import com.hyoseok.member.repository.MemberJpaRepositoryAdapter
+import com.hyoseok.message.repository.ReceiveMessageFailLogJpaReadRepositoryAdapter
 import com.hyoseok.message.repository.ReceiveMessageFailLogJpaRepository
 import com.hyoseok.message.repository.ReceiveMessageFailLogJpaRepositoryAdapter
+import com.hyoseok.message.repository.SendMessageFailLogJpaReadRepositoryAdapter
 import com.hyoseok.message.repository.SendMessageFailLogJpaRepository
 import com.hyoseok.message.repository.SendMessageFailLogJpaRepositoryAdapter
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -35,7 +37,9 @@ import org.springframework.test.context.ContextConfiguration
         CouponIssuedJpaRepositoryAdapter::class,
         MemberJpaRepositoryAdapter::class,
         SendMessageFailLogJpaRepositoryAdapter::class,
+        SendMessageFailLogJpaReadRepositoryAdapter::class,
         ReceiveMessageFailLogJpaRepositoryAdapter::class,
+        ReceiveMessageFailLogJpaReadRepositoryAdapter::class,
     ],
 )
 interface JpaRepositoryAdapterTests
