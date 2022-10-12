@@ -36,7 +36,6 @@ spring:
       max-poll-records: 250 # 최대 250개
       allow-auto-create-topics: false # 토픽 자동 생성 X
       group-id: coupon-issued-group
-      group-instance-id: coupon-issued-group-instance # Static Membership 사용하기 위해
     topics:
       coupon-issued: coupon-issued-topic
 
@@ -69,7 +68,6 @@ spring:
       max-poll-records: 250 # 최대 250개
       allow-auto-create-topics: false # 토픽 자동 생성 X
       group-id: coupon-issued-group
-      group-instance-id: coupon-issued-group-instance # Static Membership 사용하기 위해
     topics:
       coupon-issued: coupon-issued-topic
 
