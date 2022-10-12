@@ -10,7 +10,6 @@ import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import org.springframework.beans.factory.annotation.Autowired
 
-
 internal class ReceiveMessageFailLogJpaRepositoryAdapterTests : JpaRepositoryAdapterTests, DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
