@@ -14,11 +14,15 @@ import com.hyoseok.coupon.service.dto.CouponIssuedCreateResultDto
 import com.hyoseok.message.entity.SendMessageFailLog
 import com.hyoseok.message.repository.SendMessageFailLogRepository
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.net.InetAddress
+import java.util.UUID
 
 @Service
 class CouponIssuedService(
+    @Value("\${infrastructure.kafka.producer.instance-id}")
+    private val producerInstanceId: String,
     private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
     private val couponMessageBrokerProducer: CouponMessageBrokerProducer,
@@ -41,7 +45,7 @@ class CouponIssuedService(
         } catch (exception: CouponProducerSendFailedException) {
             sendMessageFailLogRepository.save(
                 sendMessageFailLog = SendMessageFailLog(
-                    instanceId = "producer-${InetAddress.getLocalHost().hostAddress}",
+                    instanceId = "$producerInstanceId-${InetAddress.getLocalHost().hostAddress}-${UUID.randomUUID()}",
                     data = jacksonObjectMapper.writeValueAsString(dto),
                     errorMessage = exception.cause?.localizedMessage ?: exception.localizedMessage,
                 ),
