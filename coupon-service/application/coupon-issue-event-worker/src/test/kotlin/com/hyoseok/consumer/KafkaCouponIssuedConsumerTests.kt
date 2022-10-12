@@ -47,7 +47,7 @@ internal class KafkaCouponIssuedConsumerTests : DescribeSpec() {
                     testKafkaProducer.send(payload = payload)
 
                     // when
-                    delay(timeMillis = 3_000) // 3초 동안 대기해야 컨슈머에서 메시지를 수신 받음
+                    delay(timeMillis = 5_000) // 5초 동안 대기해야 컨슈머에서 메시지를 수신 받음
 
                     // then
                     with(receiver = couponIssuedCreateDto) {

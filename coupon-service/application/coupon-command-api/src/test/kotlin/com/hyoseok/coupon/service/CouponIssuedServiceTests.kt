@@ -2,11 +2,11 @@ package com.hyoseok.coupon.service
 
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
-import com.hyoseok.coupon.repository.CouponIssuedFailLogRepository
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.exception.DataJpaMessage.NOT_FOUND_COUPON_ENTITY
+import com.hyoseok.message.repository.SendMessageFailLogRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -19,12 +19,12 @@ internal class CouponIssuedServiceTests : DescribeSpec(
     {
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
-        val mockCouponIssuedFailRepository: CouponIssuedFailLogRepository = mockk()
+        val mockSendMessageFailLogRepository: SendMessageFailLogRepository = mockk()
         val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
         val couponIssuedService = CouponIssuedService(
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
-            couponIssuedFailLogRepository = mockCouponIssuedFailRepository,
+            sendMessageFailLogRepository = mockSendMessageFailLogRepository,
             couponMessageBrokerProducer = mockCouponMessageBrokerProducer,
         )
 
