@@ -1,11 +1,9 @@
 package com.hyoseok.config
 
 import mu.KotlinLogging
-import org.springframework.boot.test.context.TestComponent
 import org.springframework.kafka.support.SendResult
 import org.springframework.util.concurrent.ListenableFutureCallback
 
-@TestComponent
 class TestKafkaProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
 
     private val logger = KotlinLogging.logger {}

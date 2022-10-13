@@ -4,21 +4,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.CouponIssuedEventWorker
 import com.hyoseok.config.TestKafkaProducer
-import com.hyoseok.config.TestKafkaProducerCallback
-import com.hyoseok.consumer.dto.CouponIssuedCreateDto
-import com.hyoseok.coupon.entity.CouponIssued
 import com.hyoseok.coupon.repository.CouponIssuedReadRepository
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.delay
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.test.context.EmbeddedKafka
 
-@SpringBootTest(classes = [CouponIssuedEventWorker::class, TestKafkaProducer::class, TestKafkaProducerCallback::class])
+@SpringBootTest(classes = [CouponIssuedEventWorker::class, TestKafkaProducer::class])
 @EmbeddedKafka(
     brokerProperties = ["listeners=PLAINTEXT://localhost:9092", "port=9092"],
     topics = ["coupon-issued-topic"],

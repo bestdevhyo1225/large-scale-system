@@ -20,7 +20,6 @@ class KafkaCouponProducer(
     @Value("\${infrastructure.kafka.topics.coupon-issued}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
-    private val kafkaCouponProducerCallback: KafkaCouponProducerCallback,
 ) : CouponMessageBrokerProducer {
 
     private val logger = KotlinLogging.logger {}
@@ -42,7 +41,7 @@ class KafkaCouponProducer(
         execute {
             kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
-                .addCallback(kafkaCouponProducerCallback)
+                .addCallback(KafkaCouponProducerCallback())
         }
     }
 
