@@ -1,7 +1,7 @@
 package com.hyoseok.member.repository
 
-import com.hyoseok.member.entity.MemberEntity
 import com.hyoseok.member.entity.Member
+import com.hyoseok.member.entity.MemberEntity
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,7 +1,6 @@
 package com.hyoseok.config
 
 import mu.KotlinLogging
-import org.apache.kafka.clients.producer.RecordMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestComponent
 import org.springframework.kafka.core.KafkaTemplate
@@ -18,11 +17,8 @@ class TestKafkaProducer(
     fun send(payload: String) {
         logger.info { "topic: $topic, payload: $payload" }
 
-        val recordMetadata: RecordMetadata = kafkaTemplate
+        kafkaTemplate
             .send(topic, payload)
-            .get()
-            .recordMetadata
-
-        logger.info { "partition: ${recordMetadata.partition()}, offset: ${recordMetadata.offset()}" }
+            .addCallback(TestKafkaProducerCallback())
     }
 }
