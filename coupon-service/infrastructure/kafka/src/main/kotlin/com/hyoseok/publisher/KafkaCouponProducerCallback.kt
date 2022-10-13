@@ -2,7 +2,6 @@ package com.hyoseok.publisher
 
 import mu.KotlinLogging
 import org.springframework.kafka.support.SendResult
-import org.springframework.stereotype.Component
 import org.springframework.util.concurrent.ListenableFutureCallback
 
 class KafkaCouponProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
