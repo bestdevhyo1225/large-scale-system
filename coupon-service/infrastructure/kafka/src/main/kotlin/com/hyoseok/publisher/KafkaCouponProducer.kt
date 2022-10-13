@@ -2,9 +2,10 @@ package com.hyoseok.publisher
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.coupon.exception.CouponProducerSendFailedException
 import com.hyoseok.coupon.service.CouponMessageBrokerProducer
+import com.hyoseok.member.exception.SendMessageFailedException
 import mu.KotlinLogging
+import org.apache.kafka.clients.producer.ProducerConfig.CLIENT_ID_CONFIG
 import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.KafkaException
 import org.springframework.beans.factory.annotation.Value
@@ -23,6 +24,7 @@ class KafkaCouponProducer(
 
     private val logger = KotlinLogging.logger {}
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
+    private val instanceId = kafkaTemplate.producerFactory.configurationProperties[CLIENT_ID_CONFIG] as String
 
     override fun <T : Any> send(event: T) {
         execute {
@@ -47,11 +49,11 @@ class KafkaCouponProducer(
         try {
             func()
         } catch (exception: InterruptedException) {
-            throw CouponProducerSendFailedException(message = exception.localizedMessage)
+            throw SendMessageFailedException(instanceId = instanceId, message = exception.localizedMessage)
         } catch (exception: ExecutionException) {
-            throw CouponProducerSendFailedException(message = exception.localizedMessage)
+            throw SendMessageFailedException(instanceId = instanceId, message = exception.localizedMessage)
         } catch (exception: KafkaException) {
-            throw CouponProducerSendFailedException(message = exception.localizedMessage)
+            throw SendMessageFailedException(instanceId = instanceId, message = exception.localizedMessage)
         }
     }
 }
