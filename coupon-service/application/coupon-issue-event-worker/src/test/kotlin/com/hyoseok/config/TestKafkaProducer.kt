@@ -11,6 +11,7 @@ class TestKafkaProducer(
     @Value("\${spring.kafka.topics.coupon-issued}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
+    private val testKafkaProducerCallback: TestKafkaProducerCallback,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -18,11 +19,8 @@ class TestKafkaProducer(
     fun send(payload: String) {
         logger.info { "topic: $topic, payload: $payload" }
 
-        val recordMetadata: RecordMetadata = kafkaTemplate
+        kafkaTemplate
             .send(topic, payload)
-            .get()
-            .recordMetadata
-
-        logger.info { "partition: ${recordMetadata.partition()}, offset: ${recordMetadata.offset()}" }
+            .addCallback(testKafkaProducerCallback)
     }
 }
