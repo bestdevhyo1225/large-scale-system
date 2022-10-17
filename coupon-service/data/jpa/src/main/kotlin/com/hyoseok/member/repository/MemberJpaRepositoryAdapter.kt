@@ -12,8 +12,7 @@ class MemberJpaRepositoryAdapter(
 ) : MemberRepository {
 
     override fun save(member: Member) {
-        val memberEntity = MemberEntity(member = member)
-        memberJpaRepository.save(memberEntity)
-        member.changeId(id = memberEntity.id!!)
+        memberJpaRepository.save(MemberEntity(member = member))
+            .also { member.changeId(id = it.id!!) }
     }
 }

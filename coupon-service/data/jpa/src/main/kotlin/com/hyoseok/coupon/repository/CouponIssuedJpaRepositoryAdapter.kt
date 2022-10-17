@@ -12,8 +12,7 @@ class CouponIssuedJpaRepositoryAdapter(
 ) : CouponIssuedRepository {
 
     override fun save(couponIssued: CouponIssued) {
-        val couponIssuedEntity = CouponIssuedEntity(couponIssued = couponIssued)
-        couponIssuedJpaRepository.save(couponIssuedEntity)
-        couponIssued.changeId(id = couponIssuedEntity.id!!)
+        couponIssuedJpaRepository.save(CouponIssuedEntity(couponIssued = couponIssued))
+            .also { couponIssued.changeId(id = it.id!!) }
     }
 }
