@@ -12,8 +12,7 @@ class SendMessageFailLogJpaRepositoryAdapter(
 ) : SendMessageFailLogRepository {
 
     override fun save(sendMessageFailLog: SendMessageFailLog) {
-        val sendMessageFailLogEntity = SendMessageFailLogEntity(sendMessageFailLog = sendMessageFailLog)
-        sendMessageFailLogJpaRepository.save(sendMessageFailLogEntity)
-        sendMessageFailLog.changeId(id = sendMessageFailLogEntity.id!!)
+        sendMessageFailLogJpaRepository.save(SendMessageFailLogEntity(sendMessageFailLog = sendMessageFailLog))
+            .also { sendMessageFailLog.changeId(id = it.id!!) }
     }
 }
