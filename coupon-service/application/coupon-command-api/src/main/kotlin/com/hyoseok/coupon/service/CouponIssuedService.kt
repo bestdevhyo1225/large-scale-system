@@ -35,19 +35,24 @@ class CouponIssuedService(
             return CouponIssuedCreateResultDto(result = result)
         }
 
-        couponMessageBrokerProducer.sendAsync(event = dto)
-
-        CoroutineScope(context = Dispatchers.IO).launch { saveMessageLog(dto = dto) }
+        CoroutineScope(context = Dispatchers.IO).launch {
+            saveSendMessageLog(dto = dto)
+            sendMessage(dto = dto)
+        }
 
         return CouponIssuedCreateResultDto(result = result)
     }
 
-    suspend fun saveMessageLog(dto: CouponIssuedCreateDto) {
+    suspend fun saveSendMessageLog(dto: CouponIssuedCreateDto) {
         sendMessageLogRepository.save(
             sendMessageLog = SendMessageLog(
                 instanceId = couponMessageBrokerProducer.getInstanceId(),
                 data = jacksonObjectMapper.writeValueAsString(dto),
             ),
         )
+    }
+
+    suspend fun sendMessage(dto: CouponIssuedCreateDto) {
+        couponMessageBrokerProducer.sendAsync(event = dto)
     }
 }

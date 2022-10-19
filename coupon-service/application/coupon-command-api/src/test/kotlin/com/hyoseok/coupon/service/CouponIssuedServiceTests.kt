@@ -57,9 +57,9 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 } returns CouponIssuedStatus.READY.code
-                every { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
                 every { mockCouponMessageBrokerProducer.getInstanceId() } returns instanceId
                 coEvery { mockSendMessageLogRepository.save(sendMessageLog = any()) } returns Unit
+                coEvery { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
 
                 // when
                 couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.READY.name)
@@ -72,11 +72,14 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 }
-                verify { mockCouponMessageBrokerProducer.sendAsync(event = dto) }
                 verify { mockCouponMessageBrokerProducer.getInstanceId() }
                 coVerify {
                     delay(timeMillis = 1000)
                     mockSendMessageLogRepository.save(sendMessageLog = any())
+                }
+                coVerify {
+                    delay(timeMillis = 1000)
+                    mockCouponMessageBrokerProducer.sendAsync(event = dto)
                 }
             }
 
