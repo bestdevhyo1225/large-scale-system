@@ -27,6 +27,8 @@ class KafkaCouponProducer(
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
     private val instanceId = kafkaTemplate.producerFactory.configurationProperties[CLIENT_ID_CONFIG] as String
 
+    override fun getInstanceId(): String = instanceId
+
     override fun <T : Any> send(event: T) {
         execute {
             val recordMetadata: RecordMetadata = kafkaTemplate

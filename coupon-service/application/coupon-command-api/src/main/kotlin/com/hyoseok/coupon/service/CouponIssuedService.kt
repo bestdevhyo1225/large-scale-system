@@ -10,10 +10,11 @@ import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateResultDto
-import com.hyoseok.member.exception.SendMessageFailedException
-import com.hyoseok.message.entity.SendMessageFailLog
-import com.hyoseok.message.repository.SendMessageFailLogRepository
-import mu.KotlinLogging
+import com.hyoseok.message.entity.SendMessageLog
+import com.hyoseok.message.repository.SendMessageLogRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,10 +22,9 @@ class CouponIssuedService(
     private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
     private val couponMessageBrokerProducer: CouponMessageBrokerProducer,
-    private val sendMessageFailLogRepository: SendMessageFailLogRepository,
+    private val sendMessageLogRepository: SendMessageLogRepository,
 ) {
 
-    private val logger = KotlinLogging.logger {}
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     fun create(dto: CouponIssuedCreateDto): CouponIssuedCreateResultDto {
@@ -35,19 +35,19 @@ class CouponIssuedService(
             return CouponIssuedCreateResultDto(result = result)
         }
 
-        try {
-            couponMessageBrokerProducer.sendAsync(event = dto)
-        } catch (exception: SendMessageFailedException) {
-            sendMessageFailLogRepository.save(
-                sendMessageFailLog = SendMessageFailLog(
-                    instanceId = exception.instanceId,
-                    data = jacksonObjectMapper.writeValueAsString(dto),
-                    errorMessage = exception.cause?.localizedMessage ?: exception.localizedMessage,
-                ),
-            )
-            logger.error { exception.localizedMessage }
-        }
+        couponMessageBrokerProducer.sendAsync(event = dto)
+
+        CoroutineScope(context = Dispatchers.IO).launch { saveMessageLog(dto = dto) }
 
         return CouponIssuedCreateResultDto(result = result)
+    }
+
+    suspend fun saveMessageLog(dto: CouponIssuedCreateDto) {
+        sendMessageLogRepository.save(
+            sendMessageLog = SendMessageLog(
+                instanceId = couponMessageBrokerProducer.getInstanceId(),
+                data = jacksonObjectMapper.writeValueAsString(dto),
+            ),
+        )
     }
 }
