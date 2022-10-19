@@ -1,4 +1,4 @@
-package com.hyoseok.publisher
+package com.hyoseok.coupon.publisher
 
 import mu.KotlinLogging
 import org.springframework.kafka.support.SendResult
