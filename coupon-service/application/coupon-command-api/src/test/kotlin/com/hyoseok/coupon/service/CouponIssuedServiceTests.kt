@@ -6,16 +6,12 @@ import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.exception.DataJpaMessage.NOT_FOUND_COUPON_ENTITY
-import com.hyoseok.message.repository.SendMessageLogRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
 internal class CouponIssuedServiceTests : DescribeSpec(
@@ -23,12 +19,10 @@ internal class CouponIssuedServiceTests : DescribeSpec(
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
         val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
-        val mockSendMessageLogRepository: SendMessageLogRepository = mockk()
         val couponIssuedService = CouponIssuedService(
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
             couponMessageBrokerProducer = mockCouponMessageBrokerProducer,
-            sendMessageLogRepository = mockSendMessageLogRepository,
         )
 
         describe("create 메서드는") {
@@ -46,7 +40,6 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                 updatedAt = now,
                 deletedAt = null,
             )
-            val instanceId = "producer-id"
 
             it("회원에게 쿠폰을 발급한다") {
                 // given
@@ -57,9 +50,7 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 } returns CouponIssuedStatus.READY.code
-                every { mockCouponMessageBrokerProducer.getInstanceId() } returns instanceId
-                coEvery { mockSendMessageLogRepository.save(sendMessageLog = any()) } returns Unit
-                coEvery { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
+                every { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
 
                 // when
                 couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.READY.name)
@@ -72,15 +63,7 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                         memberId = dto.memberId,
                     )
                 }
-                verify { mockCouponMessageBrokerProducer.getInstanceId() }
-                coVerify {
-                    delay(timeMillis = 1000)
-                    mockSendMessageLogRepository.save(sendMessageLog = any())
-                }
-                coVerify {
-                    delay(timeMillis = 1000)
-                    mockCouponMessageBrokerProducer.sendAsync(event = dto)
-                }
+                verify { mockCouponMessageBrokerProducer.sendAsync(event = dto) }
             }
 
             context("해당 회원이 이미 발급받은 경우") {
