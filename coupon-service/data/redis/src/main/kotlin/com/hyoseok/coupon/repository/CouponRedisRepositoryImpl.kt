@@ -41,7 +41,7 @@ class CouponRedisRepositoryImpl(
                 }
 
                 if (realtimeIssuedQuantity == 1L) {
-                    logger.info { "expired: ${expire(key = key, timeout = 3, timeUnit = DAYS)}" }
+                    logger.info { "expire setting completed: ${expire(key = key, timeout = 3, timeUnit = DAYS)}" }
                 }
 
                 redisConnection.exec()

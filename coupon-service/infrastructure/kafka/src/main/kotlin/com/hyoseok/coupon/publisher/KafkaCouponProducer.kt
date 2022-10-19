@@ -1,4 +1,4 @@
-package com.hyoseok.publisher
+package com.hyoseok.coupon.publisher
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -20,6 +20,7 @@ class KafkaCouponProducer(
     @Value("\${infrastructure.kafka.topics.coupon-issued}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
+    private val kafkaCouponProducerCallback: KafkaCouponProducerCallback,
 ) : CouponMessageBrokerProducer {
 
     private val logger = KotlinLogging.logger {}
@@ -41,7 +42,7 @@ class KafkaCouponProducer(
         execute {
             kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
-                .addCallback(KafkaCouponProducerCallback())
+                .addCallback(kafkaCouponProducerCallback)
         }
     }
 
