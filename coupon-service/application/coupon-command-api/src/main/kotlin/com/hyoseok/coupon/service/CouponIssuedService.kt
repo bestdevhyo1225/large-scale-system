@@ -26,6 +26,10 @@ class CouponIssuedService(
         }
 
         // 만약에 메시지 브로커가 다운된 경우, 메시지를 보낼 수 없기 때문에 배치 스케줄러를 통해 Redis, MySQL 간의 싱크를 맞추자
+        // 1. 쿠폰 리스트 조회
+        // 2. couponId 기준의 Key로 Redis에서 쿠폰 발급 목록 조회 (memberId 리스트)
+        // 3. memberId 값으로 쿠폰 발급 조회
+        // 4. 쿠폰 발급 내역이 MySQL에 없으면, 회원에게 쿠폰 발급 (MySQL 저장)
         couponMessageBrokerProducer.sendAsync(event = dto)
 
         return CouponIssuedCreateResultDto(result = result)
