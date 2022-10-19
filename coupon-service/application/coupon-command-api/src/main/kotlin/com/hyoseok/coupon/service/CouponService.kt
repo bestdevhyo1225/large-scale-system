@@ -1,6 +1,5 @@
 package com.hyoseok.coupon.service
 
-import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.repository.CouponRepository
 import com.hyoseok.coupon.service.dto.CouponCreateDto
 import com.hyoseok.coupon.service.dto.CouponCreateResultDto
@@ -14,9 +13,6 @@ class CouponService(
 ) {
 
     @Transactional
-    fun create(dto: CouponCreateDto): CouponCreateResultDto {
-        val coupon: Coupon = dto.toEntity()
-        couponRepository.save(coupon = coupon)
-        return CouponCreateResultDto(coupon = coupon)
-    }
+    fun create(dto: CouponCreateDto) =
+        CouponCreateResultDto(coupon = dto.toEntity().also { couponRepository.save(coupon = it) })
 }
