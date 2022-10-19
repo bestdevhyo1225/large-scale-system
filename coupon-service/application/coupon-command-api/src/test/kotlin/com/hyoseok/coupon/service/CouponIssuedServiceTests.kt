@@ -1,12 +1,15 @@
 package com.hyoseok.coupon.service
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus
 import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.exception.DataJpaMessage.NOT_FOUND_COUPON_ENTITY
-import com.hyoseok.message.repository.SendMessageFailLogRepository
+import com.hyoseok.message.entity.SendMessageLog
+import com.hyoseok.message.repository.SendMessageLogRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -17,15 +20,16 @@ import java.time.LocalDateTime
 
 internal class CouponIssuedServiceTests : DescribeSpec(
     {
+        val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
         val mockCouponReadRepository: CouponReadRepository = mockk()
         val mockCouponRedisRepository: CouponRedisRepository = mockk()
-        val mockSendMessageFailLogRepository: SendMessageFailLogRepository = mockk()
         val mockCouponMessageBrokerProducer: CouponMessageBrokerProducer = mockk()
+        val mockSendMessageLogRepository: SendMessageLogRepository = mockk()
         val couponIssuedService = CouponIssuedService(
             couponReadRepository = mockCouponReadRepository,
             couponRedisRepository = mockCouponRedisRepository,
-            sendMessageFailLogRepository = mockSendMessageFailLogRepository,
             couponMessageBrokerProducer = mockCouponMessageBrokerProducer,
+            sendMessageLogRepository = mockSendMessageLogRepository,
         )
 
         describe("create 메서드는") {
@@ -43,6 +47,11 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                 updatedAt = now,
                 deletedAt = null,
             )
+            val instanceId = "producer-id"
+            val sendLogMessage = SendMessageLog(
+                instanceId = instanceId,
+                data = jacksonObjectMapper.writeValueAsString(dto),
+            )
 
             it("회원에게 쿠폰을 발급한다") {
                 // given
@@ -54,6 +63,8 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                     )
                 } returns CouponIssuedStatus.READY.code
                 every { mockCouponMessageBrokerProducer.sendAsync(event = dto) } returns Unit
+                every { mockCouponMessageBrokerProducer.getInstanceId() } returns instanceId
+                every { mockSendMessageLogRepository.save(sendMessageLog = sendLogMessage) } returns Unit
 
                 // when
                 couponIssuedService.create(dto = dto).code.shouldBe(CouponIssuedStatus.READY.name)
@@ -67,6 +78,8 @@ internal class CouponIssuedServiceTests : DescribeSpec(
                     )
                 }
                 verify { mockCouponMessageBrokerProducer.sendAsync(event = dto) }
+                verify { mockCouponMessageBrokerProducer.getInstanceId() }
+                verify { mockSendMessageLogRepository.save(sendMessageLog = sendLogMessage) }
             }
 
             context("해당 회원이 이미 발급받은 경우") {
