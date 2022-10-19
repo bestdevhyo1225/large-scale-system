@@ -29,7 +29,7 @@ class SendMessageLogEntity private constructor(
     var instanceId: String = instanceId
         protected set
 
-    @Column(nullable = false)
+    @Column(length = 2_500, nullable = false)
     var data: String = data
         protected set
 
