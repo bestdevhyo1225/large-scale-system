@@ -1,5 +1,7 @@
 package com.hyoseok.coupon.service
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.coupon.entity.Coupon
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.COMPLETE
 import com.hyoseok.coupon.entity.enum.CouponIssuedStatus.EXIT
@@ -8,6 +10,11 @@ import com.hyoseok.coupon.repository.CouponReadRepository
 import com.hyoseok.coupon.repository.CouponRedisRepository
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateDto
 import com.hyoseok.coupon.service.dto.CouponIssuedCreateResultDto
+import com.hyoseok.message.entity.SendMessageLog
+import com.hyoseok.message.repository.SendMessageLogRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,7 +22,10 @@ class CouponIssuedService(
     private val couponReadRepository: CouponReadRepository,
     private val couponRedisRepository: CouponRedisRepository,
     private val couponMessageBrokerProducer: CouponMessageBrokerProducer,
+    private val sendMessageLogRepository: SendMessageLogRepository,
 ) {
+
+    private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
     fun create(dto: CouponIssuedCreateDto): CouponIssuedCreateResultDto {
         val coupon: Coupon = couponReadRepository.findById(couponId = dto.couponId)
@@ -25,13 +35,24 @@ class CouponIssuedService(
             return CouponIssuedCreateResultDto(result = result)
         }
 
-        // 만약에 메시지 브로커가 다운된 경우, 메시지를 보낼 수 없기 때문에 배치 스케줄러를 통해 Redis, MySQL 간의 싱크를 맞추자
-        // 1. 쿠폰 리스트 조회
-        // 2. couponId 기준의 Key로 Redis에서 쿠폰 발급 목록 조회 (memberId 리스트)
-        // 3. memberId 값으로 쿠폰 발급 조회
-        // 4. 쿠폰 발급 내역이 MySQL에 없으면, 회원에게 쿠폰 발급 (MySQL 저장)
-        couponMessageBrokerProducer.sendAsync(event = dto)
+        CoroutineScope(context = Dispatchers.IO).launch {
+            saveSendMessageLog(dto = dto)
+            sendMessage(dto = dto)
+        }
 
         return CouponIssuedCreateResultDto(result = result)
+    }
+
+    private suspend fun saveSendMessageLog(dto: CouponIssuedCreateDto) {
+        sendMessageLogRepository.save(
+            sendMessageLog = SendMessageLog(
+                instanceId = couponMessageBrokerProducer.getInstanceId(),
+                data = jacksonObjectMapper.writeValueAsString(dto),
+            ),
+        )
+    }
+
+    private suspend fun sendMessage(dto: CouponIssuedCreateDto) {
+        couponMessageBrokerProducer.sendAsync(event = dto)
     }
 }
