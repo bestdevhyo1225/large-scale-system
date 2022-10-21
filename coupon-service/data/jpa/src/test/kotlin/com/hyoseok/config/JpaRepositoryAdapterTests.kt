@@ -6,6 +6,9 @@ import com.hyoseok.config.jpa.JpaQueryFactoryConfig
 import com.hyoseok.coupon.repository.CouponIssuedJpaReadRepositoryAdapter
 import com.hyoseok.coupon.repository.CouponIssuedJpaRepository
 import com.hyoseok.coupon.repository.CouponIssuedJpaRepositoryAdapter
+import com.hyoseok.coupon.repository.CouponIssuedLogJpaReadRepositoryAdapter
+import com.hyoseok.coupon.repository.CouponIssuedLogJpaRepository
+import com.hyoseok.coupon.repository.CouponIssuedLogJpaRepositoryAdapter
 import com.hyoseok.coupon.repository.CouponJpaReadRepositoryAdapter
 import com.hyoseok.coupon.repository.CouponJpaRepository
 import com.hyoseok.coupon.repository.CouponJpaRepositoryAdapter
@@ -31,6 +34,7 @@ import org.springframework.test.context.ContextConfiguration
         JpaQueryFactoryConfig::class,
         CouponJpaRepository::class,
         CouponIssuedJpaRepository::class,
+        CouponIssuedLogJpaRepository::class,
         MemberJpaRepository::class,
         SendMessageFailLogJpaRepository::class,
         SendMessageLogJpaRepository::class,
@@ -39,6 +43,8 @@ import org.springframework.test.context.ContextConfiguration
         CouponJpaRepositoryAdapter::class,
         CouponIssuedJpaReadRepositoryAdapter::class,
         CouponIssuedJpaRepositoryAdapter::class,
+        CouponIssuedLogJpaRepositoryAdapter::class,
+        CouponIssuedLogJpaReadRepositoryAdapter::class,
         MemberJpaRepositoryAdapter::class,
         SendMessageFailLogJpaRepositoryAdapter::class,
         SendMessageFailLogJpaReadRepositoryAdapter::class,
