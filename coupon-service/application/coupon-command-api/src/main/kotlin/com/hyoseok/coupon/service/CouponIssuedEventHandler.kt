@@ -14,10 +14,10 @@ class CouponIssuedEventHandler(
     private val logger = KotlinLogging.logger {}
 
     @EventListener
-    fun handle(dto: CouponIssuedSendCompletedDto) {
+    fun handle(event: CouponIssuedSendCompletedDto) {
         logger.info { "CouponIssuedEvent send completed" }
 
-        with(receiver = dto) {
+        with(receiver = event) {
             couponIssuedLogRepository.updateIsSendCompleted(
                 couponId = couponId,
                 memberId = memberId,
