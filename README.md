@@ -151,6 +151,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ## 쿠폰 이벤트 선착순 시스템 설계
 
-### 쿠폰 이벤트 선착순 프로세스
+### 쿠폰 서비스 아키텍처 - V1
 
 <img width="1840" alt="image" src="https://user-images.githubusercontent.com/23515771/195263645-0e82e11e-1159-475e-9002-b8922afe9788.png">
+
+### 쿠폰 서비스 아키텍처 - V2
+
+<img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327700-3a424655-f5b3-428d-a37c-4a9e2d9bbea1.png">
+
