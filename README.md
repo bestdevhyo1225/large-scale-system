@@ -157,5 +157,6 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### 쿠폰 서비스 아키텍처 - V2
 
-<img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327700-3a424655-f5b3-428d-a37c-4a9e2d9bbea1.png">
+<img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327792-a76613c4-c3b6-4dfd-baf7-34fc3de8c177.png">
+
 
