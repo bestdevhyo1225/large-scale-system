@@ -2,6 +2,7 @@ package com.hyoseok.coupon.repository
 
 import com.hyoseok.config.JpaRepositoryAdapterTests
 import com.hyoseok.coupon.entity.CouponIssuedLog
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -13,6 +14,7 @@ import io.kotest.matchers.longs.shouldNotBeZero
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
+import java.time.LocalDateTime
 
 internal class CouponIssuedLogJpaRepositoryAdapterTests : JpaRepositoryAdapterTests, DescribeSpec() {
 
@@ -26,6 +28,27 @@ internal class CouponIssuedLogJpaRepositoryAdapterTests : JpaRepositoryAdapterTe
     private lateinit var couponIssuedLogReadRepository: CouponIssuedLogReadRepository
 
     init {
+        this.describe("deleteAllByCreatedAtBefore 메서드는") {
+            it("createdAt 이전의 날짜의 로그는 모두 삭제된다") {
+                // given
+                val couponId = 1L
+                val memberId = 1L
+                val instanceId = "producer-instance-id"
+                val couponIssuedLog =
+                    CouponIssuedLog(couponId = couponId, memberId = memberId, instanceId = instanceId)
+
+                couponIssuedLogRepository.save(couponIssuedLog = couponIssuedLog)
+
+                // when
+                couponIssuedLogRepository.deleteAllByCreatedAtBefore(createdAt = LocalDateTime.now().plusMinutes(5))
+
+                // then
+                shouldThrow<NoSuchElementException> {
+                    couponIssuedLogReadRepository.findByCouponIdAndMemberId(couponId = couponId, memberId = memberId)
+                }
+            }
+        }
+
         this.describe("save 메서드는") {
             it("CouponIssuedLog 엔티티를 저장한다") {
                 // given

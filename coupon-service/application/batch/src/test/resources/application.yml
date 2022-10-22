@@ -1,0 +1,48 @@
+spring:
+  profiles:
+    active: test
+
+data:
+  enable:
+    datasource: true
+    jpa: true
+
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:testdb
+      username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: create
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+infrastructure:
+  enable:
+    kafka:
+      producer:
+        coupon: true
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      acks: 1
+      buffer-memory: 33554432 # 33MB (default)
+      compression-type: lz4
+      retries: 0
+      batch-size: 100000 # 100KB
+      linger-ms: 50
+      request-timeout-ms: 60000 # 60초
+      delivery-timeout-ms: 120000 # 120초
+      instance-id: producer-coupon-issued
+    topics:
+      coupon-issued: coupon-issued-topic
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
