@@ -4,11 +4,13 @@ import com.hyoseok.message.entity.QSendMessageFailLogEntity.sendMessageFailLogEn
 import com.hyoseok.message.entity.SendMessageFailLog
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional(readOnly = true)
+@Transactional(transactionManager = "jpaTransactionManager", readOnly = true)
+@ConditionalOnProperty(prefix = "data.enable", name = ["jpa"], havingValue = "true")
 class SendMessageFailLogJpaReadRepositoryAdapter(
     private val jpaQueryFactory: JPAQueryFactory,
     private val sendMessageFailLogJpaRepository: SendMessageFailLogJpaRepository,
