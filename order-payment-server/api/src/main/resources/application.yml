@@ -11,8 +11,6 @@ spring:
   jpa:
     properties:
       hibernate:
-        hbm2ddl:
-          auto: update
         default_batch_fetch_size: 1000
     open-in-view: false
 
@@ -32,6 +30,12 @@ spring:
       driver-class-name: org.h2.Driver
       jdbc-url: jdbc:h2:mem:order-payment-dev-db
       username: sa
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
 
 ---
 spring:
@@ -55,3 +59,14 @@ spring:
         maximum-pool-size: 20
         max-lifetime: 18000000 # 5 hour
         connection-timeout: 5000 # 5 second
+
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
