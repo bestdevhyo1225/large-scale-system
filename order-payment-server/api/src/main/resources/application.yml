@@ -65,8 +65,3 @@ spring:
       hibernate:
         hbm2ddl:
           auto: none
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.springframework.orm.jpa: debug
