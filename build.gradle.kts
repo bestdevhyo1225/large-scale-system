@@ -30,6 +30,10 @@ subprojects {
     apply(plugin = "kotlin-kapt")
 
     dependencies {
+        // Spring Doc Open Api (Swagger)
+        implementation("org.springdoc:springdoc-openapi-ui:1.6.12")
+        implementation("org.springdoc:springdoc-openapi-kotlin:1.6.12")
+
         // Kotlin 로깅
         implementation("io.github.microutils:kotlin-logging:1.12.5")
 
