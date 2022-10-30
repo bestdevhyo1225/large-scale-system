@@ -158,3 +158,9 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 ### 쿠폰 서비스 아키텍처 - V2
 
 <img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327876-5b53d114-a32f-4fe5-b346-1d20e7a5973d.png">
+
+### 쿠폰 서비스 Swagger
+
+> **coupon-command-api**
+
+- `http://localhost:9000/swagger-ui/index.html`
