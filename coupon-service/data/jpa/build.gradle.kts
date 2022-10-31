@@ -8,7 +8,6 @@ allOpen {
 }
 
 dependencies {
-    implementation(project(":coupon-service:common"))
     implementation(project(":coupon-service:domain"))
 
     // spring data jpa
