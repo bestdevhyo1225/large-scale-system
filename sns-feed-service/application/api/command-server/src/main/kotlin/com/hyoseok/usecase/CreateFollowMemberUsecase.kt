@@ -11,8 +11,9 @@ class CreateFollowMemberUsecase(
     private val memberReadService: MemberReadService,
 ) {
 
-    fun execute(followerId: Long, followeeId: Long): FollowCreateResultDto = followService.following(
-        followerMemberDto = memberReadService.findMember(id = followerId),
-        followeeMemberDto = memberReadService.findMember(id = followeeId),
-    )
+    fun execute(followerId: Long, followeeId: Long): FollowCreateResultDto =
+        followService.following(
+            followerMemberDto = memberReadService.findMember(id = followerId),
+            followeeMemberDto = memberReadService.findMember(id = followeeId),
+        )
 }
