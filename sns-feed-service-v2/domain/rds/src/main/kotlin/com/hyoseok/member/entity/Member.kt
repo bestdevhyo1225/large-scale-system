@@ -25,6 +25,8 @@ class Member private constructor(
     var updatedAt: LocalDateTime = updatedAt
         protected set
 
+    override fun toString(): String = "Member(id=$id, name=$name, createdAt=$createdAt, updatedAt=$updatedAt)"
+
     object ErrorMessage {
         const val MAX_LIMIT = "입력할 수 있는 이름의 길이를 초과했습니다"
     }
@@ -44,6 +46,4 @@ class Member private constructor(
             }
         }
     }
-
-    override fun toString(): String = "Member(id=$id, name=$name, createdAt=$createdAt, updatedAt=$updatedAt)"
 }
