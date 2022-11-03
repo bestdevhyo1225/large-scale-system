@@ -10,35 +10,56 @@ import io.kotest.matchers.shouldBe
 
 internal class FollowTests : DescribeSpec(
     {
-        describe("checkFolloweeCount 메서드는") {
-            context("MAX 값을 넘어가는 경우") {
-                it("예외를 던진다") {
-                    // given
-                    val followeeCount: Long = MAX_FOLLOWEE_LIMIT.plus(1)
+        describe("create 메서드는") {
+            it("팔로우 엔티티를 생성한다") {
+                // given
+                val followerId = 1L
+                val followeeId = 2L
+                val followeeCount = 10L
 
-                    // when
-                    val exception: RuntimeException = shouldThrow { Follow.checkFolloweeCount(value = followeeCount) }
+                // when
+                val follow: Follow = Follow.create(
+                    followerId = followerId,
+                    followeeId = followeeId,
+                    followeeCount = followeeCount,
+                )
 
-                    // then
-                    exception.localizedMessage.shouldBe(FAIL_ADD_FOLLOWEE)
-                }
+                // then
+                follow.followerId.shouldBe(followerId)
+                follow.followeeId.shouldBe(followeeId)
             }
-        }
 
-        describe("Follow 엔티티 생성시") {
             context("자신이 자신을 팔로우 하는 경우") {
                 it("예외를 던진다") {
                     // given
                     val followerId = 1L
                     val followeeId = 1L
+                    val followeeCount = 10L
 
                     // when
                     val exception: IllegalArgumentException = shouldThrow {
-                        Follow(followerId = followerId, followeeId = followeeId)
+                        Follow.create(followerId = followerId, followeeId = followeeId, followeeCount = followeeCount)
                     }
 
                     // then
                     exception.localizedMessage.shouldBe(INVALID_FOLLOWER_ID_FOLLOWEE_ID)
+                }
+            }
+
+            context("팔로우 할 카운트를 초과하면") {
+                it("IllegalArgumentException 예외를 던진다") {
+                    // given
+                    val followerId = 1L
+                    val followeeId = 2L
+                    val followeeCount = MAX_FOLLOWEE_LIMIT.plus(1)
+
+                    // when
+                    val exception: IllegalArgumentException = shouldThrow {
+                        Follow.create(followerId = followerId, followeeId = followeeId, followeeCount = followeeCount)
+                    }
+
+                    // then
+                    exception.localizedMessage.shouldBe(FAIL_ADD_FOLLOWEE)
                 }
             }
         }
