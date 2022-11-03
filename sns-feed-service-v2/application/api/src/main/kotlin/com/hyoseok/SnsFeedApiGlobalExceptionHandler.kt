@@ -1,7 +1,7 @@
 package com.hyoseok
 
-import com.hyoseok.controller.dto.ErrorResponseDto
-import com.hyoseok.controller.dto.FailResponseDto
+import com.hyoseok.response.ErrorResponse
+import com.hyoseok.response.FailResponse
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,42 +16,42 @@ class SnsFeedApiGlobalExceptionHandler {
     private val logger = KotlinLogging.logger {}
 
     @ExceptionHandler(IllegalArgumentException::class)
-    fun handle(exception: IllegalArgumentException): ResponseEntity<FailResponseDto> {
+    fun handle(exception: IllegalArgumentException): ResponseEntity<FailResponse> {
         logger.error { exception }
 
-        return ResponseEntity(FailResponseDto(message = exception.localizedMessage), HttpStatus.BAD_REQUEST)
+        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(ConstraintViolationException::class)
-    fun handle(exception: ConstraintViolationException): ResponseEntity<FailResponseDto> {
+    fun handle(exception: ConstraintViolationException): ResponseEntity<FailResponse> {
         logger.error { exception }
 
-        return ResponseEntity(FailResponseDto(message = exception.localizedMessage), HttpStatus.BAD_REQUEST)
+        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.BAD_REQUEST)
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handle(exception: MethodArgumentNotValidException): ResponseEntity<FailResponseDto> {
+    fun handle(exception: MethodArgumentNotValidException): ResponseEntity<FailResponse> {
         logger.error { exception }
 
         return ResponseEntity(
-            FailResponseDto(message = exception.bindingResult.allErrors.first().defaultMessage ?: ""),
+            FailResponse(message = exception.bindingResult.allErrors.first().defaultMessage ?: ""),
             HttpStatus.BAD_REQUEST,
         )
     }
 
     @ExceptionHandler(NoSuchElementException::class)
-    fun handle(exception: NoSuchElementException): ResponseEntity<FailResponseDto> {
+    fun handle(exception: NoSuchElementException): ResponseEntity<FailResponse> {
         logger.error { exception }
 
-        return ResponseEntity(FailResponseDto(message = exception.localizedMessage), HttpStatus.NOT_FOUND)
+        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(Exception::class)
-    fun handle(exception: Exception): ResponseEntity<ErrorResponseDto> {
+    fun handle(exception: Exception): ResponseEntity<ErrorResponse> {
         logger.error { exception }
 
         return ResponseEntity(
-            ErrorResponseDto(message = HttpStatus.INTERNAL_SERVER_ERROR.name),
+            ErrorResponse(message = HttpStatus.INTERNAL_SERVER_ERROR.name),
             HttpStatus.INTERNAL_SERVER_ERROR,
         )
     }

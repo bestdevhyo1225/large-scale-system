@@ -11,7 +11,7 @@ class MemberReadService(
     private val memberReadRepository: MemberReadRepository,
 ) {
 
-    fun findMember(): MemberDto {
-        TODO()
-    }
+    fun findMember(id: Long): MemberDto =
+        memberReadRepository.findById(id = id)
+            .let { MemberDto(id = it.id!!, name = it.name, createdAt = it.createdAt) }
 }
