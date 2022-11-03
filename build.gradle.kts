@@ -20,6 +20,9 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 
@@ -45,6 +48,9 @@ subprojects {
 
         // Kotlin Coroutine
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+        // Spring Boot Custom Yaml Importer
+        implementation("com.github.kingbbode:spring-boot-custom-yaml-importer:0.3.0")
 
         // H2 Datbase
         runtimeOnly("com.h2database:h2")

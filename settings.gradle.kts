@@ -49,6 +49,9 @@ include(
     "sns-feed-service:infrastructure:aws",
     "sns-feed-service:infrastructure:kafka",
     "sns-feed-service:infrastructure:okhttp3",
+    // sns-feed-service-v2
+    "sns-feed-service-v2:application:api",
+    "sns-feed-service-v2:domain:rds",
     // coupon-service
     "coupon-service:application:batch",
     "coupon-service:application:coupon-command-api",
