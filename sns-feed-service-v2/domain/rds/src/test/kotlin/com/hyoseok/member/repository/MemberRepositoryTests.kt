@@ -36,19 +36,27 @@ internal class MemberRepositoryTests : DescribeSpec() {
     private lateinit var memberReadRepository: MemberReadRepository
 
     init {
-        this.describe("save 메서드는") {
-            // given
-            val member = Member(name = "test")
-
-            // when
+        this.afterSpec {
             withContext(Dispatchers.IO) {
-                memberRepository.save(member)
+                memberRepository.deleteAll()
             }
+        }
 
-            // then
-            val findMember: Member = memberReadRepository.findById(member.id!!)
+        this.describe("save 메서드는") {
+            it("Member 엔티티를 저장한다") {
+                // given
+                val member = Member(name = "test")
 
-            findMember.shouldBe(member)
+                // when
+                withContext(Dispatchers.IO) {
+                    memberRepository.save(member)
+                }
+
+                // then
+                val findMember: Member = memberReadRepository.findById(member.id!!)
+
+                findMember.shouldBe(member)
+            }
         }
     }
 }
