@@ -15,10 +15,14 @@ class Member private constructor(
     name: String,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
-) : BaseEntity(createdAt = createdAt, updatedAt = updatedAt) {
+) : BaseEntity(createdAt = createdAt) {
 
     @Column(name = "name", nullable = false)
     var name: String = name
+        protected set
+
+    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME")
+    var updatedAt: LocalDateTime = updatedAt
         protected set
 
     object ErrorMessage {

@@ -11,7 +11,6 @@ import javax.persistence.MappedSuperclass
 @MappedSuperclass
 abstract class BaseEntity(
     createdAt: LocalDateTime,
-    updatedAt: LocalDateTime,
 ) {
 
     @Id
@@ -21,10 +20,6 @@ abstract class BaseEntity(
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     var createdAt: LocalDateTime = createdAt
-        protected set
-
-    @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME")
-    var updatedAt: LocalDateTime = updatedAt
         protected set
 
     override fun hashCode(): Int = Objects.hash(id)
