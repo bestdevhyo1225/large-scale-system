@@ -15,7 +15,19 @@ data class MemberCreateResultDto(
     companion object {
         operator fun invoke(member: Member) =
             with(receiver = member) {
-                MemberCreateResultDto(memberId = member.id!!)
+                MemberCreateResultDto(memberId = id!!)
+            }
+    }
+}
+
+data class MemberFindResultDto(
+    val id: Long,
+    val name: String,
+) {
+    companion object {
+        operator fun invoke(member: Member) =
+            with(receiver = member) {
+                MemberFindResultDto(id = id!!, name = name)
             }
     }
 }

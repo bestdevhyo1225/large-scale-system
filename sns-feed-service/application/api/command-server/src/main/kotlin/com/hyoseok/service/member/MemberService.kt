@@ -8,15 +8,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional(transactionManager = "jpaTransactionManager", readOnly = true)
+@Transactional(transactionManager = "jpaTransactionManager")
 class MemberService(
     private val memberRepository: MemberRepository,
 ) {
 
-    @Transactional(transactionManager = "jpaTransactionManager")
     fun create(dto: MemberCreateDto): MemberCreateResultDto {
-        val member: Member = dto.toEntity()
-        memberRepository.save(member = member)
-        return MemberCreateResultDto(member = member)
+        val savedMember: Member = dto.toEntity().also { memberRepository.save(member = it) }
+        return MemberCreateResultDto(member = savedMember)
     }
 }
