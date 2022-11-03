@@ -33,11 +33,21 @@ class Follow private constructor(
         const val MAX_FOLLOWEE_LIMIT: Long = 10_000
 
         fun create(followerId: Long, followeeId: Long, followeeCount: Long): Follow {
+            checkFollowerIdAndFolloweeId(followerId = followerId, followeeId = followeeId)
+            checkFolloweeCount(value = followeeCount)
             return Follow(followerId = followerId, followeeId = followeeId)
-                .also {
-                    it.checkFollowerIdAndFolloweeId(followerId = it.followerId, followeeId = it.followeeId)
-                    it.checkFolloweeCount(value = followeeCount)
-                }
+        }
+
+        private fun checkFollowerIdAndFolloweeId(followerId: Long, followeeId: Long) {
+            if (followerId == followeeId) {
+                throw IllegalArgumentException(INVALID_FOLLOWER_ID_FOLLOWEE_ID)
+            }
+        }
+
+        private fun checkFolloweeCount(value: Long) {
+            if (value > MAX_FOLLOWEE_LIMIT) {
+                throw IllegalArgumentException(FAIL_ADD_FOLLOWEE)
+            }
         }
 
         operator fun invoke(followerId: Long, followeeId: Long) =
@@ -49,17 +59,5 @@ class Follow private constructor(
 
     fun changeId(id: Long) {
         this.id = id
-    }
-
-    private fun checkFollowerIdAndFolloweeId(followerId: Long, followeeId: Long) {
-        if (followerId == followeeId) {
-            throw IllegalArgumentException(INVALID_FOLLOWER_ID_FOLLOWEE_ID)
-        }
-    }
-
-    private fun checkFolloweeCount(value: Long) {
-        if (value > MAX_FOLLOWEE_LIMIT) {
-            throw IllegalArgumentException(FAIL_ADD_FOLLOWEE)
-        }
     }
 }
