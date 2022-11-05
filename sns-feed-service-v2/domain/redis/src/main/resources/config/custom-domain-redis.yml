@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: develop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: develop
+
+  post:
+    redis:
+      mode: standalone
+      nodes: localhost:6383
+
+  feed:
+    redis:
+      mode: standalone
+      nodes: localhost:6384
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+
+  post:
+    redis:
+      mode: standalone
+      nodes: localhost:6383
+
+  feed:
+    redis:
+      mode: standalone
+      nodes: localhost:6384

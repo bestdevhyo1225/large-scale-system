@@ -51,8 +51,10 @@ include(
     "sns-feed-service:infrastructure:okhttp3",
     // sns-feed-service-v2
     "sns-feed-service-v2:application:api",
+    "sns-feed-service-v2:client:event-publisher",
     "sns-feed-service-v2:common",
     "sns-feed-service-v2:domain:rds",
+    "sns-feed-service-v2:domain:redis",
     // coupon-service
     "coupon-service:application:batch",
     "coupon-service:application:coupon-command-api",

@@ -19,11 +19,29 @@ class FollowReadRepositoryImpl(
         const val NOT_FOUND_FOLLOW = "팔로우 정보를 찾을 수 없습니다"
     }
 
+    override fun countByFolloweeId(followeeId: Long): Long =
+        followRepository.countByFolloweeId(followeeId = followeeId)
+
     override fun findById(id: Long): Follow =
         jpaQueryFactory
             .selectFrom(follow)
             .where(followIdEq(id = id))
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_FOLLOW)
+
+    override fun findAllByFolloweeIdAndLimitAndOffset(
+        followeeId: Long,
+        limit: Long,
+        offset: Long,
+    ): Pair<Long, List<Follow>> =
+        Pair(
+            first = followRepository.countByFolloweeId(followeeId = followeeId),
+            second = jpaQueryFactory
+                .selectFrom(follow)
+                .where(followFolloweeIdEq(followeeId = followeeId))
+                .limit(limit)
+                .offset(offset)
+                .fetch(),
+        )
 
     override fun findAllByFollowerIdAndLimitAndOffset(
         followerId: Long,
@@ -41,5 +59,6 @@ class FollowReadRepositoryImpl(
         )
 
     private fun followIdEq(id: Long): BooleanExpression = follow.id.eq(id)
+    private fun followFolloweeIdEq(followeeId: Long): BooleanExpression = follow.followeeId.eq(followeeId)
     private fun followFollowerIdEq(followerId: Long): BooleanExpression = follow.followerId.eq(followerId)
 }

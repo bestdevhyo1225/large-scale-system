@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: test
+
+  post:
+    redis:
+      mode: standalone
+      nodes: localhost:6383
+
+  feed:
+    redis:
+      mode: standalone
+      nodes: localhost:6384
