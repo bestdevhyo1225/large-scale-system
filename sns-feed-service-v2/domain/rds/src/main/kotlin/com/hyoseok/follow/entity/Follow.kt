@@ -39,6 +39,8 @@ class Follow private constructor(
     }
 
     companion object {
+        const val INFLUENCER_CHECK_COUNT = 10_000
+
         operator fun invoke(followerId: Long, followeeId: Long): Follow {
             validateFollowerAndFolloweeId(followerId = followerId, followeeId = followeeId)
             return Follow(followerId = followerId, followeeId = followeeId, createdAt = LocalDateTime.now())
