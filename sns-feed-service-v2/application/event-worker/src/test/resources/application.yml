@@ -11,7 +11,7 @@ spring:
       max-poll-interval: 600000 # 10분
       max-poll-records: 250 # 최대 250개
       allow-auto-create-topics: false # 토픽 자동 생성 X
-      group-id: feed-group
+      group-id: sns-feed-event-worker
     topics:
       feed: feed-topic
 
