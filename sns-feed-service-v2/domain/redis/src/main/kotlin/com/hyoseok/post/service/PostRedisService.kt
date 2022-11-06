@@ -5,10 +5,12 @@ import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImageCache
 import com.hyoseok.post.repository.PostRedisTransactionRepository
 import com.hyoseok.post.repository.PostRedisRepository
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
+@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
 class PostRedisService(
     private val postRedisRepository: PostRedisRepository,
     private val postRedisTransactionRepository: PostRedisTransactionRepository,

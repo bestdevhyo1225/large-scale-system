@@ -1,8 +1,8 @@
 package com.hyoseok.post.repository
 
 import com.hyoseok.config.PostRedisConfig
-import com.hyoseok.config.PostRedisEmbbededServerConfig
 import com.hyoseok.config.PostRedisTemplateConfig
+import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.POST_KEYS
 import com.hyoseok.post.entity.PostImageCache
@@ -27,7 +27,7 @@ import java.time.LocalDateTime
 @EnableAutoConfiguration
 @ContextConfiguration(
     classes = [
-        PostRedisEmbbededServerConfig::class,
+        RedisEmbbededServerConfig::class,
         PostRedisConfig::class,
         PostRedisTemplateConfig::class,
         PostRedisTransactionRepositoryImpl::class,

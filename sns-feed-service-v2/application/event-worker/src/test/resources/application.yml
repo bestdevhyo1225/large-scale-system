@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: test
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: latest # 가장 마지막 오프셋 값
+      session-timeout: 30000 # 30초
+      heartbeat-interval: 10000 # 10초
+      max-poll-interval: 600000 # 10분
+      max-poll-records: 250 # 최대 250개
+      allow-auto-create-topics: false # 토픽 자동 생성 X
+      group-id: feed-group
+    topics:
+      feed: feed-topic
+
+  feed:
+    redis:
+      enable: true
+      mode: standalone
+      nodes: localhost:6379

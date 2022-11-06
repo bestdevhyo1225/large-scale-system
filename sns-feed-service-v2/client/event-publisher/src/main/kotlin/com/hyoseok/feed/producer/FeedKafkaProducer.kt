@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException
 
 @Component
 class FeedKafkaProducer(
-    @Value("\${spring.kafka.topics.sns-feed-topic}")
+    @Value("\${spring.kafka.topics.feed}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
     private val kafkaProducerCallback: KafkaProducerCallback,

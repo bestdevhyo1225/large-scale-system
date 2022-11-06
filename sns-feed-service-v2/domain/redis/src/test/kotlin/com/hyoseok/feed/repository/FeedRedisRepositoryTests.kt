@@ -1,8 +1,8 @@
 package com.hyoseok.feed.repository
 
 import com.hyoseok.config.FeedRedisConfig
-import com.hyoseok.config.FeedRedisEmbbededServerConfig
 import com.hyoseok.config.FeedRedisTemplateConfig
+import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.feed.entity.Feed
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 @EnableAutoConfiguration
 @ContextConfiguration(
     classes = [
-        FeedRedisEmbbededServerConfig::class,
+        RedisEmbbededServerConfig::class,
         FeedRedisConfig::class,
         FeedRedisTemplateConfig::class,
         FeedRedisRepositoryImpl::class,

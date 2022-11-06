@@ -5,6 +5,7 @@ import com.hyoseok.config.RedisMode.Standalone
 import io.lettuce.core.ReadFrom
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,6 +18,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 
 @Configuration
 @EnableCaching(proxyTargetClass = true)
+@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
 class PostRedisConfig(
     @Value("\${spring.post.redis.mode}")
     private val mode: RedisMode,

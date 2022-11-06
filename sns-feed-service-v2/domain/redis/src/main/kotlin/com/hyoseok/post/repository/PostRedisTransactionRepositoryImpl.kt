@@ -4,6 +4,7 @@ import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.POST_KEYS
 import com.hyoseok.post.entity.PostCache.Companion.ZSET_POST_MAX_LIMIT
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.sql.Timestamp
@@ -11,6 +12,7 @@ import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Repository
+@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
 class PostRedisTransactionRepositoryImpl(
     @Qualifier("postRedisTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,
