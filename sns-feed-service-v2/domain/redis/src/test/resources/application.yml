@@ -4,10 +4,12 @@ spring:
 
   post:
     redis:
+      enable: true
       mode: standalone
-      nodes: localhost:6383
+      nodes: localhost:6379
 
   feed:
     redis:
+      enable: true
       mode: standalone
-      nodes: localhost:6384
+      nodes: localhost:6379

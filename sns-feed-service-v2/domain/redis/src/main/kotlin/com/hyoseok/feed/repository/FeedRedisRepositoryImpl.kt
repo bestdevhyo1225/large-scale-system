@@ -4,10 +4,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.base.repository.AbstractRedisRepository
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
+@ConditionalOnProperty(prefix = "spring.feed.redis", name = ["enable"], havingValue = "true")
 class FeedRedisRepositoryImpl(
     @Qualifier("feedRedisTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,

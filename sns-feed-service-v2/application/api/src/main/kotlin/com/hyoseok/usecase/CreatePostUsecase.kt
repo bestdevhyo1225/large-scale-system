@@ -1,5 +1,7 @@
 package com.hyoseok.usecase
 
+import com.hyoseok.feed.dto.FeedEventDto
+import com.hyoseok.feed.producer.FeedKafkaProducer
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.service.MemberReadService
@@ -9,8 +11,6 @@ import com.hyoseok.post.dto.PostDto
 import com.hyoseok.post.dto.PostImageCacheDto
 import com.hyoseok.post.service.PostRedisService
 import com.hyoseok.post.service.PostService
-import com.hyoseok.feed.producer.FeedKafkaProducer
-import com.hyoseok.feed.dto.FeedEventDto
 import com.hyoseok.usecase.dto.CreatePostUsecaseDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

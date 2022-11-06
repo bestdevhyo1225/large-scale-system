@@ -15,8 +15,16 @@ spring:
     activate:
       on-profile: develop
 
+  post:
+    redis:
+      enable: true
+
 ---
 spring:
   config:
     activate:
       on-profile: production
+
+  post:
+    redis:
+      enable: true
