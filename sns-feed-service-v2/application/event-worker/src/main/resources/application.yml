@@ -9,6 +9,10 @@ spring:
   profiles:
     active: develop
 
+  feed:
+    redis:
+      enable: true
+
 ---
 spring:
   config:
@@ -28,10 +32,6 @@ spring:
     topics:
       feed: feed-topic
 
-  feed:
-    redis:
-      enable: true
-
 ---
 spring:
   config:
@@ -50,7 +50,3 @@ spring:
       group-id: sns-feed-event-worker
     topics:
       feed: feed-topic
-
-  feed:
-    redis:
-      enable: true

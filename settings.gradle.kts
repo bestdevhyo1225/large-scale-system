@@ -52,6 +52,7 @@ include(
     // sns-feed-service-v2
     "sns-feed-service-v2:application:api",
     "sns-feed-service-v2:application:event-worker",
+    "sns-feed-service-v2:application:query-api",
     "sns-feed-service-v2:client:event-publisher",
     "sns-feed-service-v2:common",
     "sns-feed-service-v2:domain:rds",
