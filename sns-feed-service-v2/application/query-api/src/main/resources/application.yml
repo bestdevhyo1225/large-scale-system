@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 9001
   tomcat:
     threads:
       min-spare: 20
@@ -10,6 +10,10 @@ spring:
     active: develop
 
   post:
+    redis:
+      enable: true
+
+  feed:
     redis:
       enable: true
 
