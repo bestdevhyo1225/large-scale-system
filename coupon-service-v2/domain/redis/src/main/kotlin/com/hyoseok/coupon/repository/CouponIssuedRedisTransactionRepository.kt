@@ -1,7 +1,7 @@
 package com.hyoseok.coupon.repository
 
-import com.hyoseok.coupon.entity.CouponIssued
+import com.hyoseok.coupon.entity.CouponIssuedCache
 
 interface CouponIssuedRedisTransactionRepository {
-    fun createCouponIssued(couponIssued: CouponIssued, memberId: Long): Long
+    fun createCouponIssued(couponIssuedCache: CouponIssuedCache, memberId: Long): Long
 }

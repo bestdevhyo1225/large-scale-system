@@ -1,0 +1,22 @@
+server:
+  port: 9000
+  tomcat:
+    threads:
+      min-spare: 20
+      max: 100
+
+spring:
+  profiles:
+    active: develop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: develop
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
