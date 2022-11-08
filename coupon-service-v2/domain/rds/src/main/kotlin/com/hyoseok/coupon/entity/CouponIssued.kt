@@ -42,11 +42,10 @@ class CouponIssued private constructor(
         operator fun invoke(
             couponId: Long,
             memberId: Long,
-            createdAt: LocalDateTime,
         ) = CouponIssued(
             couponId = couponId,
             memberId = memberId,
-            createdAt = createdAt,
+            createdAt = LocalDateTime.now().withNano(0),
         )
     }
 }
