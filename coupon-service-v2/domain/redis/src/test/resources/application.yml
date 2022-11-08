@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: test
+
+  redis:
+    mode: standalone
+    nodes: localhost:6379
