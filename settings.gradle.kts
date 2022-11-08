@@ -68,4 +68,12 @@ include(
     "coupon-service:domain",
     "coupon-service:infrastructure:kafka",
     "coupon-service:infrastructure:okhttp3",
+    // coupon-service-v2
+    "coupon-service-v2:application:api",
+    "coupon-service-v2:application:batch",
+    "coupon-service-v2:application:event-consumer",
+    "coupon-service-v2:client:event-publisher",
+    "coupon-service-v2:common",
+    "coupon-service-v2:domain:rds",
+    "coupon-service-v2:domain:redis",
 )
