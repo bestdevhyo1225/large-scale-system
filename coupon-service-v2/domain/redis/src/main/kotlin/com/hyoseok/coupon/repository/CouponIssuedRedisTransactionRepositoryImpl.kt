@@ -1,8 +1,8 @@
 package com.hyoseok.coupon.repository
 
-import com.hyoseok.coupon.entity.CouponIssued
-import com.hyoseok.coupon.entity.CouponIssuedStatus.EXIT
-import com.hyoseok.coupon.entity.CouponIssuedStatus.FAILED
+import com.hyoseok.coupon.entity.CouponIssuedCache
+import com.hyoseok.coupon.entity.CouponIssuedCache.Status.EXIT
+import com.hyoseok.coupon.entity.CouponIssuedCache.Status.FAILED
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit.DAYS
@@ -13,9 +13,9 @@ class CouponIssuedRedisTransactionRepositoryImpl(
     private val couponIssuedRedisRepository: CouponIssuedRedisRepository,
 ) : CouponIssuedRedisTransactionRepository {
 
-    override fun createCouponIssued(couponIssued: CouponIssued, memberId: Long): Long =
+    override fun createCouponIssued(couponIssuedCache: CouponIssuedCache, memberId: Long): Long =
         redisTemplate.execute { redisConnection ->
-            val key: String = couponIssued.getKey()
+            val key: String = couponIssuedCache.getKey()
             var result: Long = EXIT.code
 
             try {
@@ -23,7 +23,7 @@ class CouponIssuedRedisTransactionRepositoryImpl(
 
                 val realtimeIssuedQuantity: Long = couponIssuedRedisRepository.scard(key = key)
 
-                if (realtimeIssuedQuantity < couponIssued.totalIssuedQuantity) {
+                if (realtimeIssuedQuantity < couponIssuedCache.totalIssuedQuantity) {
                     result = couponIssuedRedisRepository.sadd(key = key, value = memberId)
                 }
 

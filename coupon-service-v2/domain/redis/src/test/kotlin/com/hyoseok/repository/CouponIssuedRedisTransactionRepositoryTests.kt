@@ -3,10 +3,10 @@ package com.hyoseok.repository
 import com.hyoseok.config.RedisConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.config.RedisTemplateConfig
-import com.hyoseok.coupon.entity.CouponIssued
-import com.hyoseok.coupon.entity.CouponIssuedStatus.COMPLETE
-import com.hyoseok.coupon.entity.CouponIssuedStatus.EXIT
-import com.hyoseok.coupon.entity.CouponIssuedStatus.READY
+import com.hyoseok.coupon.entity.CouponIssuedCache
+import com.hyoseok.coupon.entity.CouponIssuedCache.Status.COMPLETE
+import com.hyoseok.coupon.entity.CouponIssuedCache.Status.EXIT
+import com.hyoseok.coupon.entity.CouponIssuedCache.Status.READY
 import com.hyoseok.coupon.repository.CouponIssuedRedisRepository
 import com.hyoseok.coupon.repository.CouponIssuedRedisRepositoryImpl
 import com.hyoseok.coupon.repository.CouponIssuedRedisTransactionRepository
@@ -57,7 +57,7 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
         this.describe("createCouponIssued 메서드는") {
             it("트랜잭션 기반으로 쿠폰 발급 데이터를 생성한다") {
                 // given
-                val couponIssued = CouponIssued(
+                val couponIssuedCache = CouponIssuedCache(
                     couponId = 1,
                     totalIssuedQuantity = 5_000,
                     issuedDate = LocalDate.now(),
@@ -66,7 +66,7 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
 
                 // when
                 val result: Long = couponIssuedRedisTransactionRepository.createCouponIssued(
-                    couponIssued = couponIssued,
+                    couponIssuedCache = couponIssuedCache,
                     memberId = memberId,
                 )
 
@@ -77,7 +77,7 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
             context("totalIssuedQuantity 값을 넘어간 경우") {
                 it("CouponIssued.EXIT 값을 반환한다") {
                     // given
-                    val couponIssued = CouponIssued(
+                    val couponIssuedCache = CouponIssuedCache(
                         couponId = 1,
                         totalIssuedQuantity = 1,
                         issuedDate = LocalDate.now(),
@@ -86,11 +86,11 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
 
                     // when
                     val firstResult: Long = couponIssuedRedisTransactionRepository.createCouponIssued(
-                        couponIssued = couponIssued,
+                        couponIssuedCache = couponIssuedCache,
                         memberId = memberId,
                     )
                     val secondResult: Long = couponIssuedRedisTransactionRepository.createCouponIssued(
-                        couponIssued = couponIssued,
+                        couponIssuedCache = couponIssuedCache,
                         memberId = memberId,
                     )
 
@@ -103,7 +103,7 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
             context("이미 발급된 데이터가 존재하는 경우") {
                 it("CouponIssued.COMPLETE 값을 반환한다") {
                     // given
-                    val couponIssued = CouponIssued(
+                    val couponIssuedCache = CouponIssuedCache(
                         couponId = 1,
                         totalIssuedQuantity = 2_000,
                         issuedDate = LocalDate.now(),
@@ -112,11 +112,11 @@ internal class CouponIssuedRedisTransactionRepositoryTests : DescribeSpec() {
 
                     // when
                     val firstResult: Long = couponIssuedRedisTransactionRepository.createCouponIssued(
-                        couponIssued = couponIssued,
+                        couponIssuedCache = couponIssuedCache,
                         memberId = memberId,
                     )
                     val secondResult: Long = couponIssuedRedisTransactionRepository.createCouponIssued(
-                        couponIssued = couponIssued,
+                        couponIssuedCache = couponIssuedCache,
                         memberId = memberId,
                     )
 
