@@ -3,6 +3,7 @@ package com.hyoseok.wish.service
 import com.hyoseok.wish.dto.WishCacheDto
 import com.hyoseok.wish.entity.WishCache
 import com.hyoseok.wish.repository.WishRedisTransactionRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.every
 import io.mockk.mockk
@@ -26,6 +27,22 @@ internal class WishRedisServiceTests : DescribeSpec(
 
                 // then
                 verify { mockWishRedisTransactionRepository.createWish(wishCache = wishCache) }
+            }
+
+            context("좋아요 캐시 저장에 실패한 경우") {
+                it("예외를 반환한다") {
+                    // given
+                    val wishCacheDto = WishCacheDto(postId = 1L, memberId = 1L)
+                    val wishCache: WishCache = wishCacheDto.toEntity()
+
+                    every { mockWishRedisTransactionRepository.createWish(wishCache = wishCache) } returns false
+
+                    // when
+                    shouldThrow<RuntimeException> { wishRedisService.create(dto = wishCacheDto) }
+
+                    // then
+                    verify { mockWishRedisTransactionRepository.createWish(wishCache = wishCache) }
+                }
             }
         }
     },
