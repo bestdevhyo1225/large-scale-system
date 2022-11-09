@@ -18,6 +18,10 @@ spring:
       mode: standalone
       nodes: localhost:6384
 
+logging:
+  level:
+    io.lettuce.core.protocol.CommandHandler: debug
+
 ---
 spring:
   config:
