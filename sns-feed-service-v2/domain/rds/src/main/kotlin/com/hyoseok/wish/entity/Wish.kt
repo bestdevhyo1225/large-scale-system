@@ -5,10 +5,16 @@ import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.Index
 import javax.persistence.Table
 
 @Entity
-@Table(name = "wish")
+@Table(
+    name = "wish",
+    indexes = [
+        Index(name = "uk_post_id_member_id", columnList = "post_id,member_id", unique = true),
+    ],
+)
 @DynamicUpdate
 class Wish private constructor(
     postId: Long,
