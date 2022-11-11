@@ -54,9 +54,23 @@ class KafkaConsumerConfig(
 ) {
 
     @Bean
-    fun kafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
-        val props = mutableMapOf<String, Any>()
+    fun feedKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
+        val containerFactory = ConcurrentKafkaListenerContainerFactory<String, String>()
+        containerFactory.consumerFactory = DefaultKafkaConsumerFactory(configConsumerProps())
+        containerFactory.containerProperties.ackMode = AckMode.MANUAL_IMMEDIATE // 즉시 수동 커밋
+        return containerFactory
+    }
 
+    @Bean
+    fun wishKafkaListenerContainerFactory(): ConcurrentKafkaListenerContainerFactory<String, String> {
+        val containerFactory = ConcurrentKafkaListenerContainerFactory<String, String>()
+        containerFactory.consumerFactory = DefaultKafkaConsumerFactory(configConsumerProps())
+        containerFactory.containerProperties.ackMode = AckMode.MANUAL_IMMEDIATE // 즉시 수동 커밋
+        return containerFactory
+    }
+
+    private fun configConsumerProps(): Map<String, Any> {
+        val props: MutableMap<String, Any> = mutableMapOf()
         props[BOOTSTRAP_SERVERS_CONFIG] = bootstrapServers
         props[ENABLE_AUTO_COMMIT_CONFIG] = false // 수동 커밋
         props[AUTO_OFFSET_RESET_CONFIG] = autoOffsetReset
@@ -75,13 +89,6 @@ class KafkaConsumerConfig(
         props[PARTITION_ASSIGNMENT_STRATEGY_CONFIG] = listOf(CooperativeStickyAssignor::class.java) // 협력적 스티키 파티션 할당 전략
         props[KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
-
-        val consumerFactory = DefaultKafkaConsumerFactory<String, String>(props)
-        val containerFactory = ConcurrentKafkaListenerContainerFactory<String, String>()
-
-        containerFactory.containerProperties.ackMode = AckMode.MANUAL_IMMEDIATE // 즉시 수동 커밋
-        containerFactory.consumerFactory = consumerFactory
-
-        return containerFactory
+        return props
     }
 }

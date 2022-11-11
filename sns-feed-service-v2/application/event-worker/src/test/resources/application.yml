@@ -14,9 +14,4 @@ spring:
       group-id: sns-feed-event-worker
     topics:
       feed: feed-topic
-
-  feed:
-    redis:
-      enable: true
-      mode: standalone
-      nodes: localhost:6379
+      wish: wish-topic

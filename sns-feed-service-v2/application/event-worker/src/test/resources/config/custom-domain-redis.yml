@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: test
+
+  feed:
+    redis:
+      enable: true
+      mode: standalone
+      nodes: localhost:6379
+
+logging:
+  level:
+    io.lettuce.core.protocol.CommandHandler: debug
