@@ -22,6 +22,7 @@ spring:
       instance-id: producer-sns-feed
     topics:
       feed: feed-topic
+      wish: wish-topic
 
 ---
 spring:
@@ -43,3 +44,4 @@ spring:
       instance-id: producer-sns-feed
     topics:
       feed: feed-topic
+      wish: wish-topic

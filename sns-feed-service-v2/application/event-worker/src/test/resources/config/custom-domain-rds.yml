@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: test
+
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      jdbc-url: jdbc:h2:mem:test
+      username: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.springframework.orm.jpa: debug
