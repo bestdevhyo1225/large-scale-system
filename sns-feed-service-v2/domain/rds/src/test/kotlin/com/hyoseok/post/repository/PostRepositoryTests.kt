@@ -9,6 +9,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -73,6 +74,49 @@ internal class PostRepositoryTests : DescribeSpec() {
 
                 findPost.shouldBe(post)
                 findPost.postImages.shouldHaveSize(postImages.size)
+            }
+        }
+
+        this.describe("findAllByInId 메서드는") {
+            it("id 리스트에 해당되는 Post 엔티티를 반환한다") {
+                // given
+                val memberId = 1L
+                val title = "title"
+                val contents = "contents"
+                val writer = "writer"
+                val posts: List<Post> = listOf(
+                    Post(
+                        memberId = memberId,
+                        title = title,
+                        contents = contents,
+                        writer = writer,
+                        postImages = listOf(
+                            PostImage(url = "test1", sortOrder = 1),
+                            PostImage(url = "test2", sortOrder = 2),
+                        ),
+                    ),
+                    Post(
+                        memberId = memberId,
+                        title = title,
+                        contents = contents,
+                        writer = writer,
+                        postImages = listOf(
+                            PostImage(url = "test1", sortOrder = 1),
+                            PostImage(url = "test2", sortOrder = 2),
+                        ),
+                    ),
+                )
+
+                withContext(Dispatchers.IO) {
+                    postRepository.saveAll(posts)
+                }
+
+                // when
+                val findPosts: List<Post> = postReadRepository.findAllByInId(ids = posts.map { it.id!! })
+
+                // then
+                findPosts.shouldNotBeEmpty()
+                findPosts.shouldHaveSize(posts.size)
             }
         }
     }

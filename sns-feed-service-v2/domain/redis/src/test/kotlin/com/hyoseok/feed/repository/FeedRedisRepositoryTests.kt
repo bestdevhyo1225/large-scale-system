@@ -8,6 +8,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.ints.shouldBeZero
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
@@ -87,6 +88,34 @@ internal class FeedRedisRepositoryTests : DescribeSpec() {
                     feedRedisRepository.zrevRange(key = key, start = 0, end = 1, clazz = Feed::class.java)
 
                 feeds.size.shouldBeZero()
+            }
+        }
+
+        this.describe("zrevRange 메서드는") {
+            it("start, end 범위에 포함된 데이터를 조회한다") {
+                // given
+                val memberId = 1L
+                val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+                (1L..10L).forEachIndexed { index, postId ->
+                    val createdAt: LocalDateTime = LocalDateTime.now().withNano(0).plusMinutes(index.toLong())
+                    val score = Timestamp.valueOf(createdAt).time.toDouble()
+                    feedRedisRepository.zadd(key = key, value = postId, score = score)
+                }
+
+                // when
+                val postIds1: List<Long> =
+                    feedRedisRepository.zrevRange(key = key, start = 0, end = 4, clazz = Long::class.java)
+
+                val postIds2: List<Long> =
+                    feedRedisRepository.zrevRange(key = key, start = 5, end = 9, clazz = Long::class.java)
+
+                val postIds3: List<Long> =
+                    feedRedisRepository.zrevRange(key = key, start = 10, end = 14, clazz = Long::class.java)
+
+                // then
+                postIds1.shouldHaveSize(size = 5)
+                postIds2.shouldHaveSize(size = 5)
+                postIds3.shouldHaveSize(size = 0)
             }
         }
     }
