@@ -33,5 +33,12 @@ class PostReadRepositoryImpl(
             .where(postIdEq(id))
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_POST)
 
+    override fun findAllByInId(ids: List<Long>): List<Post> =
+        jpaQueryFactory
+            .selectFrom(post)
+            .where(postIdIn(ids = ids))
+            .fetch()
+
     private fun postIdEq(id: Long): BooleanExpression = post.id.eq(id)
+    private fun postIdIn(ids: List<Long>): BooleanExpression = post.id.`in`(ids)
 }

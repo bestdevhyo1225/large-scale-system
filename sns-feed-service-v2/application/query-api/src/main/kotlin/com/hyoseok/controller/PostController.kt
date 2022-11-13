@@ -2,7 +2,10 @@ package com.hyoseok.controller
 
 import com.hyoseok.post.dto.PostDto
 import com.hyoseok.response.SuccessResponse
+import com.hyoseok.usecase.FindPostTimelineUsecase
 import com.hyoseok.usecase.FindPostUsecase
+import com.hyoseok.util.PageByPosition
+import com.hyoseok.util.PageRequestByPosition
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,9 +16,25 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/posts")
 class PostController(
     private val findPostUsecase: FindPostUsecase,
+    private val findPostTimelineUsecase: FindPostTimelineUsecase,
 ) {
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): ResponseEntity<SuccessResponse<PostDto>> =
         ResponseEntity.ok(SuccessResponse(data = findPostUsecase.execute(postId = id)))
+
+    @GetMapping("/members/{memberId}/timeline")
+    fun getTimeline(
+        @PathVariable
+        memberId: Long,
+        pageRequestByPosition: PageRequestByPosition,
+    ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
+        ResponseEntity.ok(
+            SuccessResponse(
+                data = findPostTimelineUsecase.execute(
+                    memberId,
+                    pageRequestByPosition = pageRequestByPosition,
+                ),
+            ),
+        )
 }

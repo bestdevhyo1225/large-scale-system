@@ -2,7 +2,7 @@ package com.hyoseok.post.repository
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.base.repository.AbstractRedisRepository
+import com.hyoseok.common.AbstractRedisRepository
 import com.hyoseok.post.entity.PostCache
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

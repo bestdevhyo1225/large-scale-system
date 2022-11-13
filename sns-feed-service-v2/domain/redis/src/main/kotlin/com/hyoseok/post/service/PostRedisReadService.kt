@@ -20,4 +20,9 @@ class PostRedisReadService(
 
         return PostCacheDto(postCache = postCache, viewCount = postViewCache)
     }
+
+    fun findPostCaches(ids: List<Long>): List<PostCacheDto> {
+        val keys: List<String> = ids.map { PostCache.getPostIdKey(id = it) }
+        return postRedisRepository.mget(keys = keys).map { PostCacheDto(postCache = it, viewCount = 0L) }
+    }
 }

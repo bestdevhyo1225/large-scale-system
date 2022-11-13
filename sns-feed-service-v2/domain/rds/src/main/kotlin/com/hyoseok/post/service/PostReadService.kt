@@ -12,4 +12,7 @@ class PostReadService(
 ) {
 
     fun findPost(id: Long) = PostDto(post = postReadRepository.findById(id = id))
+
+    fun findPosts(ids: List<Long>): List<PostDto> =
+        postReadRepository.findAllByInId(ids = ids).map { PostDto(post = it) }
 }

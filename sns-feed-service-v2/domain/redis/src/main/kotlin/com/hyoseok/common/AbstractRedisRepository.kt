@@ -1,4 +1,4 @@
-package com.hyoseok.base.repository
+package com.hyoseok.common
 
 import kotlin.math.abs
 import kotlin.math.ln

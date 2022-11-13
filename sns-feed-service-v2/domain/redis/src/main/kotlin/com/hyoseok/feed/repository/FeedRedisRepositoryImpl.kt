@@ -2,7 +2,7 @@ package com.hyoseok.feed.repository
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.hyoseok.base.repository.AbstractRedisRepository
+import com.hyoseok.common.AbstractRedisRepository
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
@@ -25,7 +25,7 @@ class FeedRedisRepositoryImpl(
         redisTemplate.opsForZSet().removeRange(key, start, end)
     }
 
-    override fun <T> zrevRange(key: String, start: Long, end: Long, clazz: Class<T>): List<T> {
+    override fun <T : Any> zrevRange(key: String, start: Long, end: Long, clazz: Class<T>): List<T> {
         val values: Set<String?>? = redisTemplate.opsForZSet().reverseRange(key, start, end)
 
         if (values.isNullOrEmpty()) {
