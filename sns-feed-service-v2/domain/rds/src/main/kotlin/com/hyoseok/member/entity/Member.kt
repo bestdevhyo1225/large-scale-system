@@ -42,7 +42,7 @@ class Member private constructor(
     }
 
     companion object {
-        const val MAX_LIMIT_NAME_LENGTH = 20
+        private const val MAX_LIMIT_NAME_LENGTH = 20
         const val NUMBER_OF_INFLUENCER = 10_000L
 
         operator fun invoke(name: String): Member {
