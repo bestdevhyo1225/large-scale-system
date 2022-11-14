@@ -39,7 +39,7 @@ class FindPostTimelineUsecase(
         val deferredInfluencerPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
             getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
-        val items: List<PostDto> = deferredFeedPosts.await() + deferredInfluencerPosts.await()
+        val items: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
 
         PageByPosition(
             items = items.shuffled(),
