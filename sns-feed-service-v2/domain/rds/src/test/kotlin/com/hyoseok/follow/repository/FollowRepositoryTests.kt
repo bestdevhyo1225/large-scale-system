@@ -8,6 +8,8 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -82,6 +84,37 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 // then
                 result.first.shouldBe(follows.size)
                 result.second.shouldHaveSize(limit.toInt())
+            }
+        }
+
+        this.describe("findAllByFollowerIdAndLimitOrderByIdDesc 메서드는") {
+            it("offset 0인 상태에서 limit 만큼 Follow 엔티티 리스트를 조회한다") {
+                // given
+                val limit = 5L
+                val followerId = 1L
+                val follows: List<Follow> = (2L..11L).map { Follow(followerId = followerId, followeeId = it) }
+
+                withContext(Dispatchers.IO) {
+                    followRepository.saveAll(follows)
+                }
+
+                // when
+                val findFollows: List<Follow> = followReadRepository.findAllByFollowerIdAndLimitOrderByIdDesc(
+                    followerId = followerId,
+                    limit = limit,
+                )
+                val followsIds: List<Long> = follows
+                    .map { it.id!! }
+                    .sortedByDescending { it }
+                    .subList(0, 5)
+
+                // then
+                findFollows.shouldNotBeEmpty()
+                findFollows.shouldHaveSize(limit.toInt())
+                findFollows.forEachIndexed { index, follow ->
+                    follow.id.shouldNotBeNull()
+                    follow.id!!.shouldBe(followsIds[index])
+                }
             }
         }
     }

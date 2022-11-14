@@ -12,7 +12,6 @@ import com.hyoseok.post.service.PostReadService
 import com.hyoseok.post.service.PostRedisReadService
 import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
-import com.hyoseok.util.PageRequestByPosition.Companion.NONE_START
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -29,31 +28,22 @@ class FindPostTimelineUsecase(
 ) {
 
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> = runBlocking {
-        val (start: Long, size: Long) = pageRequestByPosition
-        val feedPostStart: Long = start
-        val feedPostSize: Long = size.div(other = 2)
-        val influencerPostStart: Long = feedPostStart.plus(feedPostSize)
-        val influencerPostSize: Long = feedPostSize.plus(size.mod(other = 2))
-        val feedPostPageRequestByPosition = PageRequestByPosition(start = feedPostStart, size = feedPostSize)
-        val influencerPostPageRequestByPosition = PageRequestByPosition(
-            start = influencerPostStart,
-            size = influencerPostSize,
-        )
+        val (
+            feedPostsRequestByPosition: PageRequestByPosition,
+            influencerPostsRequestByPosition: PageRequestByPosition,
+        ) = pageRequestByPosition.splitTwoPageRequestByPosition()
 
         val deferredFeedPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
-            getFeedPosts(memberId = memberId, pageRequestByPosition = feedPostPageRequestByPosition)
+            getFeedPosts(memberId = memberId, pageRequestByPosition = feedPostsRequestByPosition)
         }
-
         val deferredInfluencerPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
-            getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostPageRequestByPosition)
+            getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
-
         val items: List<PostDto> = deferredFeedPosts.await() + deferredInfluencerPosts.await()
-        val nextStart: Long = if (items.isEmpty()) NONE_START else start.plus(size)
 
         PageByPosition(
             items = items.shuffled(),
-            nextPageRequestByPosition = pageRequestByPosition.next(start = nextStart),
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = items.size),
         )
     }
 

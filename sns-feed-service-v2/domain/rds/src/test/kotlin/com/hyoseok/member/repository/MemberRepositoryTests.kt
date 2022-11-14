@@ -3,10 +3,13 @@ package com.hyoseok.member.repository
 import com.hyoseok.config.BasicDataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.member.entity.Member
+import com.hyoseok.member.entity.Member.Companion.NUMBER_OF_INFLUENCER
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -56,6 +59,33 @@ internal class MemberRepositoryTests : DescribeSpec() {
                 val findMember: Member = memberReadRepository.findById(member.id!!)
 
                 findMember.shouldBe(member)
+            }
+        }
+
+        this.describe("findByInIdAndInfluencer 메서드는") {
+            context("influencer 값이 true인 경우") {
+                it("Member 엔티티 리스트를 조회한다") {
+                    // given
+                    val normalMembers: List<Member> = (1..5).map { Member(name = "normal-$it") }
+                    val influencerMembers: List<Member> = (1..5).map {
+                        val member = Member(name = "influencer-$it")
+                        member.switchInfluencerAccount(followerCount = NUMBER_OF_INFLUENCER.plus(other = 1))
+                        member
+                    }
+                    val members: List<Member> = normalMembers.plus(influencerMembers)
+
+                    withContext(Dispatchers.IO) {
+                        memberRepository.saveAll(members)
+                    }
+
+                    // when
+                    val findMembers: List<Member> =
+                        memberReadRepository.findByInIdAndInfluencer(ids = members.map { it.id!! }, influencer = true)
+
+                    // then
+                    findMembers.shouldNotBeEmpty()
+                    findMembers.shouldHaveSize(influencerMembers.size)
+                }
             }
         }
     }
