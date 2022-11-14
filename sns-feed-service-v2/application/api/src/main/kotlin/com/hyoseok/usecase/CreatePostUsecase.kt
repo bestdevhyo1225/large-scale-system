@@ -40,7 +40,10 @@ class CreatePostUsecase(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             createPostCache(postDto = postDto)
-            sendFeedEvent(postId = postDto.id, followeeId = postDto.memberId)
+
+            if (!memberDto.influencer) {
+                sendFeedEvent(postId = postDto.id, followeeId = postDto.memberId)
+            }
         }
 
         return postDto

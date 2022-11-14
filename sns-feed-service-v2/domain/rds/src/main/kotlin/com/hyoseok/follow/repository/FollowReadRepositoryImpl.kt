@@ -3,6 +3,7 @@ package com.hyoseok.follow.repository
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.entity.QFollow.follow
 import com.hyoseok.follow.repository.FollowReadRepositoryImpl.ErrorMessage.NOT_FOUND_FOLLOW
+import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
@@ -58,7 +59,19 @@ class FollowReadRepositoryImpl(
                 .fetch(),
         )
 
+    override fun findAllByFollowerIdAndLimitOrderByIdDesc(
+        followerId: Long,
+        limit: Long,
+    ): List<Follow> =
+        jpaQueryFactory
+            .selectFrom(follow)
+            .where(followFollowerIdEq(followerId = followerId))
+            .orderBy(followIdDesc())
+            .limit(limit)
+            .fetch()
+
     private fun followIdEq(id: Long): BooleanExpression = follow.id.eq(id)
     private fun followFolloweeIdEq(followeeId: Long): BooleanExpression = follow.followeeId.eq(followeeId)
     private fun followFollowerIdEq(followerId: Long): BooleanExpression = follow.followerId.eq(followerId)
+    private fun followIdDesc(): OrderSpecifier<*> = follow.id.desc()
 }

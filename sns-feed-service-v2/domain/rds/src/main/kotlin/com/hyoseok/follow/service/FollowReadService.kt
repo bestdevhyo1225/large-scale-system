@@ -1,6 +1,7 @@
 package com.hyoseok.follow.service
 
 import com.hyoseok.follow.entity.Follow
+import com.hyoseok.follow.entity.Follow.Companion.INFLUENCER_FIND_MAX_LIMIT
 import com.hyoseok.follow.repository.FollowReadRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,6 +29,10 @@ class FollowReadService(
     }
 
     fun findFolloweeIds(followerId: Long, limit: Long, offset: Long): Pair<Long, List<Long>> {
+        if (limit == 0L || offset <= -1) {
+            return Pair(first = 0L, second = listOf())
+        }
+
         val (total: Long, followees: List<Follow>) = followReadRepository.findAllByFollowerIdAndLimitAndOffset(
             followerId = followerId,
             limit = limit,
@@ -36,4 +41,9 @@ class FollowReadService(
 
         return Pair(first = total, second = followees.map { it.followeeId })
     }
+
+    fun findFolloweeIdsByStaticLimit(followerId: Long): List<Long> =
+        followReadRepository
+            .findAllByFollowerIdAndLimitOrderByIdDesc(followerId = followerId, limit = INFLUENCER_FIND_MAX_LIMIT)
+            .map { it.followeeId }
 }

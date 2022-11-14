@@ -7,4 +7,8 @@ interface FollowReadRepository {
     fun findById(id: Long): Follow
     fun findAllByFolloweeIdAndLimitAndOffset(followeeId: Long, limit: Long, offset: Long): Pair<Long, List<Follow>>
     fun findAllByFollowerIdAndLimitAndOffset(followerId: Long, limit: Long, offset: Long): Pair<Long, List<Follow>>
+    fun findAllByFollowerIdAndLimitOrderByIdDesc(
+        followerId: Long,
+        limit: Long,
+    ): List<Follow>
 }

@@ -39,6 +39,15 @@ class PostReadRepositoryImpl(
             .where(postIdIn(ids = ids))
             .fetch()
 
+    override fun findAllByMemberIdsAndLimitAndCount(memberIds: List<Long>, limit: Long, offset: Long): List<Post> =
+        jpaQueryFactory
+            .selectFrom(post)
+            .where(postMemberIdIn(memberIds = memberIds))
+            .limit(limit)
+            .offset(offset)
+            .fetch()
+
     private fun postIdEq(id: Long): BooleanExpression = post.id.eq(id)
     private fun postIdIn(ids: List<Long>): BooleanExpression = post.id.`in`(ids)
+    private fun postMemberIdIn(memberIds: List<Long>): BooleanExpression = post.memberId.`in`(memberIds)
 }
