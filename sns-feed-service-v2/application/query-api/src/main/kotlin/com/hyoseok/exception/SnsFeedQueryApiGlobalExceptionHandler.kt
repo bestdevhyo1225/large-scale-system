@@ -1,4 +1,4 @@
-package com.hyoseok
+package com.hyoseok.exception
 
 import com.hyoseok.response.ErrorResponse
 import com.hyoseok.response.FailResponse
@@ -44,6 +44,13 @@ class SnsFeedQueryApiGlobalExceptionHandler {
         logger.error { exception }
 
         return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(QueryApiRateLimitException::class)
+    fun handle(exception: QueryApiRateLimitException): ResponseEntity<FailResponse> {
+        logger.error { exception }
+
+        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.SERVICE_UNAVAILABLE)
     }
 
     @ExceptionHandler(Exception::class)
