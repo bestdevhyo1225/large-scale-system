@@ -12,6 +12,9 @@ class FollowReadService(
     private val followReadRepository: FollowReadRepository,
 ) {
 
+    fun getFollowerCount(followeeId: Long): Long =
+        followReadRepository.countByFolloweeId(followeeId = followeeId)
+
     fun findFollowerIds(followeeId: Long, limit: Long, offset: Long): Pair<Long, List<Long>> {
         // 10,000 이상의 팔로워를 가진 회원들은 이벤트 발행을 하지 않겠다.
         // 게시물 하나를 등록할 때마다 이벤트 발행하는 프로세스의 부하가 심하다.
