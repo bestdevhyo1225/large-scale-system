@@ -1,4 +1,4 @@
-package com.hyoseok.config
+package com.hyoseok.feed.producer
 
 import mu.KotlinLogging
 import org.springframework.kafka.support.SendResult
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import org.springframework.util.concurrent.ListenableFutureCallback
 
 @Component
-class KafkaProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
+class FeedKafkaProducerCallback : ListenableFutureCallback<SendResult<String, String>> {
 
     private val logger = KotlinLogging.logger {}
 

@@ -3,7 +3,6 @@ package com.hyoseok.feed.producer
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.common.AbstractKafkaProducer
-import com.hyoseok.config.KafkaProducerCallback
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
@@ -14,7 +13,7 @@ class FeedKafkaProducer(
     @Value("\${spring.kafka.topics.feed}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
-    private val kafkaProducerCallback: KafkaProducerCallback,
+    private val feedKafkaProducerCallback: FeedKafkaProducerCallback,
 ) : AbstractKafkaProducer() {
 
     private val logger = KotlinLogging.logger {}
@@ -35,7 +34,7 @@ class FeedKafkaProducer(
         execute {
             kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
-                .addCallback(kafkaProducerCallback)
+                .addCallback(feedKafkaProducerCallback)
         }
     }
 }

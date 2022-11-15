@@ -3,7 +3,6 @@ package com.hyoseok.wish.producer
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.hyoseok.common.AbstractKafkaProducer
-import com.hyoseok.config.KafkaProducerCallback
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
@@ -13,7 +12,7 @@ class WishKafkaProducer(
     @Value("\${spring.kafka.topics.wish}")
     private val topic: String,
     private val kafkaTemplate: KafkaTemplate<String, String>,
-    private val kafkaProducerCallback: KafkaProducerCallback,
+    private val wishKafkaProducerCallback: WishKafkaProducerCallback,
 ) : AbstractKafkaProducer() {
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
@@ -22,7 +21,7 @@ class WishKafkaProducer(
         execute {
             kafkaTemplate
                 .send(topic, jacksonObjectMapper.writeValueAsString(event))
-                .addCallback(kafkaProducerCallback)
+                .addCallback(wishKafkaProducerCallback)
         }
     }
 }
