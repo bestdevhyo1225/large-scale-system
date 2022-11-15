@@ -19,12 +19,22 @@ class MemberReadRepositoryImpl(
         const val NOT_FOUND_MEMBER = "회원을 찾을 수 없습니다"
     }
 
-    override fun findById(id: Long): Member {
-        return jpaQueryFactory
+    override fun findById(id: Long): Member =
+        jpaQueryFactory
             .selectFrom(member)
             .where(memberIdEq(id = id))
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
-    }
+
+    override fun findByInIdAndInfluencer(ids: List<Long>, influencer: Boolean): List<Member> =
+        jpaQueryFactory
+            .selectFrom(member)
+            .where(
+                memberIdsIn(ids = ids),
+                memberInfluencerEq(influencer = influencer),
+            )
+            .fetch()
 
     private fun memberIdEq(id: Long): BooleanExpression = member.id.eq(id)
+    private fun memberIdsIn(ids: List<Long>): BooleanExpression = member.id.`in`(ids)
+    private fun memberInfluencerEq(influencer: Boolean): BooleanExpression = member.influencer.eq(influencer)
 }

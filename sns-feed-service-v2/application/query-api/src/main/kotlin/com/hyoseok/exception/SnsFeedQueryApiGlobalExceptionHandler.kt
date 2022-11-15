@@ -1,4 +1,4 @@
-package com.hyoseok
+package com.hyoseok.exception
 
 import com.hyoseok.response.ErrorResponse
 import com.hyoseok.response.FailResponse
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import javax.validation.ConstraintViolationException
 
 @RestControllerAdvice
-class SnsFeedApiGlobalExceptionHandler {
+class SnsFeedQueryApiGlobalExceptionHandler {
 
     private val logger = KotlinLogging.logger {}
 
@@ -44,6 +44,13 @@ class SnsFeedApiGlobalExceptionHandler {
         logger.error { exception }
 
         return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(QueryApiRateLimitException::class)
+    fun handle(exception: QueryApiRateLimitException): ResponseEntity<FailResponse> {
+        logger.error { exception }
+
+        return ResponseEntity(FailResponse(message = exception.localizedMessage), HttpStatus.SERVICE_UNAVAILABLE)
     }
 
     @ExceptionHandler(Exception::class)

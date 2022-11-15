@@ -3,7 +3,9 @@ package com.hyoseok.member.service
 import com.hyoseok.member.dto.MemberCreateDto
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.entity.Member
+import com.hyoseok.member.repository.MemberReadRepositoryImpl.ErrorMessage.NOT_FOUND_MEMBER
 import com.hyoseok.member.repository.MemberRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,5 +22,14 @@ class MemberService(
     fun create(dto: MemberCreateDto): MemberDto =
         Member(name = dto.name)
             .also { memberRepository.save(it) }
-            .let { MemberDto(id = it.id!!, name = it.name, createdAt = it.createdAt) }
+            .let {
+                with(receiver = it) {
+                    MemberDto(id = id!!, name = name, influencer = influencer, createdAt = createdAt)
+                }
+            }
+
+    fun updateInfluenerAccount(memberId: Long, followerCount: Long) {
+        memberRepository.findByIdOrNull(id = memberId)
+            ?.switchInfluencerAccount(followerCount = followerCount) ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
+    }
 }

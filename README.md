@@ -1,16 +1,16 @@
 # 대규모 시스템 설계 기초
 
-## 참고 서적
+:pushpin: ## 참고 서적
 
 - [가상 면접 사례로 배우는 대규모 시스템 설계 기초](http://www.yes24.com/Product/Goods/102819435)
 
-## 시스템 설계 리스트
+:pushpin: ## 시스템 설계 리스트
 
 - [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
 - [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 - [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 
-## URL 단축기 설계
+:pushpin: ## URL 단축기 설계
 
 ### 요구 사항
 
@@ -106,7 +106,11 @@
 CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의 쓰기 작업, `11760.6 TPS` 의 읽기 작업이 처리된다. 이를 통해 필요한 서버의 수를 측정한다면, 쓰기 작업을
 수행하는 `Command` 서버는 `최소 2대의 서버` 가 필요하며, `Query` 서버도 `최소 2대 서버` 가 필요하다.
 
-## SNS 피드 시스템 설계
+:pushpin: ## SNS 피드 시스템 설계
+
+### SNS 피드 서비스 아키텍처
+
+<img width="1408" alt="image" src="https://user-images.githubusercontent.com/23515771/201864347-a345dfe1-f6cc-4525-959e-9d49ae12574a.png">
 
 ### 팬 아웃(포스팅 전송) 프로세스
 
@@ -149,7 +153,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | /api/v1/feeds/{memberId}/posts | 105,393회 | 1,138ms | 31ms | 3,847ms | 0.00% | 870.6/sec |
 | /api/v1/feeds/{memberId}/posts | 122,928회 | 975ms | 163ms | 2,192ms | 0.00% | 1016.2/sec |
 
-## 쿠폰 이벤트 선착순 시스템 설계
+:pushpin: ## 쿠폰 이벤트 선착순 시스템 설계
 
 ### 쿠폰 서비스 아키텍처 - V1
 

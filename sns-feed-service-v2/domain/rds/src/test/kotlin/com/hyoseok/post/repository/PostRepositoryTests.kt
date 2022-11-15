@@ -8,6 +8,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.shouldBe
@@ -117,6 +118,46 @@ internal class PostRepositoryTests : DescribeSpec() {
                 // then
                 findPosts.shouldNotBeEmpty()
                 findPosts.shouldHaveSize(posts.size)
+            }
+        }
+
+        this.describe("findAllByMemberIdsAndLimitAndCount 메서드는") {
+            it("회원번호 리스트를 limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
+                // given
+                val limit = 5L
+                val contents = "contents"
+                val writer = "writer"
+                val memberIds: List<Long> = listOf(1L, 2L, 3L)
+                val posts: List<Post> = memberIds.flatMap { memberId ->
+                    (1L..3L).map { titleNo ->
+                        Post(
+                            memberId = memberId,
+                            title = "title$titleNo",
+                            contents = contents,
+                            writer = writer,
+                            postImages = listOf(
+                                PostImage(url = "test1", sortOrder = 1),
+                                PostImage(url = "test2", sortOrder = 2),
+                            ),
+                        )
+                    }
+                }
+
+                withContext(Dispatchers.IO) {
+                    postRepository.saveAll(posts)
+                }
+
+                // when
+                val findPosts: List<Post> = postReadRepository.findAllByMemberIdsAndLimitAndCount(
+                    memberIds = memberIds,
+                    limit = limit,
+                    offset = 0,
+                )
+
+                // then
+                findPosts.shouldNotBeEmpty()
+                findPosts.shouldHaveSize(limit.toInt())
+                findPosts.map { it.memberId.shouldBeIn(memberIds) }
             }
         }
     }

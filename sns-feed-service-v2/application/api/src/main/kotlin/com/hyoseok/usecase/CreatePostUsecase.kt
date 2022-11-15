@@ -1,5 +1,7 @@
 package com.hyoseok.usecase
 
+import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE_POST_USECASE
+import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.feed.dto.FeedEventDto
 import com.hyoseok.feed.producer.FeedKafkaProducer
 import com.hyoseok.follow.service.FollowReadService
@@ -12,9 +14,11 @@ import com.hyoseok.post.dto.PostImageCacheDto
 import com.hyoseok.post.service.PostRedisService
 import com.hyoseok.post.service.PostService
 import com.hyoseok.usecase.dto.CreatePostUsecaseDto
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,6 +30,9 @@ class CreatePostUsecase(
     private val feedKafkaProducer: FeedKafkaProducer,
 ) {
 
+    private val logger = KotlinLogging.logger {}
+
+    @RateLimiter(name = CREATE_POST_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(createPostUsecaseDto: CreatePostUsecaseDto): PostDto {
         val memberDto: MemberDto = memberReadService.findMember(id = createPostUsecaseDto.memberId)
         val postDto: PostDto = postService.create(
@@ -40,7 +47,10 @@ class CreatePostUsecase(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             createPostCache(postDto = postDto)
-            sendFeedEvent(postId = postDto.id, followeeId = postDto.memberId)
+
+            if (!memberDto.influencer) {
+                sendFeedEvent(postId = postDto.id, followeeId = postDto.memberId)
+            }
         }
 
         return postDto
@@ -85,5 +95,10 @@ class CreatePostUsecase(
                 isProgress = false
             }
         }
+    }
+
+    private fun fallbackExecute(exception: Exception): PostDto {
+        logger.error { exception.localizedMessage }
+        throw ApiRateLimitException(message = "일시적으로 게시물을 등록할 수 없습니다. 잠시 후에 다시 시도해주세요.")
     }
 }

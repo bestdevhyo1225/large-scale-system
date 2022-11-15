@@ -3,8 +3,8 @@ package com.hyoseok.post.service
 import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImageCache
-import com.hyoseok.post.repository.PostRedisTransactionRepository
 import com.hyoseok.post.repository.PostRedisRepository
+import com.hyoseok.post.repository.PostRedisTransactionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import java.util.concurrent.TimeUnit.SECONDS

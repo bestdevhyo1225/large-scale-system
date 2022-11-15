@@ -10,8 +10,21 @@ import org.springframework.transaction.annotation.Transactional
 class MemberReadService(
     private val memberReadRepository: MemberReadRepository,
 ) {
-
     fun findMember(id: Long): MemberDto =
-        memberReadRepository.findById(id = id)
-            .let { MemberDto(id = it.id!!, name = it.name, createdAt = it.createdAt) }
+        with(receiver = memberReadRepository.findById(id = id)) {
+            MemberDto(id = id, name = name, influencer = influencer, createdAt = createdAt)
+        }
+
+    fun findInfluencerMembers(ids: List<Long>): List<MemberDto> {
+        if (ids.isEmpty()) {
+            return listOf()
+        }
+
+        return memberReadRepository.findByInIdAndInfluencer(ids = ids, influencer = true)
+            .map {
+                with(receiver = it) {
+                    MemberDto(id = id!!, name = name, influencer = influencer, createdAt = createdAt)
+                }
+            }
+    }
 }

@@ -40,6 +40,7 @@ class Follow private constructor(
 
     companion object {
         const val INFLUENCER_CHECK_COUNT = 10_000
+        const val INFLUENCER_FIND_MAX_LIMIT = 1_000L
 
         operator fun invoke(followerId: Long, followeeId: Long): Follow {
             validateFollowerAndFolloweeId(followerId = followerId, followeeId = followeeId)
