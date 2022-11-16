@@ -70,9 +70,8 @@ class PostRedisConfig(
     /*
     * [ Redis Connection Pool을 사용하는 이유 ]
     * - Redis의 multi 명령어를 사용하면 트랜잭션을 사용할 수 있다.
-    * - 트랜잭션은 새로운 커넥션을 매 번 생성하고 종료한다. -> 비용 문제
+    * - 트랜잭션은 매 번 커넥션을 획득하고 반환한다. 이에 따라 비용이 발생한다.
     * - 위와 같은 이유로 커넥션 풀을 사용하려고 한다.
-    * - 트랜잭션을 제외한 나머지 명령어의 경우, shareNativeConnection=true(default) 에 의해 하나의 공유된 커넥션을 사용한다.
     * */
     private fun lettucePoolingClientConfiguration(): LettucePoolingClientConfiguration {
         val poolConfig = GenericObjectPoolConfig<Any>()
