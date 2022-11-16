@@ -34,5 +34,7 @@ class FeedKafkaListener(
         acknowledgment?.acknowledge() ?: throw RuntimeException(ACKNOWLEDGMENT_IS_NULL)
 
         logger.info { "completed acknowledge()" }
+
+        // 메시지 수신 완료 로그 업데이트?
     }
 }

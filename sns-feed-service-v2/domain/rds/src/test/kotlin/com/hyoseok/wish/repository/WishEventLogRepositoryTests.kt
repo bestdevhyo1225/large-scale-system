@@ -2,12 +2,12 @@ package com.hyoseok.wish.repository
 
 import com.hyoseok.config.BasicDataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
-import com.hyoseok.wish.entity.Wish
+import com.hyoseok.wish.entity.WishEventLog
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.nulls.shouldNotBeNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,36 +19,30 @@ import org.springframework.test.context.ContextConfiguration
     classes = [
         BasicDataSourceConfig::class,
         JpaConfig::class,
-        WishRepository::class,
-        WishReadRepository::class,
-        WishReadRepositoryImpl::class,
+        WishEventLogRepository::class,
     ],
 )
-internal class WishRepositoryTests : DescribeSpec() {
+internal class WishEventLogRepositoryTests : DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
 
     @Autowired
-    private lateinit var wishRepository: WishRepository
-
-    @Autowired
-    private lateinit var wishReadRepository: WishReadRepository
+    private lateinit var wishEventLogRepository: WishEventLogRepository
 
     init {
         this.describe("save 메서드는") {
-            it("Wish 엔티티를 저장한다") {
+            it("WishEventLog 엔티티를 저장한다") {
                 // given
-                val wish = Wish(postId = 1, memberId = 1)
+                val wishEventLog = WishEventLog(postId = 1, memberId = 1)
 
                 // when
                 withContext(Dispatchers.IO) {
-                    wishRepository.save(wish)
+                    wishEventLogRepository.save(wishEventLog)
                 }
 
                 // then
-                wishReadRepository.findById(id = wish.id!!)
-                    .shouldBe(wish)
+                wishEventLog.id.shouldNotBeNull()
             }
         }
     }

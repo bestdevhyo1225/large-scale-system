@@ -23,11 +23,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreatePostUsecase(
-    private val postService: PostService,
-    private val postRedisService: PostRedisService,
+    private val feedKafkaProducer: FeedKafkaProducer,
     private val followReadService: FollowReadService,
     private val memberReadService: MemberReadService,
-    private val feedKafkaProducer: FeedKafkaProducer,
+    private val postService: PostService,
+    private val postRedisService: PostRedisService,
 ) {
 
     private val logger = KotlinLogging.logger {}
@@ -86,7 +86,7 @@ class CreatePostUsecase(
             )
 
             followerIds.forEach {
-                feedKafkaProducer.sendAsync(FeedEventDto(postId = postId, followerId = it))
+                feedKafkaProducer.sendAsync(event = FeedEventDto(postId = postId, followerId = it))
             }
 
             offset += limit

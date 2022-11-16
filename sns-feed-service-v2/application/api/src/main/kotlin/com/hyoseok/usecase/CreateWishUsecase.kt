@@ -4,7 +4,9 @@ import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.wish.dto.WishCacheDto
 import com.hyoseok.wish.dto.WishEventDto
+import com.hyoseok.wish.dto.WishEventLogDto
 import com.hyoseok.wish.producer.WishKafkaProducer
+import com.hyoseok.wish.service.WishEventLogService
 import com.hyoseok.wish.service.WishRedisService
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreateWishUsecase(
+    private val wishEventLogService: WishEventLogService,
     private val wishRedisService: WishRedisService,
     private val wishKafkaProducer: WishKafkaProducer,
 ) {
@@ -31,7 +34,9 @@ class CreateWishUsecase(
     }
 
     private suspend fun sendWishEvent(postId: Long, memberId: Long) {
-        wishKafkaProducer.sendAsync(WishEventDto(postId = postId, memberId = memberId))
+        val wishEventLogDto: WishEventLogDto = wishEventLogService.create(postId = postId, memberId = memberId)
+        val wishEventDto = WishEventDto(wishEventLogId = wishEventLogDto.id, postId = postId, memberId = memberId)
+        wishKafkaProducer.sendAsync(event = wishEventDto)
     }
 
     private fun fallbackExecute(exception: Exception) {
