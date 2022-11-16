@@ -18,7 +18,7 @@ class WishReadRepositoryImpl(
         const val NOT_FOUND_WISH = "좋아요 정보를 찾을 수 없습니다"
     }
 
-    override fun findBy(id: Long): Wish =
+    override fun findById(id: Long): Wish =
         jpaQueryFactory
             .selectFrom(wish)
             .where(wishIdEq(id = id))
