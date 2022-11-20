@@ -21,7 +21,7 @@ class MemberService(
 
     fun create(dto: MemberCreateDto): MemberDto =
         Member(name = dto.name)
-            .also { memberRepository.save(it) }
+            .run { memberRepository.save(this) }
             .let {
                 with(receiver = it) {
                     MemberDto(id = id!!, name = name, influencer = influencer, createdAt = createdAt)

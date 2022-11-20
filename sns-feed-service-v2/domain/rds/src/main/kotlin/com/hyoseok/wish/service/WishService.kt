@@ -12,10 +12,12 @@ class WishService(
     private val wishRepository: WishRepository,
 ) {
 
-    fun create(postId: Long, memberId: Long): WishDto {
-        val savedWish: Wish = wishRepository.save(Wish(postId = postId, memberId = memberId))
-        return with(receiver = savedWish) {
-            WishDto(id = id!!, postId = postId, memberId = memberId, createdAt = createdAt)
-        }
-    }
+    fun create(postId: Long, memberId: Long): WishDto =
+        Wish(postId = postId, memberId = memberId)
+            .run { wishRepository.save(this) }
+            .let {
+                with(receiver = it) {
+                    WishDto(id = id!!, postId = postId, memberId = memberId, createdAt = createdAt)
+                }
+            }
 }
