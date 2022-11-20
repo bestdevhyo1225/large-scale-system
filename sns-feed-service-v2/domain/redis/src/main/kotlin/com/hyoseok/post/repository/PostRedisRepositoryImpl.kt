@@ -36,6 +36,26 @@ class PostRedisRepositoryImpl(
         return jacksonObjectMapper.readValue(value, clazz)
     }
 
+    override fun <HK, HV : Any> hget(key: String, hashKey: HK, clazz: Class<HV>): HV? {
+        val value: String? =
+            redisTemplate.opsForHash<String, String>().get(key, jacksonObjectMapper.writeValueAsString(hashKey))
+
+        if (value.isNullOrBlank()) {
+            return null
+        }
+
+        return jacksonObjectMapper.readValue(value, clazz)
+    }
+
+    override fun <HK, HV : Any> hset(key: String, hashKey: HK, value: HV) {
+        redisTemplate.opsForHash<String, String>()
+            .put(key, jacksonObjectMapper.writeValueAsString(hashKey), jacksonObjectMapper.writeValueAsString(value))
+    }
+
+    override fun <HK : Any> hIncrement(key: String, hashKey: HK, value: Long): Long =
+        redisTemplate.opsForHash<String, String>()
+            .increment(key, jacksonObjectMapper.writeValueAsString(hashKey), value)
+
     override fun increment(key: String): Long = redisTemplate.opsForValue().increment(key) ?: 0
 
     override fun mget(keys: List<String>): List<PostCache> {

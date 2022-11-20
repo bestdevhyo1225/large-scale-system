@@ -2,6 +2,7 @@ package com.hyoseok.post.service
 
 import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
+import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
@@ -10,24 +11,29 @@ import org.springframework.stereotype.Service
 @ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
 class PostRedisReadService(
     private val postRedisRepository: PostRedisRepository,
+    private val postRedisPipelineRepository: PostRedisPipelineRepository,
 ) {
 
     fun findPostCache(id: Long): PostCacheDto? {
-        val postCache: PostCache =
-            postRedisRepository.get(key = PostCache.getPostIdKey(id = id), clazz = PostCache::class.java) ?: return null
-        val postViewCache: Long =
-            postRedisRepository.get(key = PostCache.getPostIdViewsKey(id = id), clazz = Long::class.java) ?: return null
+        val postCache: PostCache = postRedisRepository.hget(
+            key = PostCache.getPostBucketKey(id = id),
+            hashKey = id,
+            clazz = PostCache::class.java,
+        ) ?: return null
+
+        val postViewCache: Long = postRedisRepository.hget(
+            key = PostCache.getPostViewBucketKey(id = id),
+            hashKey = id,
+            clazz = Long::class.java,
+        ) ?: 0L
 
         return PostCacheDto(postCache = postCache, viewCount = postViewCache)
     }
 
-    fun findPostCaches(ids: List<Long>): List<PostCacheDto> {
-        if (ids.isEmpty()) {
-            return listOf()
+    fun findPostCaches(ids: List<Long>): List<PostCacheDto> =
+        if (ids.isNotEmpty()) {
+            postRedisPipelineRepository.getPostCaches(ids = ids)
+        } else {
+            listOf()
         }
-
-        val keys: List<String> = ids.map { PostCache.getPostIdKey(id = it) }
-
-        return postRedisRepository.mget(keys = keys).map { PostCacheDto(postCache = it, viewCount = 0L) }
-    }
 }

@@ -4,7 +4,6 @@ import com.hyoseok.config.PostRedisConfig
 import com.hyoseok.config.PostRedisTemplateConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.post.entity.PostCache
-import com.hyoseok.post.entity.PostCache.Companion.POST_KEYS
 import com.hyoseok.post.entity.PostImageCache
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -81,7 +80,7 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
         this.describe("zadd 메서드는") {
             it("key, value, score를 저장한다") {
                 // given
-                val key: String = POST_KEYS
+                val key = "post:keys"
                 val postId: Long = 1
                 val score: Double = Timestamp.valueOf(LocalDateTime.now().withNano(0)).time.toDouble()
 
@@ -97,7 +96,7 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
         this.describe("zremRangeByRank 메서드는") {
             it("start, end 범위만큼 value를 삭제한다") {
                 // given
-                val key: String = POST_KEYS
+                val key = "post:keys"
                 val postIds: List<Long> = (1L..3L).map { it }
                 val createdAt: LocalDateTime = LocalDateTime.now().withNano(0)
                 val scores: List<Double> = (0L..2L).map {
@@ -131,6 +130,47 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
                 // then
                 postRedisRepository.get(key = key, clazz = Long::class.java)
                     .shouldBe(expected = 1)
+            }
+        }
+
+        this.describe("hset 메서드는") {
+            it("PostCache를 Hash 자료구조로 저장한다") {
+                // given
+                val postId: Long = 1
+                val key: String = PostCache.getPostBucketKey(id = postId)
+                val value = PostCache(
+                    id = postId,
+                    memberId = 1234L,
+                    title = "title",
+                    contents = "contents",
+                    writer = "writer",
+                    createdAt = LocalDateTime.now().withNano(0),
+                    updatedAt = LocalDateTime.now().withNano(0),
+                    images = listOf(PostImageCache(id = 1L, url = "https://test.com", sortOrder = 0)),
+                )
+
+                // when
+                postRedisRepository.hset(key = key, hashKey = postId, value = value)
+
+                // then
+                postRedisRepository.hget(key = key, hashKey = postId, clazz = PostCache::class.java)
+                    .shouldBe(value)
+            }
+        }
+
+        this.describe("hIncrement 메서드는") {
+            it("key, hashKey를 사용해서 값을 증가시킨다") {
+                // given
+                val postId: Long = 1
+                val key: String = PostCache.getPostViewBucketKey(id = postId)
+                val value: Long = 1
+
+                // when
+                postRedisRepository.hIncrement(key = key, hashKey = postId, value = value)
+
+                // then
+                postRedisRepository.hget(key = key, hashKey = postId, clazz = Long::class.java)
+                    .shouldBe(value)
             }
         }
     }
