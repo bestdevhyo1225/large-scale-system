@@ -31,6 +31,17 @@ spring:
           min-idle: 0 # 기본값 0, time-between-eviction-runs있을때만 유효
           max-wait: -1 # 기본값 -1ms, 풀에서 커넥션 얻을때까지 대기 시간, 음수면 무기한
 
+  wish:
+    redis:
+      mode: standalone
+      nodes: localhost:6385
+      lettuce:
+        pool:
+          max-active: 8 # 기본값 8
+          max-idle: 8 # 기본값 8
+          min-idle: 0 # 기본값 0, time-between-eviction-runs있을때만 유효
+          max-wait: -1 # 기본값 -1ms, 풀에서 커넥션 얻을때까지 대기 시간, 음수면 무기한
+
 logging:
   level:
     io.lettuce.core.protocol.CommandHandler: debug
@@ -56,6 +67,17 @@ spring:
     redis:
       mode: standalone
       nodes: localhost:6384
+      lettuce:
+        pool:
+          max-active: 8 # 기본값 8
+          max-idle: 8 # 기본값 8
+          min-idle: 0 # 기본값 0, time-between-eviction-runs있을때만 유효
+          max-wait: -1 # 기본값 -1ms, 풀에서 커넥션 얻을때까지 대기 시간, 음수면 무기한
+
+  wish:
+    redis:
+      mode: standalone
+      nodes: localhost:6385
       lettuce:
         pool:
           max-active: 8 # 기본값 8

@@ -3,13 +3,17 @@ server:
   tomcat:
     threads:
       min-spare: 20
-      max: 100
+      max: 150
 
 spring:
   profiles:
     active: develop
 
   post:
+    redis:
+      enable: true
+
+  wish:
     redis:
       enable: true
 

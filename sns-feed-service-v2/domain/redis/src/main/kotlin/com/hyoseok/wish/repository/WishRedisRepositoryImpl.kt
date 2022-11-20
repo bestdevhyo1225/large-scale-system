@@ -10,9 +10,9 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.wish.redis", name = ["enable"], havingValue = "true")
 class WishRedisRepositoryImpl(
-    @Qualifier("postRedisTemplate")
+    @Qualifier("wishRedisTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,
 ) : WishRedisRepository {
 
