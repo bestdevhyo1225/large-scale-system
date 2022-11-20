@@ -14,8 +14,8 @@ class PostService(
     private val postRepository: PostRepository,
 ) {
 
-    fun create(dto: PostCreateDto): PostDto {
-        return with(receiver = dto) {
+    fun create(dto: PostCreateDto): PostDto =
+        with(receiver = dto) {
             Post(
                 memberId = memberId,
                 title = title,
@@ -24,7 +24,6 @@ class PostService(
                 postImages = images.map { PostImage(url = it.url, sortOrder = it.sortOrder) },
             )
         }
-            .also { postRepository.save(it) }
+            .run { postRepository.save(this) }
             .let { PostDto(post = it) }
-    }
 }

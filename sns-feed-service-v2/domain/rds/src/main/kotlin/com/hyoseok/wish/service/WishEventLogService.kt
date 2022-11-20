@@ -14,20 +14,21 @@ class WishEventLogService(
     private val wishEventLogRepository: WishEventLogRepository,
 ) {
 
-    fun create(postId: Long, memberId: Long): WishEventLogDto {
-        val savedWishEventLog: WishEventLog =
-            wishEventLogRepository.save(WishEventLog(postId = postId, memberId = memberId))
-        return with(receiver = savedWishEventLog) {
-            WishEventLogDto(
-                id = id!!,
-                postId = postId,
-                memberId = memberId,
-                isProcessed = isProcessed,
-                publishedAt = publishedAt,
-                processedAt = processedAt,
-            )
-        }
-    }
+    fun create(postId: Long, memberId: Long): WishEventLogDto =
+        WishEventLog(postId = postId, memberId = memberId)
+            .run { wishEventLogRepository.save(this) }
+            .let {
+                with(receiver = it) {
+                    WishEventLogDto(
+                        id = id!!,
+                        postId = postId,
+                        memberId = memberId,
+                        isProcessed = isProcessed,
+                        publishedAt = publishedAt,
+                        processedAt = processedAt,
+                    )
+                }
+            }
 
     fun completeWishEventProcessing(id: Long) {
         wishEventLogRepository.findByIdOrNull(id = id)

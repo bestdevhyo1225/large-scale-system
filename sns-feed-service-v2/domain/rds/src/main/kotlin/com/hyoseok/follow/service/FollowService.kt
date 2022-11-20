@@ -15,13 +15,10 @@ class FollowService(
 
     fun create(dto: FollowCreateDto): FollowDto =
         Follow(followerId = dto.followerId, followeeId = dto.followeeId)
-            .also { followRepository.save(it) }
+            .run { followRepository.save(this) }
             .let {
-                FollowDto(
-                    id = it.id!!,
-                    followerId = it.followerId,
-                    followeeId = it.followeeId,
-                    createdAt = it.createdAt,
-                )
+                with(receiver = it) {
+                    FollowDto(id = id!!, followerId = followerId, followeeId = followeeId, createdAt = createdAt)
+                }
             }
 }
