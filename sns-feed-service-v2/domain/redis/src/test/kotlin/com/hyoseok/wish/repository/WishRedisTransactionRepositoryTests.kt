@@ -1,8 +1,8 @@
 package com.hyoseok.wish.repository
 
-import com.hyoseok.config.PostRedisConfig
-import com.hyoseok.config.PostRedisTemplateConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
+import com.hyoseok.config.WishRedisConfig
+import com.hyoseok.config.WishRedisTemplateConfig
 import com.hyoseok.wish.entity.WishCache
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -24,8 +24,8 @@ import org.springframework.test.context.ContextConfiguration
 @ContextConfiguration(
     classes = [
         RedisEmbbededServerConfig::class,
-        PostRedisConfig::class,
-        PostRedisTemplateConfig::class,
+        WishRedisConfig::class,
+        WishRedisTemplateConfig::class,
         WishRedisRepositoryImpl::class,
         WishRedisTransactionRepositoryImpl::class,
         WishRedisRepository::class,
@@ -38,7 +38,7 @@ internal class WishRedisTransactionRepositoryTests : DescribeSpec() {
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
 
     @Autowired
-    @Qualifier("postRedisTemplate")
+    @Qualifier("wishRedisTemplate")
     private lateinit var redisTemplate: RedisTemplate<String, String?>
 
     @Autowired

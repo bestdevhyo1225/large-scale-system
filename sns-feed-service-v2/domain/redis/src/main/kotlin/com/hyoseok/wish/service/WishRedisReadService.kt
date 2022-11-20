@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.wish.redis", name = ["enable"], havingValue = "true")
 class WishRedisReadService(
     private val wishRedisRepository: WishRedisRepository,
 ) {

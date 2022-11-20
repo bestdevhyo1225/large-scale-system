@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Repository
-@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.wish.redis", name = ["enable"], havingValue = "true")
 class WishRedisTransactionRepositoryImpl(
-    @Qualifier("postRedisTemplate")
+    @Qualifier("wishRedisTemplate")
     private val redisTemplate: RedisTemplate<String, String?>,
     private val wishRedisRepository: WishRedisRepository,
 ) : WishRedisTransactionRepository {

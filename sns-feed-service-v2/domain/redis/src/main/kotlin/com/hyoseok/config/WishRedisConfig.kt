@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
@@ -20,42 +19,41 @@ import java.time.Duration
 
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-@ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
-class PostRedisConfig(
-    @Value("\${spring.post.redis.mode}")
+@ConditionalOnProperty(prefix = "spring.wish.redis", name = ["enable"], havingValue = "true")
+class WishRedisConfig(
+    @Value("\${spring.wish.redis.mode}")
     private val mode: RedisMode,
 
-    @Value("\${spring.post.redis.nodes}")
+    @Value("\${spring.wish.redis.nodes}")
     private val nodes: List<String>,
 
-    @Value("\${spring.post.redis.lettuce.pool.max-active}")
+    @Value("\${spring.wish.redis.lettuce.pool.max-active}")
     private val maxActive: Int,
 
-    @Value("\${spring.post.redis.lettuce.pool.max-idle}")
+    @Value("\${spring.wish.redis.lettuce.pool.max-idle}")
     private val maxIdle: Int,
 
-    @Value("\${spring.post.redis.lettuce.pool.max-idle}")
+    @Value("\${spring.wish.redis.lettuce.pool.max-idle}")
     private val minIdle: Int,
 
-    @Value("\${spring.post.redis.lettuce.pool.max-wait}")
+    @Value("\${spring.wish.redis.lettuce.pool.max-wait}")
     private val maxWait: Long,
 ) {
 
     private val logger = KotlinLogging.logger {}
 
     @Bean
-    @Primary
-    fun postRedisConnectionFactory(): RedisConnectionFactory {
+    fun wishRedisConnectionFactory(): RedisConnectionFactory {
         val lettuceConnectionFactory: LettuceConnectionFactory = when (mode) {
             Standalone -> {
-                logger.info { "post redis standalone mode" }
+                logger.info { "wish redis standalone mode" }
 
                 val (host: String, port: Int) = getHostAndPort()
                 LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettucePoolingClientConfiguration())
             }
 
             Cluster -> {
-                logger.info { "post redis cluster mode" }
+                logger.info { "wish redis cluster mode" }
 
                 LettuceConnectionFactory(RedisClusterConfiguration(nodes), lettucePoolingClientConfiguration())
             }
@@ -81,7 +79,7 @@ class PostRedisConfig(
         poolConfig.setMaxWait(Duration.ofMillis(maxWait))
 
         return LettucePoolingClientConfiguration.builder()
-            .clientName("post-redis-client")
+            .clientName("wish-redis-client")
             .readFrom(ReadFrom.REPLICA_PREFERRED)
             .poolConfig(poolConfig)
             .build()
