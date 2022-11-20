@@ -134,6 +134,19 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 6. `FeedCache` 를 만들어 `Followee` 의 Id를 기준으로 `Sorted Set` 컬렉션을 활용하여, `등록 순` 으로 피드 캐시를 저장한다.
 
+### POST 캐시 메모리 계산
+
+`Post, PostViewCount` 캐시 `1개` 저장시, `200 Byte` 가 필요하다.
+
+  - `1,000,000 건` :  `200 MB`
+
+  - `100,000,000 건` : `20 GB`
+
+  - `500,000,000 건` : `100 GB`
+
+위의 계산을 확인해보면 `5억 건` 의 경우 `100 GB` 를 사용하기 때문에 [Redis에 심플한 key-value 로 수 억개의 데이터 저장하기](https://charsyam.wordpress.com/2011/11/06/redis%EC%97%90-%EC%8B%AC%ED%94%8C%ED%95%9C-key-value-%EB%A1%9C-%EC%88%98-%EC%96%B5%EA%B0%9C%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0/)
+을 참고해서 `Hash` 자료구조로 개선하자.
+
 ### 팬 아웃(포스팅 전송) 성능 테스트 결과
 
 - `Number Of Threads (users)` : 2,000명, `Ramp-up Period (seoncds)` : 1초

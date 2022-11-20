@@ -14,9 +14,10 @@ data class PostCache(
 ) {
 
     companion object {
-        const val POST_KEYS = "post:keys"
-        const val ZSET_POST_MAX_LIMIT = -100_001L
+        private const val HASH_MAX_ENTRIES = 1_000L
 
+        fun getPostBucketKey(id: Long) = "postbucket:${id.div(HASH_MAX_ENTRIES)}"
+        fun getPostViewBucketKey(id: Long) = "postviewbucket:${id.div(HASH_MAX_ENTRIES)}"
         fun getPostIdKey(id: Long) = "post:$id"
         fun getPostIdViewsKey(id: Long) = "post:$id:views"
 
