@@ -121,8 +121,45 @@ internal class PostRepositoryTests : DescribeSpec() {
             }
         }
 
+        this.describe("findAllByMemberIdAndLimitAndCount 메서드는") {
+            it("회원번호, limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
+                // given
+                val limit = 5L
+                val contents = "contents"
+                val writer = "writer"
+                val memberId = 1L
+                val posts: List<Post> = (1L..5L).map { titleNo ->
+                    Post(
+                        memberId = memberId,
+                        title = "title$titleNo",
+                        contents = contents,
+                        writer = writer,
+                        postImages = listOf(
+                            PostImage(url = "test1", sortOrder = 1),
+                            PostImage(url = "test2", sortOrder = 2),
+                        ),
+                    )
+                }
+
+                withContext(Dispatchers.IO) {
+                    postRepository.saveAll(posts)
+                }
+
+                // when
+                val findPosts: List<Post> = postReadRepository.findAllByMemberIdAndLimitAndCount(
+                    memberId = memberId,
+                    limit = limit,
+                    offset = 0,
+                )
+
+                // then
+                findPosts.shouldNotBeEmpty()
+                findPosts.shouldHaveSize(limit.toInt())
+            }
+        }
+
         this.describe("findAllByMemberIdsAndLimitAndCount 메서드는") {
-            it("회원번호 리스트를 limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
+            it("회원번호 리스트, limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
                 // given
                 val limit = 5L
                 val contents = "contents"
