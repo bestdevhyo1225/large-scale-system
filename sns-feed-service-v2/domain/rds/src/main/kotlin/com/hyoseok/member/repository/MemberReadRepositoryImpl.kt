@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class MemberReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
-    private val memberRepository: MemberRepository,
 ) : MemberReadRepository {
 
     object ErrorMessage {

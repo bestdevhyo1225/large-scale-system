@@ -117,5 +117,29 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 }
             }
         }
+
+        this.describe("findAllByFolloweeIdAndLimitAndOffset 메서드는") {
+            it("followeeId를 기준으로 Follow 엔티티 리스트를 반환한다") {
+                // given
+                val limit = 5L
+                val offset = 0L
+                val followeeId = 1L
+                val follows: List<Follow> = (2L..11L).map { Follow(followerId = it, followeeId = followeeId) }
+
+                withContext(Dispatchers.IO) {
+                    followRepository.saveAll(follows)
+                }
+
+                // when
+                val result: Pair<Long, List<Follow>> = followReadRepository.findAllByFolloweeIdAndLimitAndOffset(
+                    followeeId = followeeId,
+                    limit = limit,
+                    offset = offset,
+                )
+
+                result.first.shouldBe(follows.size)
+                result.second.shouldHaveSize(limit.toInt())
+            }
+        }
     }
 }
