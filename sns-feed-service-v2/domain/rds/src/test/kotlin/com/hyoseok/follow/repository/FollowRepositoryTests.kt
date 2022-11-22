@@ -141,5 +141,41 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 result.second.shouldHaveSize(limit.toInt())
             }
         }
+
+        this.describe("countByFolloweeId 메서드는") {
+            it("followeeId를 기준으로 전체 Follow 엔티티 수를 가져온다") {
+                // given
+                val followeeId = 1L
+                val follows: List<Follow> = (2L..11L).map { Follow(followerId = it, followeeId = followeeId) }
+
+                withContext(Dispatchers.IO) {
+                    followRepository.saveAll(follows)
+                }
+
+                // when
+                val totalCount: Long = followReadRepository.countByFolloweeId(followeeId = followeeId)
+
+                // then
+                totalCount.shouldBe(follows.size)
+            }
+        }
+
+        this.describe("countByFollowerId 메서드는") {
+            it("followerId를 기준으로 전체 Follow 엔티티 수를 가져온다") {
+                // given
+                val followerId = 1L
+                val follows: List<Follow> = (2L..11L).map { Follow(followerId = followerId, followeeId = it) }
+
+                withContext(Dispatchers.IO) {
+                    followRepository.saveAll(follows)
+                }
+
+                // when
+                val totalCount: Long = followReadRepository.countByFollowerId(followerId = followerId)
+
+                // then
+                totalCount.shouldBe(follows.size)
+            }
+        }
     }
 }
