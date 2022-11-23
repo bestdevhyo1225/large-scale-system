@@ -34,7 +34,6 @@ class PostImage private constructor(
         protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
     var post: Post? = null
         protected set
 
