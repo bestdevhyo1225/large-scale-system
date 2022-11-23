@@ -14,6 +14,10 @@ class PostRedisTransactionRepositoryImpl(
     private val postRedisRepository: PostRedisRepository,
 ) : PostRedisTransactionRepository {
 
+    companion object {
+        private const val FIRST_POSITION = 0
+    }
+
     override fun createPostCache(postCache: PostCache, postViewCount: Long): Boolean =
         redisTemplate.execute { redisConnection ->
             try {
@@ -28,6 +32,24 @@ class PostRedisTransactionRepositoryImpl(
                     key = PostCache.getPostViewBucketKey(id = postCache.id),
                     hashKey = postCache.id,
                     value = postViewCount,
+                )
+
+                var value: StringBuilder? = postRedisRepository.hget(
+                    key = PostCache.getPostMemberIdBucketKey(memberId = postCache.memberId),
+                    hashKey = postCache.memberId,
+                    clazz = StringBuilder::class.java,
+                )
+
+                if (value.isNullOrBlank()) {
+                    value = StringBuilder("${postCache.id}")
+                } else {
+                    value.insert(FIRST_POSITION, "${postCache.id},")
+                }
+
+                postRedisRepository.hset(
+                    key = PostCache.getPostMemberIdBucketKey(memberId = postCache.memberId),
+                    hashKey = postCache.memberId,
+                    value = value,
                 )
 
                 redisConnection.exec()

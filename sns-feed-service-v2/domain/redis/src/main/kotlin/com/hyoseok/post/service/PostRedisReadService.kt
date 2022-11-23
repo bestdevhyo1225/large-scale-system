@@ -4,6 +4,7 @@ import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
+import com.hyoseok.util.PageRequestByPosition
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
@@ -36,4 +37,29 @@ class PostRedisReadService(
         } else {
             listOf()
         }
+
+    fun findPostCaches(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<PostCacheDto> {
+        val (start: Long, size: Long) = pageRequestByPosition
+
+        if (start <= -1L || size == 0L) {
+            return listOf()
+        }
+
+        val value: StringBuilder? = postRedisRepository.hget(
+            key = PostCache.getPostMemberIdBucketKey(memberId = memberId),
+            hashKey = memberId,
+            clazz = StringBuilder::class.java,
+        )
+
+        if (value.isNullOrBlank()) {
+            return listOf()
+        }
+
+        val end: Long = start.plus(size).minus(other = 1)
+        val paginationIds: List<Long> = value.split(",")
+            .map { it.toLong() }
+            .slice(start.toInt()..end.toInt())
+
+        return postRedisPipelineRepository.getPostCaches(ids = paginationIds)
+    }
 }
