@@ -33,6 +33,7 @@ class PostImage private constructor(
     var sortOrder: Int = sortOrder
         protected set
 
+    // 외래키를 사용하지 않고, '@JoinColumn' 은 엔티티 간 조인과 관계없이 외래키 이름 지정을 위해서만 사용하는 것이다.
     @ManyToOne(fetch = FetchType.LAZY)
     var post: Post? = null
         protected set
