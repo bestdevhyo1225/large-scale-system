@@ -14,7 +14,7 @@ internal class PostCacheTests : DescribeSpec(
                 val postBuckKey: String = PostCache.getPostBucketKey(id = id)
 
                 // then
-                postBuckKey.shouldBe("postbucket:1239")
+                postBuckKey.shouldBe("post:bucket:1239")
             }
         }
     },
