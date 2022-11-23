@@ -91,7 +91,6 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
                     clazz = StringBuilder::class.java,
                 )
 
-
                 PostMemberIdBucket.shouldNotBeNull()
                 PostMemberIdBucket.split(",").first().toLong().shouldBe(postCache.id)
             }
