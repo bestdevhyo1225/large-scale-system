@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class PostReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
-    private val postRepository: PostRepository,
 ) : PostReadRepository {
 
     object ErrorMessage {

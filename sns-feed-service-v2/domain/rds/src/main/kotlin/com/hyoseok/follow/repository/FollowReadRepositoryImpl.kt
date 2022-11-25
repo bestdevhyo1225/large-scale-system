@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class FollowReadRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory,
-    private val followRepository: FollowRepository,
 ) : FollowReadRepository {
 
     object ErrorMessage {
@@ -21,7 +20,18 @@ class FollowReadRepositoryImpl(
     }
 
     override fun countByFolloweeId(followeeId: Long): Long =
-        followRepository.countByFolloweeId(followeeId = followeeId)
+        jpaQueryFactory
+            .select(follow.count())
+            .from(follow)
+            .where(followFolloweeIdEq(followeeId = followeeId))
+            .fetchOne() ?: 0L
+
+    override fun countByFollowerId(followerId: Long): Long =
+        jpaQueryFactory
+            .select(follow.count())
+            .from(follow)
+            .where(followFollowerIdEq(followerId = followerId))
+            .fetchOne() ?: 0L
 
     override fun findById(id: Long): Follow =
         jpaQueryFactory
@@ -35,7 +45,7 @@ class FollowReadRepositoryImpl(
         offset: Long,
     ): Pair<Long, List<Follow>> =
         Pair(
-            first = followRepository.countByFolloweeId(followeeId = followeeId),
+            first = countByFolloweeId(followeeId = followeeId),
             second = jpaQueryFactory
                 .selectFrom(follow)
                 .where(followFolloweeIdEq(followeeId = followeeId))
@@ -50,7 +60,7 @@ class FollowReadRepositoryImpl(
         offset: Long,
     ): Pair<Long, List<Follow>> =
         Pair(
-            first = followRepository.countByFollowerId(followerId = followerId),
+            first = countByFollowerId(followerId = followerId),
             second = jpaQueryFactory
                 .selectFrom(follow)
                 .where(followFollowerIdEq(followerId = followerId))

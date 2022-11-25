@@ -9,6 +9,7 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -57,8 +58,8 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
             it("트랜잭션을 활용해서 PostCache, PostViewCount를 저장한다") {
                 // given
                 val postCache = PostCache(
-                    id = 1L,
-                    memberId = 1L,
+                    id = 1231623,
+                    memberId = 1,
                     title = "title",
                     contents = "contents",
                     writer = "writer",
@@ -83,6 +84,15 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
                     hashKey = postCache.id,
                     clazz = Long::class.java,
                 ).shouldBe(postViewCount)
+
+                val PostMemberIdBucket: StringBuilder? = postRedisRepository.hget(
+                    key = PostCache.getPostMemberIdBucketKey(memberId = postCache.memberId),
+                    hashKey = postCache.memberId,
+                    clazz = StringBuilder::class.java,
+                )
+
+                PostMemberIdBucket.shouldNotBeNull()
+                PostMemberIdBucket.split(",").first().toLong().shouldBe(postCache.id)
             }
         }
     }
