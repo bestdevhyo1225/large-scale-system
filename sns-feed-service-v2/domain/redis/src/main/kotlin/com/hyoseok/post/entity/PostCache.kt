@@ -21,7 +21,7 @@ data class PostCache(
         fun getPostMemberIdBucketKey(memberId: Long) = "post:memberid:bucket:${memberId.div(HASH_MAX_ENTRIES)}"
         fun getPostIdKey(id: Long) = "post:$id"
         fun getPostIdViewsKey(id: Long) = "post:$id:views"
-        fun getPostKeyAndExpireTime(id: Long) = Pair(first = getPostIdKey(id = id), second = 60 * 60 * 3L) // 3시간
-        fun getPostViewKeyAndExpireTime(id: Long) = Pair(first = getPostIdViewsKey(id = id), second = 60 * 5L) // 5분
+        fun getPostKeyAndExpireTime(id: Long) = Pair(first = getPostIdKey(id = id), second = 60L * 30L) // 30분
+        fun getPostViewsKeyAndExpireTime(id: Long) = Pair(first = getPostIdViewsKey(id = id), second = 60L * 30L) // 30분
     }
 }

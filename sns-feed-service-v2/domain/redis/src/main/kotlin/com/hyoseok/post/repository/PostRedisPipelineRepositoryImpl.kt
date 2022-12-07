@@ -20,15 +20,13 @@ class PostRedisPipelineRepositoryImpl(
 
         redisTemplate.executePipelined {
             ids.forEach { id ->
-                val postCache: PostCache? = postRedisRepository.hget(
-                    key = PostCache.getPostBucketKey(id = id),
-                    hashKey = id,
+                val postCache: PostCache? = postRedisRepository.get(
+                    key = PostCache.getPostIdKey(id = id),
                     clazz = PostCache::class.java,
                 )
 
-                val postViewCount: Long = postRedisRepository.hget(
-                    key = PostCache.getPostViewBucketKey(id = id),
-                    hashKey = id,
+                val postViewCount: Long = postRedisRepository.get(
+                    key = PostCache.getPostIdViewsKey(id = id),
                     clazz = Long::class.java,
                 ) ?: 0L
 
