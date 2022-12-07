@@ -14,7 +14,7 @@ class PostRedisService(
     private val postRedisTransactionRepository: PostRedisTransactionRepository,
 ) {
 
-    fun create(dto: PostCacheDto) {
+    fun createOrUpdate(dto: PostCacheDto) {
         postRedisTransactionRepository.createPostCache(postCache = dto.toEntity(), postViewCount = dto.viewCount)
     }
 

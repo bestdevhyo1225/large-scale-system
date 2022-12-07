@@ -32,7 +32,7 @@ class FindPostUsecase(
         val postDto: PostDto = postReadService.findPost(id = postId)
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            postRedisService.create(dto = createPostCacheDto(postDto = postDto))
+            postRedisService.createOrUpdate(dto = createPostCacheDto(postDto = postDto))
         }
 
         return postDto

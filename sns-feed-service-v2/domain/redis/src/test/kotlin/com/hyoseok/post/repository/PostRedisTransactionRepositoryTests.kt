@@ -9,7 +9,6 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -73,26 +72,15 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
                 postRedisTransactionRepository.createPostCache(postCache = postCache, postViewCount = postViewCount)
 
                 // then
-                postRedisRepository.hget(
-                    key = PostCache.getPostBucketKey(id = postCache.id),
-                    hashKey = postCache.id,
+                postRedisRepository.get(
+                    key = PostCache.getPostIdKey(id = postCache.id),
                     clazz = PostCache::class.java,
                 ).shouldBe(postCache)
 
-                postRedisRepository.hget(
-                    key = PostCache.getPostViewBucketKey(id = postCache.id),
-                    hashKey = postCache.id,
+                postRedisRepository.get(
+                    key = PostCache.getPostIdViewsKey(id = postCache.id),
                     clazz = Long::class.java,
                 ).shouldBe(postViewCount)
-
-                val PostMemberIdBucket: StringBuilder? = postRedisRepository.hget(
-                    key = PostCache.getPostMemberIdBucketKey(memberId = postCache.memberId),
-                    hashKey = postCache.memberId,
-                    clazz = StringBuilder::class.java,
-                )
-
-                PostMemberIdBucket.shouldNotBeNull()
-                PostMemberIdBucket.split(",").first().toLong().shouldBe(postCache.id)
             }
         }
     }

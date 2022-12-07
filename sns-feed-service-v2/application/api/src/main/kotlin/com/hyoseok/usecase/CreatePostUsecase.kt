@@ -58,7 +58,7 @@ class CreatePostUsecase(
 
     private suspend fun createPostCache(postDto: PostDto) {
         with(receiver = postDto) {
-            postRedisService.create(
+            postRedisService.createOrUpdate(
                 dto = PostCacheDto(
                     id = id,
                     memberId = memberId,

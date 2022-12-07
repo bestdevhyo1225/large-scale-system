@@ -16,15 +16,13 @@ class PostRedisReadService(
 ) {
 
     fun findPostCache(id: Long): PostCacheDto? {
-        val postCache: PostCache = postRedisRepository.hget(
-            key = PostCache.getPostBucketKey(id = id),
-            hashKey = id,
+        val postCache: PostCache = postRedisRepository.get(
+            key = PostCache.getPostIdKey(id = id),
             clazz = PostCache::class.java,
         ) ?: return null
 
-        val postViewCache: Long = postRedisRepository.hget(
-            key = PostCache.getPostViewBucketKey(id = id),
-            hashKey = id,
+        val postViewCache: Long = postRedisRepository.get(
+            key = PostCache.getPostIdViewsKey(id = id),
             clazz = Long::class.java,
         ) ?: 0L
 
@@ -45,21 +43,15 @@ class PostRedisReadService(
             return listOf()
         }
 
-        val value: StringBuilder? = postRedisRepository.hget(
-            key = PostCache.getPostMemberIdBucketKey(memberId = memberId),
-            hashKey = memberId,
-            clazz = StringBuilder::class.java,
+        val key: String = PostCache.getPostMemberKey(memberId = memberId)
+        val end: Long = start.plus(size).minus(other = 1)
+        val postIds: List<Long> = postRedisRepository.zrevRange(
+            key = key,
+            start = start,
+            end = end,
+            clazz = Long::class.java,
         )
 
-        if (value.isNullOrBlank()) {
-            return listOf()
-        }
-
-        val end: Long = start.plus(size).minus(other = 1)
-        val paginationIds: List<Long> = value.split(",")
-            .map { it.toLong() }
-            .slice(start.toInt()..end.toInt())
-
-        return postRedisPipelineRepository.getPostCaches(ids = paginationIds)
+        return postRedisPipelineRepository.getPostCaches(ids = postIds)
     }
 }
