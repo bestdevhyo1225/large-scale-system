@@ -26,7 +26,7 @@ class FindPostsUsecase(
         val postCacheDtos: List<PostCacheDto> =
             postRedisReadService.findPostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
-        if (postCacheDtos.isEmpty()) {
+        if (postCacheDtos.isEmpty() || postCacheDtos.size < pageRequestByPosition.size) {
             return postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
         }
 
