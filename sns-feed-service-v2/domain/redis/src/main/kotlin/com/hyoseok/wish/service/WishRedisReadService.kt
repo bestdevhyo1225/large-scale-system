@@ -17,7 +17,7 @@ class WishRedisReadService(
 
     fun findWishCounts(postIds: List<Long>): Map<Long, Long> =
         if (postIds.isNotEmpty()) {
-            wishRedisPipelineRepository.getWishCount(postIds = postIds)
+            wishRedisPipelineRepository.getWishCountsMap(postIds = postIds)
         } else {
             mapOf()
         }

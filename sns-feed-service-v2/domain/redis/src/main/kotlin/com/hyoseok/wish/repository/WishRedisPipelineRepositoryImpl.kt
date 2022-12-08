@@ -14,7 +14,7 @@ class WishRedisPipelineRepositoryImpl(
     private val wishRedisRepository: WishRedisRepository,
 ) : WishRedisPipelineRepository {
 
-    override fun getWishCount(postIds: List<Long>): Map<Long, Long> {
+    override fun getWishCountsMap(postIds: List<Long>): Map<Long, Long> {
         val result: MutableMap<Long, Long> = mutableMapOf()
 
         redisTemplate.executePipelined {
