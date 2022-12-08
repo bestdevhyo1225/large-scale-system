@@ -8,7 +8,8 @@ import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
-import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.maps.shouldHaveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -27,12 +28,14 @@ import org.springframework.test.context.ContextConfiguration
         WishRedisConfig::class,
         WishRedisTemplateConfig::class,
         WishRedisRepositoryImpl::class,
+        WishRedisPipelineRepositoryImpl::class,
         WishRedisTransactionRepositoryImpl::class,
         WishRedisRepository::class,
+        WishRedisPipelineRepository::class,
         WishRedisTransactionRepository::class,
     ],
 )
-internal class WishRedisTransactionRepositoryTests : DescribeSpec() {
+internal class WishRedisPipelineRepositoryTests : DescribeSpec() {
 
     override fun extensions(): List<Extension> = listOf(SpringExtension)
     override fun isolationMode(): IsolationMode = IsolationMode.InstancePerLeaf
@@ -45,27 +48,32 @@ internal class WishRedisTransactionRepositoryTests : DescribeSpec() {
     private lateinit var wishRedisTransactionRepository: WishRedisTransactionRepository
 
     @Autowired
-    private lateinit var wishRedisRepository: WishRedisRepository
+    private lateinit var wishRedisPipelineRepository: WishRedisPipelineRepository
 
     init {
         this.afterSpec {
             redisTemplate.delete(redisTemplate.keys("*"))
         }
 
-        this.describe("createWish 메서드는") {
-            it("게시글에 대한 좋아요 캐시를 생성한다") {
+        this.describe("getWishCountsMap 메서드는") {
+            it("postIds 값을 통해 캐싱된 좋아요 리스트를 반환한다") {
                 // given
-                val wishCache = WishCache(postId = 1, memberId = 1)
+                val memberId = 1L
+                val postIds: List<Long> = (1L..10L).map { it }
+
+                postIds.forEach {
+                    wishRedisTransactionRepository.createWish(wishCache = WishCache(postId = it, memberId = memberId))
+                }
 
                 // when
-                wishRedisTransactionRepository.createWish(wishCache = wishCache)
+                val wishCountsMap: Map<Long, Long> = wishRedisPipelineRepository.getWishCountsMap(postIds = postIds)
 
                 // then
-                wishRedisRepository.scard(key = wishCache.getWishPostKey())
-                    .shouldBe(expected = 1)
-
-                redisTemplate.getExpire(wishCache.getWishPostKey())
-                    .shouldBeGreaterThan(x = 0)
+                wishCountsMap.shouldHaveSize(postIds.size)
+                postIds.forEach {
+                    wishCountsMap[it].shouldNotBeNull()
+                    wishCountsMap[it].shouldBe(1)
+                }
             }
         }
     }

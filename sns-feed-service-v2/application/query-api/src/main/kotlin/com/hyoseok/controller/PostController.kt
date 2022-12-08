@@ -5,6 +5,7 @@ import com.hyoseok.response.SuccessResponse
 import com.hyoseok.usecase.FindPostTimelineUsecase
 import com.hyoseok.usecase.FindPostUsecase
 import com.hyoseok.usecase.FindPostsUsecase
+import com.hyoseok.usecase.dto.FindPostWishUsecaseDto
 import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
 import org.springframework.http.ResponseEntity
@@ -22,7 +23,7 @@ class PostController(
 ) {
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<SuccessResponse<PostDto>> =
+    fun get(@PathVariable id: Long): ResponseEntity<SuccessResponse<FindPostWishUsecaseDto>> =
         ResponseEntity.ok(SuccessResponse(data = findPostUsecase.execute(postId = id)))
 
     @GetMapping("/members/{memberId}")
@@ -30,7 +31,7 @@ class PostController(
         @PathVariable
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
-    ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
+    ): ResponseEntity<SuccessResponse<PageByPosition<FindPostWishUsecaseDto>>> =
         ResponseEntity.ok(
             SuccessResponse(
                 data = findPostsUsecase.execute(
