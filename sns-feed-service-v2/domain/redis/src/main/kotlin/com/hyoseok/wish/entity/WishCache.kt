@@ -5,11 +5,11 @@ data class WishCache(
     val memberId: Long,
 ) {
 
-    val expireTime: Long = 60 * 60 * 3 // 3시간
+    val expireTime: Long = 60 * 30 // 30분
 
     companion object {
-        fun getKey(postId: Long) = "post:$postId:wishes"
+        fun getWishPostKey(postId: Long) = "wish:post:$postId"
     }
 
-    fun getKey() = getKey(postId = postId)
+    fun getWishPostKey() = getWishPostKey(postId = postId)
 }

@@ -17,16 +17,13 @@ class WishRedisTransactionRepositoryImpl(
 
     override fun createWish(wishCache: WishCache): Boolean =
         redisTemplate.execute { redisConnection ->
-            val key: String = wishCache.getKey()
+            val key: String = wishCache.getWishPostKey()
 
             try {
                 redisConnection.multi()
 
                 wishRedisRepository.sadd(key = key, value = wishCache.memberId)
-
-                if (wishRedisRepository.scard(key = key) == 1L) {
-                    redisTemplate.expire(key, wishCache.expireTime, SECONDS)
-                }
+                redisTemplate.expire(key, wishCache.expireTime, SECONDS)
 
                 redisConnection.exec()
                 return@execute true

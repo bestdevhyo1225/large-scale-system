@@ -61,10 +61,10 @@ internal class WishRedisTransactionRepositoryTests : DescribeSpec() {
                 wishRedisTransactionRepository.createWish(wishCache = wishCache)
 
                 // then
-                wishRedisRepository.scard(key = wishCache.getKey())
+                wishRedisRepository.scard(key = wishCache.getWishPostKey())
                     .shouldBe(expected = 1)
 
-                redisTemplate.getExpire(wishCache.getKey())
+                redisTemplate.getExpire(wishCache.getWishPostKey())
                     .shouldBeGreaterThan(x = 0)
             }
         }
