@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.sql.Timestamp
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeUnit.SECONDS
 
 @Repository
 @ConditionalOnProperty(prefix = "spring.feed.redis", name = ["enable"], havingValue = "true")
@@ -24,9 +26,11 @@ class FeedRedisTransactionRepositoryImpl(
             try {
                 redisConnection.multi()
 
-                val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+                val (key: String, expireTime: Long) = Feed.getMemberIdFeedsKeyAndExpireTime(id = memberId)
+
                 feedRedisRepository.zadd(key = key, value = postId, score = score)
                 feedRedisRepository.zremRangeByRank(key = key, start = ZSET_FEED_MAX_LIMIT, end = ZSET_FEED_MAX_LIMIT)
+                redisTemplate.expire(key, expireTime, SECONDS)
 
                 redisConnection.exec()
                 return@execute
