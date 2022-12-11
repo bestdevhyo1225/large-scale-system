@@ -3,6 +3,8 @@ package com.hyoseok.follow.repository
 import com.hyoseok.config.BasicDataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.follow.entity.Follow
+import com.hyoseok.follow.entity.FollowCount
+import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_CHECK_TOTAL_COUNT
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -23,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration
         BasicDataSourceConfig::class,
         JpaConfig::class,
         FollowRepository::class,
+        FollowCountRepository::class,
         FollowReadRepository::class,
         FollowReadRepositoryImpl::class,
     ],
@@ -34,6 +37,9 @@ internal class FollowRepositoryTests : DescribeSpec() {
 
     @Autowired
     private lateinit var followRepository: FollowRepository
+
+    @Autowired
+    private lateinit var followCountRepository: FollowCountRepository
 
     @Autowired
     private lateinit var followReadRepository: FollowReadRepository
@@ -92,15 +98,21 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 // given
                 val limit = 5L
                 val followerId = 1L
-                val follows: List<Follow> = (2L..11L).map { Follow(followerId = followerId, followeeId = it) }
+                val followeeIds: List<Long> = (2L..11L).map { it }
+                val follows: List<Follow> = followeeIds.map { Follow(followerId = followerId, followeeId = it) }
+                val followCounts: List<FollowCount> = followeeIds.map {
+                    FollowCount(memberId = it, totalFollower = INFLUENCER_CHECK_TOTAL_COUNT, totalFollowee = 1)
+                }
 
                 withContext(Dispatchers.IO) {
                     followRepository.saveAll(follows)
+                    followCountRepository.saveAll(followCounts)
                 }
 
                 // when
                 val findFollows: List<Follow> = followReadRepository.findAllByFollowerIdAndLimitOrderByIdDesc(
                     followerId = followerId,
+                    influencerCheckTotalCount = INFLUENCER_CHECK_TOTAL_COUNT,
                     limit = limit,
                 )
                 val followsIds: List<Long> = follows
