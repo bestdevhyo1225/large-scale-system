@@ -12,8 +12,11 @@ import com.hyoseok.post.dto.PostDto
 import com.hyoseok.post.dto.PostImageDto
 import com.hyoseok.post.service.PostReadService
 import com.hyoseok.post.service.PostRedisReadService
+import com.hyoseok.usecase.dto.FindPostWishUsecaseDto
 import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
+import com.hyoseok.wish.service.WishReadService
+import com.hyoseok.wish.service.WishRedisReadService
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -29,12 +32,17 @@ class FindPostTimelineUsecase(
     private val memberReadService: MemberReadService,
     private val postRedisReadService: PostRedisReadService,
     private val postReadService: PostReadService,
+    private val wishRedisReadService: WishRedisReadService,
+    private val wishReadService: WishReadService,
 ) {
 
     private val logger = KotlinLogging.logger {}
 
     @RateLimiter(name = FIND_POST_TIMELINE_USECASE, fallbackMethod = "fallbackExecute")
-    fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> = runBlocking {
+    fun execute(
+        memberId: Long,
+        pageRequestByPosition: PageRequestByPosition,
+    ): PageByPosition<FindPostWishUsecaseDto> = runBlocking {
         val (
             feedPostsRequestByPosition: PageRequestByPosition,
             influencerPostsRequestByPosition: PageRequestByPosition,
@@ -46,11 +54,15 @@ class FindPostTimelineUsecase(
         val deferredInfluencerPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
             getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
-        val items: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
+        val postDtos: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
+        val wishCountsMap: Map<Long, Long> = getWishCounts(postDtos = postDtos, pageSize = pageRequestByPosition.size)
+        val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postDtos.map {
+            FindPostWishUsecaseDto(postDto = it, wishCount = wishCountsMap[it.id] ?: 0L)
+        }
 
         PageByPosition(
-            items = items.shuffled(),
-            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = items.size),
+            items = findPostWishUsecaseDtos.shuffled(),
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
         )
     }
 
@@ -99,7 +111,21 @@ class FindPostTimelineUsecase(
             )
         }
 
-    private fun fallbackExecute(exception: Exception): PageByPosition<PostDto> {
+    private fun getWishCounts(postDtos: List<PostDto>, pageSize: Long): Map<Long, Long> {
+        val postIds: List<Long> = postDtos.map { it.id }
+        val wishCountsByRedis: Map<Long, Long> = wishRedisReadService.findWishCounts(postIds = postIds)
+
+        if (isExistWishCountsCache(wishCounts = wishCountsByRedis, pageSize = pageSize)) {
+            return wishCountsByRedis
+        }
+
+        return wishReadService.getCountsByPostIds(postIds = postIds)
+    }
+
+    private fun isExistWishCountsCache(wishCounts: Map<Long, Long>, pageSize: Long) =
+        wishCounts.isNotEmpty() && wishCounts.size == pageSize.toInt()
+
+    private fun fallbackExecute(exception: Exception): PageByPosition<FindPostWishUsecaseDto> {
         logger.error { exception.localizedMessage }
         throw QueryApiRateLimitException(message = "일시적으로 타임라인을 조회할 수 없습니다. 잠시 후에 다시 시도해주세요.")
     }

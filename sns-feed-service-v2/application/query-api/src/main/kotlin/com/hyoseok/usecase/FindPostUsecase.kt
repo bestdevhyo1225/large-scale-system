@@ -86,8 +86,8 @@ class FindPostUsecase(
             )
         }
 
-    private fun fallbackExecute(exception: Exception): PostDto {
+    private fun fallbackExecute(exception: Exception): FindPostWishUsecaseDto {
         logger.error { exception.localizedMessage }
-        throw QueryApiRateLimitException(message = "일시적으로 타임라인을 조회할 수 없습니다. 잠시 후에 다시 시도해주세요.")
+        throw QueryApiRateLimitException(message = "일시적으로 해당 게시물을 조회할 수 없습니다. 잠시 후에 다시 시도해주세요.")
     }
 }
