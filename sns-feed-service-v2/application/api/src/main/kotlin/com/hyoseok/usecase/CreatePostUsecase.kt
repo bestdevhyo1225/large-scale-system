@@ -35,15 +35,8 @@ class CreatePostUsecase(
     @RateLimiter(name = CREATE_POST_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(createPostUsecaseDto: CreatePostUsecaseDto): PostDto {
         val memberDto: MemberDto = memberReadService.findMember(id = createPostUsecaseDto.memberId)
-        val postDto: PostDto = postService.create(
-            dto = PostCreateDto(
-                memberId = memberDto.id,
-                writer = memberDto.name,
-                title = createPostUsecaseDto.title,
-                contents = createPostUsecaseDto.contents,
-                images = createPostUsecaseDto.images,
-            ),
-        )
+        val postCreateDto: PostCreateDto = createPostUsecaseDto.toDomainDto(memberDto = memberDto)
+        val postDto: PostDto = postService.create(dto = postCreateDto)
 
         CoroutineScope(context = Dispatchers.IO).launch {
             createPostCache(postDto = postDto)
