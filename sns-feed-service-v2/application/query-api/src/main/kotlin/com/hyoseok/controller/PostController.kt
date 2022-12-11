@@ -1,6 +1,5 @@
 package com.hyoseok.controller
 
-import com.hyoseok.post.dto.PostDto
 import com.hyoseok.response.SuccessResponse
 import com.hyoseok.usecase.FindPostTimelineUsecase
 import com.hyoseok.usecase.FindPostUsecase
@@ -46,7 +45,7 @@ class PostController(
         @PathVariable
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
-    ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
+    ): ResponseEntity<SuccessResponse<PageByPosition<FindPostWishUsecaseDto>>> =
         ResponseEntity.ok(
             SuccessResponse(
                 data = findPostTimelineUsecase.execute(
