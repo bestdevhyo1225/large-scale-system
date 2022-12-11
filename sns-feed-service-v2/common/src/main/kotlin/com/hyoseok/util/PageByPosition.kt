@@ -31,13 +31,10 @@ data class PageRequestByPosition(
         if (start <= NONE_START || size == 0L) {
             throw IllegalArgumentException("start, size is invalid")
         }
-        val firstStart: Long = start
-        val firstSize: Long = size.div(other = 2)
-        val secondStart: Long = firstStart.plus(firstSize)
-        val secondSize: Long = firstSize.plus(size.mod(other = 2))
+        val divSize: Long = size.div(other = 2)
         return Pair(
-            first = PageRequestByPosition(start = firstStart, size = firstSize),
-            second = PageRequestByPosition(start = secondStart, size = secondSize),
+            first = PageRequestByPosition(start = start, size = divSize),
+            second = PageRequestByPosition(start = start, size = divSize),
         )
     }
 }
