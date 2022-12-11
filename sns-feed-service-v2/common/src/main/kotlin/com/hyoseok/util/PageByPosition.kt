@@ -34,7 +34,7 @@ data class PageRequestByPosition(
         val divSize: Long = size.div(other = 2)
         return Pair(
             first = PageRequestByPosition(start = start, size = divSize),
-            second = PageRequestByPosition(start = start, size = divSize),
+            second = PageRequestByPosition(start = start, size = divSize.plus(size.mod(other = 2))),
         )
     }
 }
