@@ -2,9 +2,11 @@ package com.hyoseok.follow.repository
 
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.entity.QFollow.follow
+import com.hyoseok.follow.entity.QFollowCount.followCount
 import com.hyoseok.follow.repository.FollowReadRepositoryImpl.ErrorMessage.NOT_FOUND_FOLLOW
 import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.core.types.dsl.NumberPath
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -71,17 +73,26 @@ class FollowReadRepositoryImpl(
 
     override fun findAllByFollowerIdAndLimitOrderByIdDesc(
         followerId: Long,
+        influencerCheckTotalCount: Long,
         limit: Long,
     ): List<Follow> =
         jpaQueryFactory
-            .selectFrom(follow)
-            .where(followFollowerIdEq(followerId = followerId))
+            .select(follow)
+            .from(follow)
+            .innerJoin(followCount).on(followFolloweeIdEq(followeeId = followCount.memberId))
+            .where(
+                followFollowerIdEq(followerId = followerId),
+                followCountTotalFollowerGoe(totalFollower = influencerCheckTotalCount),
+            )
             .orderBy(followIdDesc())
             .limit(limit)
             .fetch()
 
     private fun followIdEq(id: Long): BooleanExpression = follow.id.eq(id)
     private fun followFolloweeIdEq(followeeId: Long): BooleanExpression = follow.followeeId.eq(followeeId)
+    private fun followFolloweeIdEq(followeeId: NumberPath<Long>): BooleanExpression = follow.followeeId.eq(followeeId)
     private fun followFollowerIdEq(followerId: Long): BooleanExpression = follow.followerId.eq(followerId)
+    private fun followCountTotalFollowerGoe(totalFollower: Long): BooleanExpression =
+        followCount.totalFollower.goe(totalFollower)
     private fun followIdDesc(): OrderSpecifier<*> = follow.id.desc()
 }
