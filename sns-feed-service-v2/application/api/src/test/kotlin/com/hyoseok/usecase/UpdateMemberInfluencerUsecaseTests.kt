@@ -18,18 +18,18 @@ internal class UpdateMemberInfluencerUsecaseTests : BehaviorSpec(
         )
 
         given("계정을 인플루언서로 변경할 때") {
+            val followeeId = 1L
+            val followerCount = 10_001L
+
+            every { mockFollowReadService.getFollowerCount(followeeId = followeeId) } returns followerCount
+            justRun {
+                mockMemberService.updateInfluenerAccount(
+                    memberId = followeeId,
+                    followerCount = followerCount,
+                )
+            }
+
             `when`("팔로우한 횟수를 통해 인플루언서 계정으로 변경하고") {
-                val followeeId = 1L
-                val followerCount = 10_001L
-
-                every { mockFollowReadService.getFollowerCount(followeeId = followeeId) } returns followerCount
-                justRun {
-                    mockMemberService.updateInfluenerAccount(
-                        memberId = followeeId,
-                        followerCount = followerCount,
-                    )
-                }
-
                 updateMemberInfluencerUsecase.execute(memberId = followeeId)
 
                 then("이와 관련된 메서드들은 최소 1번씩 호출된다") {
