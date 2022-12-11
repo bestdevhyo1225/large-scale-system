@@ -24,7 +24,7 @@ internal class CreateWishUsecaseTests : BehaviorSpec(
             wishKafkaProducer = mockWishKafkaProducer,
         )
 
-        given("좋아요를 할 때") {
+        given("좋아요를 처리하기 위해 아래와 같은 상황이 주어지면") {
             val wishCacheDto = WishCacheDto(postId = 1L, memberId = 1L)
             val wishEventLogDto = WishEventLogDto(
                 id = 1L,
@@ -49,7 +49,7 @@ internal class CreateWishUsecaseTests : BehaviorSpec(
             } returns wishEventLogDto
             justRun { mockWishKafkaProducer.sendAsync(event = wishEventDto) }
 
-            `when`("좋아요 캐시를 저장한 다음, 좋아요 메시지를 Kafka에 전송하고") {
+            `when`("좋아요 캐시를 저장하는데") {
                 createWishUsecase.execute(postId = wishCacheDto.postId, memberId = wishCacheDto.memberId)
 
                 then("이와 관련된 메서드들은 최소 1번씩 호출된다") {

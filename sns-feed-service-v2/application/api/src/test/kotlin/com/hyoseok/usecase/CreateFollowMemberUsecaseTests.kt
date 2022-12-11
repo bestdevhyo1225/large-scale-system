@@ -20,7 +20,7 @@ internal class CreateFollowMemberUsecaseTests : BehaviorSpec(
             memberReadService = mockMemberReadService,
         )
 
-        given("팔로우를 할 때") {
+        given("팔로우를 하기 위해서 아래와 같은 상황이 주어지면") {
             val followerMemberDto = MemberDto(
                 id = 1L,
                 name = "팔로워",
@@ -47,7 +47,7 @@ internal class CreateFollowMemberUsecaseTests : BehaviorSpec(
                 createdAt = LocalDateTime.now().withNano(0),
             )
 
-            `when`("팔로이와 팔로워를 조회한 다음, 팔로우를 처리하고") {
+            `when`("팔로우를 처리하는데") {
                 createFollowMemberUsecase.execute(
                     followerId = followerMemberDto.id,
                     followeeId = followeeMemberDto.id,

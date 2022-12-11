@@ -36,7 +36,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
             postRedisService = mockPostRedisService,
         )
 
-        given("게시물을 저장할 때") {
+        given("게시물을 등록하기 위해 아래와 같은 상황이 주어지면") {
             val createPostUsecaseDto = CreatePostUsecaseDto(
                 memberId = 1L,
                 title = "게시물 제목",
@@ -105,7 +105,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
             } returns pairResult
             justRun { mockFeedKafkaProducer.sendAsync(event = feedEventDto) }
 
-            `when`("게시물을 저장하고, 캐시 처리한 다음 피드 메시지를 발행하는데") {
+            `when`("게시물을 저장하는데") {
                 createPostUsecase.execute(createPostUsecaseDto = createPostUsecaseDto)
 
                 then("이와 관련된 메서드들은 최소 1번씩 호출된다") {

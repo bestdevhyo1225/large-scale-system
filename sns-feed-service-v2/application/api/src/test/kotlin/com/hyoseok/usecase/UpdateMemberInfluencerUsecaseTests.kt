@@ -17,7 +17,7 @@ internal class UpdateMemberInfluencerUsecaseTests : BehaviorSpec(
             memberService = mockMemberService,
         )
 
-        given("계정을 인플루언서로 변경할 때") {
+        given("계정을 인플루언서로 변경하기 위해 아래와 같은 상황이 주어지면") {
             val followeeId = 1L
             val followerCount = 10_001L
 
@@ -29,7 +29,7 @@ internal class UpdateMemberInfluencerUsecaseTests : BehaviorSpec(
                 )
             }
 
-            `when`("팔로우한 횟수를 통해 인플루언서 계정으로 변경하고") {
+            `when`("계정을 인플루언서로 변경하는데") {
                 updateMemberInfluencerUsecase.execute(memberId = followeeId)
 
                 then("이와 관련된 메서드들은 최소 1번씩 호출된다") {
