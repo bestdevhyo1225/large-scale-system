@@ -20,34 +20,34 @@ internal class CreateFollowMemberUsecaseTests : BehaviorSpec(
             memberReadService = mockMemberReadService,
         )
 
-        given("팔로우를 할 때") {
-            `when`("팔로이와 팔로워를 조회한 다음, 팔로우를 처리하고") {
-                val followerMemberDto = MemberDto(
-                    id = 1L,
-                    name = "팔로워",
-                    influencer = false,
-                    createdAt = LocalDateTime.now().withNano(0),
-                )
-                val followeeMemberDto = MemberDto(
-                    id = 2L,
-                    name = "팔로이",
-                    influencer = false,
-                    createdAt = LocalDateTime.now().withNano(0),
-                )
-                val followCreateDto = FollowCreateDto(
-                    followerId = followerMemberDto.id,
-                    followeeId = followeeMemberDto.id,
-                )
+        given("팔로우를 하기 위해서 아래와 같은 상황이 주어지면") {
+            val followerMemberDto = MemberDto(
+                id = 1L,
+                name = "팔로워",
+                influencer = false,
+                createdAt = LocalDateTime.now().withNano(0),
+            )
+            val followeeMemberDto = MemberDto(
+                id = 2L,
+                name = "팔로이",
+                influencer = false,
+                createdAt = LocalDateTime.now().withNano(0),
+            )
+            val followCreateDto = FollowCreateDto(
+                followerId = followerMemberDto.id,
+                followeeId = followeeMemberDto.id,
+            )
 
-                every { mockMemberReadService.findMember(id = followerMemberDto.id) } returns followerMemberDto
-                every { mockMemberReadService.findMember(id = followeeMemberDto.id) } returns followeeMemberDto
-                every { mockFollowService.create(dto = followCreateDto) } returns FollowDto(
-                    id = 1L,
-                    followerId = followerMemberDto.id,
-                    followeeId = followeeMemberDto.id,
-                    createdAt = LocalDateTime.now().withNano(0),
-                )
+            every { mockMemberReadService.findMember(id = followerMemberDto.id) } returns followerMemberDto
+            every { mockMemberReadService.findMember(id = followeeMemberDto.id) } returns followeeMemberDto
+            every { mockFollowService.create(dto = followCreateDto) } returns FollowDto(
+                id = 1L,
+                followerId = followerMemberDto.id,
+                followeeId = followeeMemberDto.id,
+                createdAt = LocalDateTime.now().withNano(0),
+            )
 
+            `when`("팔로우를 처리하는데") {
                 createFollowMemberUsecase.execute(
                     followerId = followerMemberDto.id,
                     followeeId = followeeMemberDto.id,
