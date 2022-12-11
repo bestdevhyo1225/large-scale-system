@@ -55,7 +55,7 @@ class FindPostTimelineUsecase(
             getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
         val postDtos: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
-        val wishCountsMap: Map<Long, Long> = getWishCounts(postDtos = postDtos, pageSize = pageRequestByPosition.size)
+        val wishCountsMap: Map<Long, Long> = getWishCounts(postDtos = postDtos)
         val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postDtos.map {
             FindPostWishUsecaseDto(postDto = it, wishCount = wishCountsMap[it.id] ?: 0L)
         }
@@ -76,12 +76,21 @@ class FindPostTimelineUsecase(
         )
         val postIds: List<Long> = feedDtos.map { it.postId }
         val postCacheDtos: List<PostCacheDto> = postRedisReadService.findPostCaches(ids = postIds)
-
-        if (postCacheDtos.isNotEmpty()) {
-            return postCacheDtos.map { createPostDto(postCacheDto = it) }
+        return postCacheDtos.map { postCacheDto ->
+            with(receiver = postCacheDto) {
+                PostDto(
+                    id = id,
+                    memberId = memberId,
+                    title = title,
+                    contents = contents,
+                    writer = writer,
+                    viewCount = viewCount,
+                    createdAt = createdAt,
+                    updatedAt = updatedAt,
+                    images = images.map { PostImageDto(id = it.id, url = it.url, sortOrder = it.sortOrder) },
+                )
+            }
         }
-
-        return postReadService.findPosts(ids = postIds)
     }
 
     private suspend fun getInfluencerPosts(
@@ -96,34 +105,14 @@ class FindPostTimelineUsecase(
         )
     }
 
-    private fun createPostDto(postCacheDto: PostCacheDto): PostDto =
-        with(receiver = postCacheDto) {
-            PostDto(
-                id = id,
-                memberId = memberId,
-                title = title,
-                contents = contents,
-                writer = writer,
-                viewCount = viewCount,
-                createdAt = createdAt,
-                updatedAt = updatedAt,
-                images = images.map { PostImageDto(id = it.id, url = it.url, sortOrder = it.sortOrder) },
-            )
-        }
-
-    private fun getWishCounts(postDtos: List<PostDto>, pageSize: Long): Map<Long, Long> {
+    private fun getWishCounts(postDtos: List<PostDto>): Map<Long, Long> {
         val postIds: List<Long> = postDtos.map { it.id }
         val wishCountsByRedis: Map<Long, Long> = wishRedisReadService.findWishCounts(postIds = postIds)
-
-        if (isExistWishCountsCache(wishCounts = wishCountsByRedis, pageSize = pageSize)) {
+        if (wishCountsByRedis.isNotEmpty() && wishCountsByRedis.size == postIds.size) {
             return wishCountsByRedis
         }
-
         return wishReadService.getCountsByPostIds(postIds = postIds)
     }
-
-    private fun isExistWishCountsCache(wishCounts: Map<Long, Long>, pageSize: Long) =
-        wishCounts.isNotEmpty() && wishCounts.size == pageSize.toInt()
 
     private fun fallbackExecute(exception: Exception): PageByPosition<FindPostWishUsecaseDto> {
         logger.error { exception.localizedMessage }

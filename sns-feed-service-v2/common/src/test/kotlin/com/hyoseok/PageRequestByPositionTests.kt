@@ -62,24 +62,24 @@ internal class PageRequestByPositionTests : DescribeSpec(
                 // then
                 firstPageRequestByPosition.start.shouldBe(expected = 0)
                 firstPageRequestByPosition.size.shouldBe(expected = 5)
-                secondPageRequestByPosition.start.shouldBe(expected = 5)
+                secondPageRequestByPosition.start.shouldBe(expected = 0)
                 secondPageRequestByPosition.size.shouldBe(expected = 5)
             }
 
             it("여러가지 start, size 값 테스트") {
                 listOf(
-                    Pair(first = PageRequestByPosition(), second = listOf<Long>(0, 5, 5, 5)),
-                    Pair(first = PageRequestByPosition(start = 10, size = 10), second = listOf<Long>(10, 5, 15, 5)),
-                    Pair(first = PageRequestByPosition(start = 20, size = 10), second = listOf<Long>(20, 5, 25, 5)),
-                    Pair(first = PageRequestByPosition(start = 30, size = 10), second = listOf<Long>(30, 5, 35, 5)),
-                    Pair(first = PageRequestByPosition(start = 40, size = 10), second = listOf<Long>(40, 5, 45, 5)),
-                    Pair(first = PageRequestByPosition(start = 50, size = 10), second = listOf<Long>(50, 5, 55, 5)),
-                    Pair(first = PageRequestByPosition(start = 50, size = 20), second = listOf<Long>(50, 10, 60, 10)),
-                    Pair(first = PageRequestByPosition(start = 50, size = 30), second = listOf<Long>(50, 15, 65, 15)),
-                    Pair(first = PageRequestByPosition(start = 0, size = 20), second = listOf<Long>(0, 10, 10, 10)),
-                    Pair(first = PageRequestByPosition(start = 20, size = 20), second = listOf<Long>(20, 10, 30, 10)),
-                    Pair(first = PageRequestByPosition(start = 5, size = 5), second = listOf<Long>(5, 2, 7, 3)),
-                    Pair(first = PageRequestByPosition(start = 15, size = 15), second = listOf<Long>(15, 7, 22, 8)),
+                    Pair(first = PageRequestByPosition(), second = listOf<Long>(0, 5, 0, 5)),
+                    Pair(first = PageRequestByPosition(start = 10, size = 10), second = listOf<Long>(10, 5, 10, 5)),
+                    Pair(first = PageRequestByPosition(start = 20, size = 10), second = listOf<Long>(20, 5, 20, 5)),
+                    Pair(first = PageRequestByPosition(start = 30, size = 10), second = listOf<Long>(30, 5, 30, 5)),
+                    Pair(first = PageRequestByPosition(start = 40, size = 10), second = listOf<Long>(40, 5, 40, 5)),
+                    Pair(first = PageRequestByPosition(start = 50, size = 10), second = listOf<Long>(50, 5, 50, 5)),
+                    Pair(first = PageRequestByPosition(start = 50, size = 20), second = listOf<Long>(50, 10, 50, 10)),
+                    Pair(first = PageRequestByPosition(start = 50, size = 30), second = listOf<Long>(50, 15, 50, 15)),
+                    Pair(first = PageRequestByPosition(start = 0, size = 20), second = listOf<Long>(0, 10, 0, 10)),
+                    Pair(first = PageRequestByPosition(start = 20, size = 20), second = listOf<Long>(20, 10, 20, 10)),
+                    Pair(first = PageRequestByPosition(start = 5, size = 5), second = listOf<Long>(5, 2, 5, 3)),
+                    Pair(first = PageRequestByPosition(start = 15, size = 15), second = listOf<Long>(15, 7, 15, 8)),
                 ).forEach {
                     // given
                     val (pageRequestByPosition: PageRequestByPosition, expecteds: List<Long>) = it
