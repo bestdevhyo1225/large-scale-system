@@ -5,12 +5,12 @@ import com.hyoseok.feed.producer.FeedKafkaProducer
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.service.MemberReadService
-import com.hyoseok.post.dto.PostCacheDto
+import com.hyoseok.post.dto.PostImageCreateDto
 import com.hyoseok.post.dto.PostCreateDto
 import com.hyoseok.post.dto.PostDto
-import com.hyoseok.post.dto.PostImageCacheDto
-import com.hyoseok.post.dto.PostImageCreateDto
 import com.hyoseok.post.dto.PostImageDto
+import com.hyoseok.post.dto.PostCacheDto
+import com.hyoseok.post.dto.PostImageCacheDto
 import com.hyoseok.post.service.PostRedisService
 import com.hyoseok.post.service.PostService
 import com.hyoseok.usecase.dto.CreatePostUsecaseDto
@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 
 internal class CreatePostUsecaseTests : BehaviorSpec(
     {
-        val mockFeedKafkaProducer: FeedKafkaProducer = mockk()
+        val mockFeedKafkaProducer: FeedKafkaProducer = mockk(relaxed = true)
         val mockFollowReadService: FollowReadService = mockk()
         val mockMemberReadService: MemberReadService = mockk()
         val mockPostService: PostService = mockk()
@@ -100,6 +100,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                 every {
                     mockFollowReadService.findFollowerIds(
                         followeeId = postDto.memberId,
+                        influencer = memberDto.influencer,
                         limit = limit,
                         offset = offset,
                     )
@@ -114,6 +115,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                     verify {
                         mockFollowReadService.findFollowerIds(
                             followeeId = postDto.memberId,
+                            influencer = memberDto.influencer,
                             limit = limit,
                             offset = offset,
                         )

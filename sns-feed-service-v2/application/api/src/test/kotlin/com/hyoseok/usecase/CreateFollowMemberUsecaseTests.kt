@@ -41,7 +41,9 @@ internal class CreateFollowMemberUsecaseTests : BehaviorSpec(
 
                 every { mockMemberReadService.findMember(id = followerMemberDto.id) } returns followerMemberDto
                 every { mockMemberReadService.findMember(id = followeeMemberDto.id) } returns followeeMemberDto
-                every { mockFollowService.create(dto = followCreateDto) } returns FollowDto(
+                every {
+                    mockFollowService.create(dto = followCreateDto)
+                } returns FollowDto(
                     id = 1L,
                     followerId = followerMemberDto.id,
                     followeeId = followeeMemberDto.id,
