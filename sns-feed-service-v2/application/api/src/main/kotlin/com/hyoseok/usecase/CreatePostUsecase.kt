@@ -40,10 +40,7 @@ class CreatePostUsecase(
 
         CoroutineScope(context = Dispatchers.IO).launch {
             createPostCache(postDto = postDto)
-
-            if (!memberDto.influencer) {
-                sendFeedEvent(postId = postDto.id, followeeId = postDto.memberId)
-            }
+            sendFeedEvent(postDto = postDto, influencer = memberDto.influencer)
         }
 
         return postDto
@@ -67,19 +64,20 @@ class CreatePostUsecase(
         }
     }
 
-    private suspend fun sendFeedEvent(postId: Long, followeeId: Long) {
+    private suspend fun sendFeedEvent(postDto: PostDto, influencer: Boolean) {
         val limit = 1_000L
         var offset = 0L
         var isProgress = true
         while (isProgress) {
             val (total: Long, followerIds: List<Long>) = followReadService.findFollowerIds(
-                followeeId = followeeId,
+                followeeId = postDto.memberId,
+                influencer = influencer,
                 limit = limit,
                 offset = offset,
             )
 
             followerIds.forEach {
-                feedKafkaProducer.sendAsync(event = FeedEventDto(postId = postId, followerId = it))
+                feedKafkaProducer.sendAsync(event = FeedEventDto(postId = postDto.id, followerId = it))
             }
 
             offset += limit

@@ -1,7 +1,8 @@
 package com.hyoseok.follow.service
 
 import com.hyoseok.follow.entity.Follow
-import com.hyoseok.follow.entity.Follow.Companion.INFLUENCER_FIND_MAX_LIMIT
+import com.hyoseok.follow.entity.Follow.Companion.FIND_MAX_LIMIT
+import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_CHECK_TOTAL_COUNT
 import com.hyoseok.follow.repository.FollowReadRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,10 +16,10 @@ class FollowReadService(
     fun getFollowerCount(followeeId: Long): Long =
         followReadRepository.countByFolloweeId(followeeId = followeeId)
 
-    fun findFollowerIds(followeeId: Long, limit: Long, offset: Long): Pair<Long, List<Long>> {
-        // 10,000 이상의 팔로워를 가진 회원들은 이벤트 발행을 하지 않겠다.
+    fun findFollowerIds(followeeId: Long, influencer: Boolean, limit: Long, offset: Long): Pair<Long, List<Long>> {
+        // 인플루언서의 경우, 이벤트를 발행하지 않겠다.
         // 게시물 하나를 등록할 때마다 이벤트 발행하는 프로세스의 부하가 심하다.
-        if (followReadRepository.countByFolloweeId(followeeId = followeeId) >= Follow.INFLUENCER_CHECK_COUNT) {
+        if (influencer) {
             return Pair(first = 0L, second = listOf())
         }
 
@@ -47,6 +48,10 @@ class FollowReadService(
 
     fun findFolloweeIdsByStaticLimit(followerId: Long): List<Long> =
         followReadRepository
-            .findAllByFollowerIdAndLimitOrderByIdDesc(followerId = followerId, limit = INFLUENCER_FIND_MAX_LIMIT)
+            .findAllByFollowerIdAndLimitOrderByIdDesc(
+                followerId = followerId,
+                influencerCheckTotalCount = INFLUENCER_CHECK_TOTAL_COUNT,
+                limit = FIND_MAX_LIMIT,
+            )
             .map { it.followeeId }
 }

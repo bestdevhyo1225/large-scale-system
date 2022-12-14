@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 
 internal class CreatePostUsecaseTests : BehaviorSpec(
     {
-        val mockFeedKafkaProducer: FeedKafkaProducer = mockk()
+        val mockFeedKafkaProducer: FeedKafkaProducer = mockk(relaxed = true)
         val mockFollowReadService: FollowReadService = mockk()
         val mockMemberReadService: MemberReadService = mockk()
         val mockPostService: PostService = mockk()
@@ -99,6 +99,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
             every {
                 mockFollowReadService.findFollowerIds(
                     followeeId = postDto.memberId,
+                    influencer = memberDto.influencer,
                     limit = limit,
                     offset = offset,
                 )
@@ -114,6 +115,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                     verify {
                         mockFollowReadService.findFollowerIds(
                             followeeId = postDto.memberId,
+                            influencer = memberDto.influencer,
                             limit = limit,
                             offset = offset,
                         )

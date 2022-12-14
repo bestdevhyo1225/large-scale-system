@@ -99,10 +99,8 @@ class FindPostTimelineUsecase(
     ): List<PostDto> {
         val followeeIds: List<Long> = followReadService.findFolloweeIdsByStaticLimit(followerId = memberId)
         val memberDtos: List<MemberDto> = memberReadService.findInfluencerMembers(ids = followeeIds)
-        return postReadService.findPosts(
-            memberIds = memberDtos.map { it.id },
-            pageRequestByPosition = pageRequestByPosition,
-        )
+        val memberIds: List<Long> = memberDtos.map { it.id }
+        return postReadService.findPosts(memberIds = memberIds, pageRequestByPosition = pageRequestByPosition)
     }
 
     private fun getWishCounts(postDtos: List<PostDto>): Map<Long, Long> {
