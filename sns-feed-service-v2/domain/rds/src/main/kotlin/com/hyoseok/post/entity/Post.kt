@@ -17,7 +17,7 @@ import javax.persistence.Table
 @Table(
     name = "post",
     indexes = [
-        Index(name = "idx_post_01", columnList = "member_id", unique = true),
+        Index(name = "idx_post_01", columnList = "member_id"),
     ],
 )
 @DynamicUpdate
