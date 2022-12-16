@@ -10,9 +10,9 @@ class WishReadService(
     private val wishReadRepository: WishReadRepository,
 ) {
 
-    fun getCountByPostId(postId: Long): Long = wishReadRepository.countByPostId(postId = postId)
+    fun findWishCount(postId: Long): Long = wishReadRepository.countByPostId(postId = postId)
 
-    fun getCountsByPostIds(postIds: List<Long>): Map<Long, Long> =
+    fun findWishCounts(postIds: List<Long>): Map<Long, Long> =
         if (postIds.isNotEmpty()) {
             wishReadRepository.countGroupByPostIds(postIds = postIds)
                 .associate { it.postId to it.wishCount }

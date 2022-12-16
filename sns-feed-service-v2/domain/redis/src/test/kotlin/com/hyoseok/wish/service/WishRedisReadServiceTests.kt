@@ -26,7 +26,7 @@ internal class WishRedisReadServiceTests : DescribeSpec(
                 every { mockWishRedisRepository.scard(key = key) } returns 1L
 
                 // when
-                wishRedisReadService.findWishCount(postId = postId)
+                wishRedisReadService.findWishCountCache(postId = postId)
 
                 // then
                 verify { mockWishRedisRepository.scard(key = key) }

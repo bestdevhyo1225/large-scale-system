@@ -43,7 +43,7 @@ internal class FindPostUsecaseTests : BehaviorSpec(
         val imageSortOrder = 1
 
         given("게시물과 좋아요 캐시가 둘 다 존재하는 경우") {
-            val wishCount = 1L
+            val wishCountCache = 1L
             val postCache = PostCacheDto(
                 id = postId,
                 memberId = memberId,
@@ -59,22 +59,22 @@ internal class FindPostUsecaseTests : BehaviorSpec(
             )
 
             every { mockPostRedisReadService.findPostCache(id = postId) } returns postCache
-            every { mockWishRedisReadService.findWishCount(postId = postId) } returns wishCount
+            every { mockWishRedisReadService.findWishCountCache(postId = postId) } returns wishCountCache
 
             `when`("캐시 결과를 반환하며") {
                 findPostUsecase.execute(postId = postId)
 
                 then("이와 관련된 메서드들은 최소 1번씩은 호출된다") {
                     verify { mockPostRedisReadService.findPostCache(id = postId) }
-                    verify { mockWishRedisReadService.findWishCount(postId = postId) }
+                    verify { mockWishRedisReadService.findWishCountCache(postId = postId) }
                 }
             }
         }
 
         given("게시물과 좋아요 캐시가 둘 다 존재하지 않는 경우") {
             val postCache: PostCacheDto? = null
-            val wishCountByRedis: Long? = null
-            val wishCountByDB: Long = 1
+            val wishCountCache: Long? = null
+            val wishCount: Long = 1
             val postDto = PostDto(
                 id = postId,
                 memberId = memberId,
@@ -103,8 +103,8 @@ internal class FindPostUsecaseTests : BehaviorSpec(
             }
 
             every { mockPostRedisReadService.findPostCache(id = postId) } returns postCache
-            every { mockWishRedisReadService.findWishCount(postId = postId) } returns wishCountByRedis
-            every { mockWishReadService.getCountByPostId(postId = postId) } returns wishCountByDB
+            every { mockWishRedisReadService.findWishCountCache(postId = postId) } returns wishCountCache
+            every { mockWishReadService.findWishCount(postId = postId) } returns wishCount
             every { mockPostReadService.findPost(id = postId) } returns postDto
             justRun { mockPostRedisService.createOrUpdate(dto = createPostCacheDto) }
 
@@ -113,8 +113,8 @@ internal class FindPostUsecaseTests : BehaviorSpec(
 
                 then("이와 관련된 메서드들은 최소 1번씩은 호출된다") {
                     verify { mockPostRedisReadService.findPostCache(id = postId) }
-                    verify { mockWishRedisReadService.findWishCount(postId = postId) }
-                    verify { mockWishReadService.getCountByPostId(postId = postId) }
+                    verify { mockWishRedisReadService.findWishCountCache(postId = postId) }
+                    verify { mockWishReadService.findWishCount(postId = postId) }
                     verify { mockPostReadService.findPost(id = postId) }
                 }
             }
@@ -134,8 +134,8 @@ internal class FindPostUsecaseTests : BehaviorSpec(
                     PostImageCacheDto(id = imageId, url = imageUrl, sortOrder = imageSortOrder),
                 ),
             )
-            val wishCountByRedis: Long? = null
-            val wishCountByDB: Long = 1
+            val wishCountCache: Long? = null
+            val wishCount: Long = 1
             val postDto = PostDto(
                 id = postId,
                 memberId = memberId,
@@ -164,8 +164,8 @@ internal class FindPostUsecaseTests : BehaviorSpec(
             }
 
             every { mockPostRedisReadService.findPostCache(id = postId) } returns postCache
-            every { mockWishRedisReadService.findWishCount(postId = postId) } returns wishCountByRedis
-            every { mockWishReadService.getCountByPostId(postId = postId) } returns wishCountByDB
+            every { mockWishRedisReadService.findWishCountCache(postId = postId) } returns wishCountCache
+            every { mockWishReadService.findWishCount(postId = postId) } returns wishCount
             every { mockPostReadService.findPost(id = postId) } returns postDto
             justRun { mockPostRedisService.createOrUpdate(dto = createPostCacheDto) }
 
@@ -174,8 +174,8 @@ internal class FindPostUsecaseTests : BehaviorSpec(
 
                 then("이와 관련된 메서드들은 최소 1번씩은 호출된다") {
                     verify { mockPostRedisReadService.findPostCache(id = postId) }
-                    verify { mockWishRedisReadService.findWishCount(postId = postId) }
-                    verify { mockWishReadService.getCountByPostId(postId = postId) }
+                    verify { mockWishRedisReadService.findWishCountCache(postId = postId) }
+                    verify { mockWishReadService.findWishCount(postId = postId) }
                     verify { mockPostReadService.findPost(id = postId) }
                 }
             }

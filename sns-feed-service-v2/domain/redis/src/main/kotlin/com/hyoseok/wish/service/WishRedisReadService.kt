@@ -13,9 +13,10 @@ class WishRedisReadService(
     private val wishRedisPipelineRepository: WishRedisPipelineRepository,
 ) {
 
-    fun findWishCount(postId: Long): Long? = wishRedisRepository.scard(key = WishCache.getWishPostKey(postId = postId))
+    fun findWishCountCache(postId: Long): Long? =
+        wishRedisRepository.scard(key = WishCache.getWishPostKey(postId = postId))
 
-    fun findWishCounts(postIds: List<Long>): Map<Long, Long> =
+    fun findWishCountsCache(postIds: List<Long>): Map<Long, Long> =
         if (postIds.isNotEmpty()) {
             wishRedisPipelineRepository.getWishCountsMap(postIds = postIds)
         } else {
