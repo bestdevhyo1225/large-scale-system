@@ -55,9 +55,9 @@ class FindPostTimelineUsecase(
             findInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
         val postDtos: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
-        val wishCountsMap: Map<Long, Long> = findWishCounts(postDtos = postDtos)
+        val wishCounts: Map<Long, Long> = findWishCounts(postDtos = postDtos)
         val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postDtos.map {
-            FindPostWishUsecaseDto(postDto = it, wishCount = wishCountsMap[it.id] ?: 0L)
+            FindPostWishUsecaseDto(postDto = it, wishCount = wishCounts[it.id] ?: 0L)
         }
 
         PageByPosition(

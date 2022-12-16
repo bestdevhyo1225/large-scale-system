@@ -2,6 +2,7 @@ package com.hyoseok.usecase
 
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POSTS_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
+import com.hyoseok.post.dto.PostDto
 import com.hyoseok.post.service.PostReadService
 import com.hyoseok.post.service.PostRedisReadService
 import com.hyoseok.usecase.dto.FindPostWishUsecaseDto
@@ -25,7 +26,18 @@ class FindPostsUsecase(
 
     @RateLimiter(name = FIND_POSTS_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<FindPostWishUsecaseDto> {
-        TODO()
+        val postPageByPosition: PageByPosition<PostDto> =
+            postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
+        val postIds: List<Long> = postPageByPosition.items.map { it.id }
+        val wishCounts: Map<Long, Long> = wishReadService.findWishCounts(postIds = postIds)
+        val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postPageByPosition.items.map {
+            FindPostWishUsecaseDto(postDto = it, wishCount = wishCounts[it.id] ?: 0L)
+        }
+
+        return PageByPosition(
+            items = findPostWishUsecaseDtos,
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
+        )
     }
 
     private fun fallbackExecute(exception: Exception): PageByPosition<FindPostWishUsecaseDto> {
