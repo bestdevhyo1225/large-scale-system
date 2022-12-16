@@ -19,4 +19,4 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-check # Change reporter
-          ktlint_version: 0.43.2
+          ktlint_version: 0.43.2 # gradle ktlint 11.0.0 버전인 경우, ktlint 0.43.2 버전을 사용한다.
