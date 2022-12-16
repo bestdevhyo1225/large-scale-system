@@ -12,7 +12,7 @@ import javax.persistence.Table
 @Table(
     name = "wish",
     indexes = [
-        Index(name = "uk_post_id_member_id", columnList = "post_id,member_id", unique = true),
+        Index(name = "uk_wish_01", columnList = "post_id,member_id", unique = true),
     ],
 )
 @DynamicUpdate
