@@ -4,7 +4,7 @@ import com.hyoseok.config.BasicDataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.entity.FollowCount
-import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_CHECK_TOTAL_COUNT
+import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_MIN_LIMIT_COUNT
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -105,7 +105,7 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 val followeeIds: List<Long> = (2L..11L).map { it }
                 val follows: List<Follow> = followeeIds.map { Follow(followerId = followerId, followeeId = it) }
                 val followCounts: List<FollowCount> = followeeIds.map {
-                    FollowCount(memberId = it, totalFollower = INFLUENCER_CHECK_TOTAL_COUNT, totalFollowee = 1)
+                    FollowCount(memberId = it, totalFollower = INFLUENCER_MIN_LIMIT_COUNT, totalFollowee = 1)
                 }
 
                 withContext(Dispatchers.IO) {
@@ -116,7 +116,7 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 // when
                 val findFollows: List<Follow> = followReadRepository.findAllByFollowerIdAndLimitOrderByIdDesc(
                     followerId = followerId,
-                    influencerCheckTotalCount = INFLUENCER_CHECK_TOTAL_COUNT,
+                    checkTotalFollower = INFLUENCER_MIN_LIMIT_COUNT,
                     limit = limit,
                 )
                 val followsIds: List<Long> = follows

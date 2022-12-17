@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ContextConfiguration
+import java.time.LocalDateTime
 
 @DataJpaTest
 @ContextConfiguration(
@@ -121,7 +122,7 @@ internal class PostRepositoryTests : DescribeSpec() {
             }
         }
 
-        this.describe("findAllByMemberIdAndLimitAndCount 메서드는") {
+        this.describe("findAllByMemberIdAndLimitAndOffset 메서드는") {
             it("회원번호, limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
                 // given
                 val limit = 5L
@@ -146,7 +147,7 @@ internal class PostRepositoryTests : DescribeSpec() {
                 }
 
                 // when
-                val findPosts: List<Post> = postReadRepository.findAllByMemberIdAndLimitAndCount(
+                val findPosts: List<Post> = postReadRepository.findAllByMemberIdAndLimitAndOffset(
                     memberId = memberId,
                     limit = limit,
                     offset = 0,
@@ -158,7 +159,7 @@ internal class PostRepositoryTests : DescribeSpec() {
             }
         }
 
-        this.describe("findAllByMemberIdsAndLimitAndCount 메서드는") {
+        this.describe("findAllByMemberIdsAndCreatedAtAndLimitAndOffset 메서드는") {
             it("회원번호 리스트, limit, offset을 통해 Post 엔티티 리스트를 조회한다") {
                 // given
                 val limit = 5L
@@ -185,8 +186,10 @@ internal class PostRepositoryTests : DescribeSpec() {
                 }
 
                 // when
-                val findPosts: List<Post> = postReadRepository.findAllByMemberIdsAndLimitAndCount(
+                val findPosts: List<Post> = postReadRepository.findAllByMemberIdsAndCreatedAtAndLimitAndOffset(
                     memberIds = memberIds,
+                    fromCreatedAt = LocalDateTime.now().minusDays(1),
+                    toCreatedAt = LocalDateTime.now().plusDays(1),
                     limit = limit,
                     offset = 0,
                 )

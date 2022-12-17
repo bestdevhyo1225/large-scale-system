@@ -39,8 +39,6 @@ class Follow private constructor(
     }
 
     companion object {
-        const val FIND_MAX_LIMIT = 1_000L
-
         operator fun invoke(followerId: Long, followeeId: Long): Follow {
             validateFollowerAndFolloweeId(followerId = followerId, followeeId = followeeId)
             return Follow(followerId = followerId, followeeId = followeeId, createdAt = LocalDateTime.now())

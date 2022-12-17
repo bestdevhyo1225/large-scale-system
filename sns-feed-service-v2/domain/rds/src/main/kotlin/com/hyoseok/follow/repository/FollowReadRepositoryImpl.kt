@@ -73,7 +73,7 @@ class FollowReadRepositoryImpl(
 
     override fun findAllByFollowerIdAndLimitOrderByIdDesc(
         followerId: Long,
-        influencerCheckTotalCount: Long,
+        checkTotalFollower: Long,
         limit: Long,
     ): List<Follow> =
         jpaQueryFactory
@@ -82,7 +82,7 @@ class FollowReadRepositoryImpl(
             .innerJoin(followCount).on(followFolloweeIdEq(followeeId = followCount.memberId))
             .where(
                 followFollowerIdEq(followerId = followerId),
-                followCountTotalFollowerGoe(totalFollower = influencerCheckTotalCount),
+                followCountTotalFollowerGoe(totalFollower = checkTotalFollower),
             )
             .orderBy(followIdDesc())
             .limit(limit)

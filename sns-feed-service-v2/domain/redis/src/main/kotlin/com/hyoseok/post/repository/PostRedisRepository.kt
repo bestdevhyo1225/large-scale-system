@@ -16,4 +16,12 @@ interface PostRedisRepository {
     fun zcard(key: String): Long
     fun zremRangeByRank(key: String, start: Long, end: Long)
     fun <T : Any> zrevRange(key: String, start: Long, end: Long, clazz: Class<T>): List<T>
+    fun <T : Any> zrevRangeByScore(
+        key: String,
+        minScore: Double,
+        maxScore: Double,
+        start: Long,
+        end: Long,
+        clazz: Class<T>,
+    ): List<T>
 }

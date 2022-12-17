@@ -5,17 +5,15 @@ import com.hyoseok.post.entity.Post.Companion.POST_IDS_LIMIT_SIZE
 import com.hyoseok.post.repository.PostReadRepository
 import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 @Transactional(readOnly = true)
 class PostReadService(
     private val postReadRepository: PostReadRepository,
 ) {
-
-    private val logger = KotlinLogging.logger {}
 
     fun findPost(id: Long) = PostDto(post = postReadRepository.findById(id = id))
 
@@ -24,13 +22,14 @@ class PostReadService(
             return listOf()
         }
 
-        if (ids.size > POST_IDS_LIMIT_SIZE) {
-            logger.info { "ids.size 값이 1000을 넘었기 때문에 1,000개만 잘라서 조회합니다" }
-            return postReadRepository.findAllByInId(ids = ids.slice(0..999))
-                .map { PostDto(post = it) }
-        }
+        val postIds: List<Long> =
+            if (ids.size > POST_IDS_LIMIT_SIZE) {
+                ids.slice(0..999)
+            } else {
+                ids
+            }
 
-        return postReadRepository.findAllByInId(ids = ids)
+        return postReadRepository.findAllByInId(ids = postIds)
             .map { PostDto(post = it) }
     }
 
@@ -42,7 +41,7 @@ class PostReadService(
         }
 
         val postDtos: List<PostDto> = postReadRepository
-            .findAllByMemberIdAndLimitAndCount(memberId = memberId, limit = size, offset = start)
+            .findAllByMemberIdAndLimitAndOffset(memberId = memberId, limit = size, offset = start)
             .map { PostDto(post = it) }
 
         return PageByPosition(
@@ -62,8 +61,15 @@ class PostReadService(
             return listOf()
         }
 
-        return postReadRepository
-            .findAllByMemberIdsAndLimitAndCount(memberIds = memberIds, limit = size, offset = start)
-            .map { PostDto(post = it) }
+        val toCreatedAt: LocalDateTime = LocalDateTime.now().withNano(0)
+        val fromCreatedAt: LocalDateTime = toCreatedAt.minusDays(1)
+
+        return postReadRepository.findAllByMemberIdsAndCreatedAtAndLimitAndOffset(
+            memberIds = memberIds,
+            fromCreatedAt = fromCreatedAt,
+            toCreatedAt = toCreatedAt,
+            limit = size,
+            offset = start,
+        ).map { PostDto(post = it) }
     }
 }

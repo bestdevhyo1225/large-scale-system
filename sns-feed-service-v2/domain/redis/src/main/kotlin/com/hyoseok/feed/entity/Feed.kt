@@ -6,6 +6,6 @@ class Feed {
 
         fun getMemberIdFeedsKey(id: Long) = "member:$id:feeds"
         fun getMemberIdFeedsKeyAndExpireTime(id: Long) =
-            Pair(first = getMemberIdFeedsKey(id = id), second = 60 * 30L) // 30분 -> PostCache의 만료시간과 동일하게
+            Pair(first = getMemberIdFeedsKey(id = id), second = 60 * 60 * 24L) // 24시간
     }
 }
