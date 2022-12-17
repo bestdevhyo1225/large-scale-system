@@ -1,6 +1,8 @@
 package com.hyoseok.member.repository
 
 import com.hyoseok.member.entity.Member
+import com.hyoseok.member.entity.Member.Companion.INFLUENCER_FALSE
+import com.hyoseok.member.entity.Member.Companion.INFLUENCER_TRUE
 import com.hyoseok.member.entity.QMember.member
 import com.hyoseok.member.repository.MemberReadRepositoryImpl.ErrorMessage.NOT_FOUND_MEMBER
 import com.querydsl.core.types.dsl.BooleanExpression
@@ -35,5 +37,7 @@ class MemberReadRepositoryImpl(
 
     private fun memberIdEq(id: Long): BooleanExpression = member.id.eq(id)
     private fun memberIdsIn(ids: List<Long>): BooleanExpression = member.id.`in`(ids)
-    private fun memberInfluencerEq(influencer: Boolean): BooleanExpression = member.influencer.eq(influencer)
+    private fun memberInfluencerEq(influencer: Boolean): BooleanExpression {
+        return member.influencer.eq(if (influencer) INFLUENCER_TRUE else INFLUENCER_FALSE)
+    }
 }

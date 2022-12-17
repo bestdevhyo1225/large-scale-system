@@ -37,8 +37,8 @@ jobs:
 
       - name: Run Build
         run: |
-          ./gradlew clean build --exclude-task test
+          ./gradlew clean build -p sns-feed-service-v2 -x test
 
       - name: Run Test
         run: |
-          ./gradlew test --exclude-task build
+          ./gradlew test -p sns-feed-service-v2 -x build

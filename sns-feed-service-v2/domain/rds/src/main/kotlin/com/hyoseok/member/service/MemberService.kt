@@ -24,7 +24,7 @@ class MemberService(
             .run { memberRepository.save(this) }
             .let {
                 with(receiver = it) {
-                    MemberDto(id = id!!, name = name, influencer = influencer, createdAt = createdAt)
+                    MemberDto(id = id!!, name = name, influencer = getInfluencer(), createdAt = createdAt)
                 }
             }
 

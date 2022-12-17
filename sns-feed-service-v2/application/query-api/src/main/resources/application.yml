@@ -17,10 +17,6 @@ spring:
     redis:
       enable: true
 
-  wish:
-    redis:
-      enable: true
-
 resilience4j:
   ratelimiter:
     usecase:
