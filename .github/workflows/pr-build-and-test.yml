@@ -41,4 +41,4 @@ jobs:
 
       - name: Run Test
         run: |
-          gradlew test -p sns-feed-service-v2 -x build
+          ./gradlew test -p sns-feed-service-v2 -x build
