@@ -18,6 +18,9 @@ import org.springframework.boot.test.autoconfigure.data.redis.DataRedisTest
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ContextConfiguration
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit.SECONDS
 
 @DataRedisTest
 @DirtiesContext
@@ -29,10 +32,8 @@ import org.springframework.test.context.ContextConfiguration
         WishRedisTemplateConfig::class,
         WishRedisRepositoryImpl::class,
         WishRedisPipelineRepositoryImpl::class,
-        WishRedisTransactionRepositoryImpl::class,
         WishRedisRepository::class,
         WishRedisPipelineRepository::class,
-        WishRedisTransactionRepository::class,
     ],
 )
 internal class WishRedisPipelineRepositoryTests : DescribeSpec() {
@@ -45,7 +46,7 @@ internal class WishRedisPipelineRepositoryTests : DescribeSpec() {
     private lateinit var redisTemplate: RedisTemplate<String, String?>
 
     @Autowired
-    private lateinit var wishRedisTransactionRepository: WishRedisTransactionRepository
+    private lateinit var wishRedisRepository: WishRedisRepository
 
     @Autowired
     private lateinit var wishRedisPipelineRepository: WishRedisPipelineRepository
@@ -60,9 +61,17 @@ internal class WishRedisPipelineRepositoryTests : DescribeSpec() {
                 // given
                 val memberId = 1L
                 val postIds: List<Long> = (1L..10L).map { it }
+                val wishCaches: List<WishCache> = postIds.map { WishCache(postId = it, memberId = memberId) }
+                val score: Double = Timestamp.valueOf(LocalDateTime.now()).time.toDouble()
 
-                postIds.forEach {
-                    wishRedisTransactionRepository.createWish(wishCache = WishCache(postId = it, memberId = memberId))
+                wishCaches.forEach {
+                    wishRedisRepository.zaddAndExpire(
+                        key = it.getWishPostKey(),
+                        value = it.memberId,
+                        score = score,
+                        expireTime = it.expireTime,
+                        timeUnit = SECONDS,
+                    )
                 }
 
                 // when

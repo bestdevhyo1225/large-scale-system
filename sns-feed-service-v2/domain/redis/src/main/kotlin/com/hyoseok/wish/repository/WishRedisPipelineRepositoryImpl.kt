@@ -19,7 +19,7 @@ class WishRedisPipelineRepositoryImpl(
 
         redisTemplate.executePipelined {
             postIds.forEach {
-                wishRedisRepository.scard(key = WishCache.getWishPostKey(postId = it))
+                wishRedisRepository.zcard(key = WishCache.getWishPostKey(postId = it))
                     ?.let { wishCount -> result[it] = wishCount }
             }
 
