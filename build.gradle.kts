@@ -62,9 +62,6 @@ subprojects {
         // Spring Boot Starter Test
         testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-        // Spring Batch Test
-        testImplementation("org.springframework.batch:spring-batch-test")
-
         // Spring Kafka Test
         testImplementation("org.springframework.kafka:spring-kafka-test")
 
