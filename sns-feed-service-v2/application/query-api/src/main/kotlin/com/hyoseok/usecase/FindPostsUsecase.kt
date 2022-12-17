@@ -2,7 +2,6 @@ package com.hyoseok.usecase
 
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POSTS_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
-import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.dto.PostDto
 import com.hyoseok.post.service.PostReadService
 import com.hyoseok.post.service.PostRedisReadService
@@ -27,41 +26,12 @@ class FindPostsUsecase(
 
     @RateLimiter(name = FIND_POSTS_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<FindPostWishUsecaseDto> {
-        val postCacheDtos: List<PostCacheDto> =
-            postRedisReadService.findPostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
-
-        if (isExistPostCache(postCacheDtos = postCacheDtos, pageSize = pageRequestByPosition.size)) {
-            val postIds: List<Long> = postCacheDtos.map { it.id }
-            val wishCountsByRedis: Map<Long, Long> = wishRedisReadService.findWishCounts(postIds = postIds)
-
-            if (isExistWishCountsCache(wishCounts = wishCountsByRedis, pageSize = pageRequestByPosition.size)) {
-                val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postCacheDtos.map {
-                    FindPostWishUsecaseDto(postCacheDto = it, wishCount = wishCountsByRedis[it.id] ?: 0L)
-                }
-
-                return PageByPosition(
-                    items = findPostWishUsecaseDtos,
-                    nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
-                )
-            }
-
-            val wishCountsByDB: Map<Long, Long> = wishReadService.getCountsByPostIds(postIds = postIds)
-            val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postCacheDtos.map {
-                FindPostWishUsecaseDto(postCacheDto = it, wishCount = wishCountsByDB[it.id] ?: 0L)
-            }
-
-            return PageByPosition(
-                items = findPostWishUsecaseDtos,
-                nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
-            )
-        }
-
-        val postDtos: PageByPosition<PostDto> =
+        val postPageByPosition: PageByPosition<PostDto> =
             postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
-        val postIds: List<Long> = postDtos.items.map { it.id }
-        val wishCountsByDB: Map<Long, Long> = wishReadService.getCountsByPostIds(postIds = postIds)
-        val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postDtos.items.map {
-            FindPostWishUsecaseDto(postDto = it, wishCount = wishCountsByDB[it.id] ?: 0L)
+        val postIds: List<Long> = postPageByPosition.items.map { it.id }
+        val wishCounts: Map<Long, Long> = wishReadService.findWishCounts(postIds = postIds)
+        val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postPageByPosition.items.map {
+            FindPostWishUsecaseDto(postDto = it, wishCount = wishCounts[it.id] ?: 0L)
         }
 
         return PageByPosition(
@@ -69,12 +39,6 @@ class FindPostsUsecase(
             nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
         )
     }
-
-    private fun isExistPostCache(postCacheDtos: List<PostCacheDto>, pageSize: Long) =
-        postCacheDtos.isNotEmpty() && postCacheDtos.size == pageSize.toInt()
-
-    private fun isExistWishCountsCache(wishCounts: Map<Long, Long>, pageSize: Long) =
-        wishCounts.isNotEmpty() && wishCounts.size == pageSize.toInt()
 
     private fun fallbackExecute(exception: Exception): PageByPosition<FindPostWishUsecaseDto> {
         logger.error { exception.localizedMessage }

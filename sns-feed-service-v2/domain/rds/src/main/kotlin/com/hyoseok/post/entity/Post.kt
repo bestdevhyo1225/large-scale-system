@@ -9,11 +9,17 @@ import javax.persistence.CascadeType.PERSIST
 import javax.persistence.CascadeType.REMOVE
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.Index
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table(name = "post")
+@Table(
+    name = "post",
+    indexes = [
+        Index(name = "idx_post_01", columnList = "member_id"),
+    ],
+)
 @DynamicUpdate
 class Post private constructor(
     memberId: Long,

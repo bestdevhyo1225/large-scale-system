@@ -49,31 +49,32 @@ class FindPostTimelineUsecase(
         ) = pageRequestByPosition.splitTwoPageRequestByPosition()
 
         val deferredFeedPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
-            getFeedPosts(memberId = memberId, pageRequestByPosition = feedPostsRequestByPosition)
+            findFeedPosts(memberId = memberId, pageRequestByPosition = feedPostsRequestByPosition)
         }
         val deferredInfluencerPosts: Deferred<List<PostDto>> = async(context = Dispatchers.IO) {
-            getInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
+            findInfluencerPosts(memberId = memberId, pageRequestByPosition = influencerPostsRequestByPosition)
         }
         val postDtos: List<PostDto> = deferredFeedPosts.await().plus(deferredInfluencerPosts.await())
-        val wishCountsMap: Map<Long, Long> = getWishCounts(postDtos = postDtos)
+        val wishCounts: Map<Long, Long> = findWishCounts(postDtos = postDtos)
         val findPostWishUsecaseDtos: List<FindPostWishUsecaseDto> = postDtos.map {
-            FindPostWishUsecaseDto(postDto = it, wishCount = wishCountsMap[it.id] ?: 0L)
+            FindPostWishUsecaseDto(postDto = it, wishCount = wishCounts[it.id] ?: 0L)
         }
 
         PageByPosition(
             items = findPostWishUsecaseDtos.shuffled(),
-            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = findPostWishUsecaseDtos.size),
+            nextPageRequestByPosition = PageRequestByPosition(
+                start = feedPostsRequestByPosition.start.plus(feedPostsRequestByPosition.size),
+                size = feedPostsRequestByPosition.size,
+            ),
         )
     }
 
-    private suspend fun getFeedPosts(
+    private suspend fun findFeedPosts(
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
     ): List<PostDto> {
-        val feedDtos: List<FeedDto> = feedRedisReadService.findFeeds(
-            memberId = memberId,
-            pageRequestByPosition = pageRequestByPosition,
-        )
+        val feedDtos: List<FeedDto> =
+            feedRedisReadService.findFeeds(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
         val postIds: List<Long> = feedDtos.map { it.postId }
         val postCacheDtos: List<PostCacheDto> = postRedisReadService.findPostCaches(ids = postIds)
         return postCacheDtos.map { postCacheDto ->
@@ -93,7 +94,7 @@ class FindPostTimelineUsecase(
         }
     }
 
-    private suspend fun getInfluencerPosts(
+    private suspend fun findInfluencerPosts(
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
     ): List<PostDto> {
@@ -103,13 +104,13 @@ class FindPostTimelineUsecase(
         return postReadService.findPosts(memberIds = memberIds, pageRequestByPosition = pageRequestByPosition)
     }
 
-    private fun getWishCounts(postDtos: List<PostDto>): Map<Long, Long> {
+    private fun findWishCounts(postDtos: List<PostDto>): Map<Long, Long> {
         val postIds: List<Long> = postDtos.map { it.id }
-        val wishCountsByRedis: Map<Long, Long> = wishRedisReadService.findWishCounts(postIds = postIds)
-        if (wishCountsByRedis.isNotEmpty() && wishCountsByRedis.size == postIds.size) {
-            return wishCountsByRedis
+        val wishCountsCache: Map<Long, Long> = wishRedisReadService.findWishCountsCache(postIds = postIds)
+        if (wishCountsCache.isNotEmpty() && wishCountsCache.size == postIds.size) {
+            return wishCountsCache
         }
-        return wishReadService.getCountsByPostIds(postIds = postIds)
+        return wishReadService.findWishCounts(postIds = postIds)
     }
 
     private fun fallbackExecute(exception: Exception): PageByPosition<FindPostWishUsecaseDto> {

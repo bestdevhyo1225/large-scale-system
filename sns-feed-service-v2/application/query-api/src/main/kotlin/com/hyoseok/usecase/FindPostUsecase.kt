@@ -35,17 +35,17 @@ class FindPostUsecase(
     @RateLimiter(name = FIND_POST_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(postId: Long): FindPostWishUsecaseDto = runBlocking {
         val deferredPostCache: Deferred<PostCacheDto?> = async(context = Dispatchers.IO) {
-            getPostCache(postId = postId)
+            findPostCache(postId = postId)
         }
-        val deferredWishCount: Deferred<Long?> = async(context = Dispatchers.IO) {
-            getWishCount(postId = postId)
+        val deferredWishCountCache: Deferred<Long?> = async(context = Dispatchers.IO) {
+            findWishCountCache(postId = postId)
         }
 
         val postCacheDto: PostCacheDto? = deferredPostCache.await()
-        val wishCount: Long? = deferredWishCount.await()
+        val wishCountCache: Long? = deferredWishCountCache.await()
 
-        if (postCacheDto != null && wishCount != null) {
-            return@runBlocking getFindPostWishUsecaseDto(postCacheDto = postCacheDto, wishCount = wishCount)
+        if (postCacheDto != null && wishCountCache != null) {
+            return@runBlocking getFindPostWishUsecaseDto(postCacheDto = postCacheDto, wishCount = wishCountCache)
         }
 
         val postDto: PostDto = postReadService.findPost(id = postId)
@@ -54,19 +54,18 @@ class FindPostUsecase(
             postRedisService.createOrUpdate(dto = createPostCacheDto(postDto = postDto))
         }
 
-        if (wishCount == null) {
-            return@runBlocking FindPostWishUsecaseDto(
-                postDto = postDto,
-                wishCount = wishReadService.getCountByPostId(postId = postId),
-            )
+        if (wishCountCache == null) {
+            val wishCount: Long = wishReadService.findWishCount(postId = postId)
+            return@runBlocking FindPostWishUsecaseDto(postDto = postDto, wishCount = wishCount)
         }
 
-        FindPostWishUsecaseDto(postDto = postDto, wishCount = wishCount)
+        FindPostWishUsecaseDto(postDto = postDto, wishCount = wishCountCache)
     }
 
-    private suspend fun getPostCache(postId: Long): PostCacheDto? = postRedisReadService.findPostCache(id = postId)
+    private suspend fun findPostCache(postId: Long): PostCacheDto? = postRedisReadService.findPostCache(id = postId)
 
-    private suspend fun getWishCount(postId: Long): Long? = wishRedisReadService.findWishCount(postId = postId)
+    private suspend fun findWishCountCache(postId: Long): Long? =
+        wishRedisReadService.findWishCountCache(postId = postId)
 
     private fun getFindPostWishUsecaseDto(postCacheDto: PostCacheDto, wishCount: Long): FindPostWishUsecaseDto =
         FindPostWishUsecaseDto(postCacheDto = postCacheDto, wishCount = wishCount)
