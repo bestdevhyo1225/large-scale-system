@@ -37,7 +37,7 @@ class WishRedisRepositoryImpl(
         setExpire(key, expireTime, timeUnit)
     }
 
-    override fun zcard(key: String): Long? = redisTemplate.opsForZSet().size(key)
+    override fun zcard(key: String): Long? = redisTemplate.opsForZSet().zCard(key)
 
     override fun <T : Any> zrevRangeByScore(
         key: String,
