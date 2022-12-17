@@ -24,7 +24,10 @@ data class PostCache(
         fun getPostMemberKey(memberId: Long) = "post:member:$memberId"
         fun getPostIdKey(id: Long) = "post:$id"
         fun getPostIdViewsKey(id: Long) = "post:$id:views"
+        fun getPostIdWishesKey(id: Long) = "post:$id:wishes"
         fun getPostKeyAndExpireTime(id: Long) = Pair(first = getPostIdKey(id = id), second = 60L * 30L) // 30분
         fun getPostViewsKeyAndExpireTime(id: Long) = Pair(first = getPostIdViewsKey(id = id), second = 60L * 30L) // 30분
+        fun getPostWishesKeyAndExpireTime(id: Long) =
+            Pair(first = getPostIdWishesKey(id = id), second = 60L * 30L) // 30분
     }
 }

@@ -2,6 +2,8 @@ package com.hyoseok.post.repository
 
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.POST_MEMBER_MAX_LIMIT
+import com.hyoseok.post.entity.PostCache.Companion.getPostKeyAndExpireTime
+import com.hyoseok.post.entity.PostCache.Companion.getPostMemberKey
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
@@ -16,28 +18,18 @@ class PostRedisTransactionRepositoryImpl(
     private val postRedisRepository: PostRedisRepository,
 ) : PostRedisTransactionRepository {
 
-    override fun createPostCache(postCache: PostCache, postViewCount: Long): Boolean =
-
+    override fun createPostCache(postCache: PostCache): Boolean =
         redisTemplate.execute { redisConnection ->
+            val (postKey: String, postExpireTime: Long) = getPostKeyAndExpireTime(id = postCache.id)
+            val postMemberKey: String = getPostMemberKey(memberId = postCache.memberId)
+
             try {
                 redisConnection.multi()
-
-                val (postKey: String, postExpireTime: Long) = PostCache.getPostKeyAndExpireTime(id = postCache.id)
-                val (postViewKey: String, postViewExpireTime: Long) = PostCache.getPostViewsKeyAndExpireTime(
-                    id = postCache.id,
-                )
-                val postMemberKey: String = PostCache.getPostMemberKey(memberId = postCache.memberId)
 
                 postRedisRepository.set(
                     key = postKey,
                     value = postCache,
                     expireTime = postExpireTime,
-                    timeUnit = SECONDS,
-                )
-                postRedisRepository.set(
-                    key = postViewKey,
-                    value = postViewCount,
-                    expireTime = postViewExpireTime,
                     timeUnit = SECONDS,
                 )
                 postRedisRepository.zadd(key = postMemberKey, value = postCache.id, score = postCache.id.toDouble())

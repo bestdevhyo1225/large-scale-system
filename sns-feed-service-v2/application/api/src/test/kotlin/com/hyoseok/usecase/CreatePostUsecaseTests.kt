@@ -65,6 +65,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                 contents = createPostUsecaseDto.contents,
                 writer = memberDto.name,
                 viewCount = 0L,
+                wishCount = 0L,
                 createdAt = LocalDateTime.now().withNano(0),
                 updatedAt = LocalDateTime.now().withNano(0),
                 images = listOf(
@@ -83,6 +84,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                     contents = contents,
                     writer = writer,
                     viewCount = viewCount,
+                    wishCount = wishCount,
                     createdAt = createdAt,
                     updatedAt = updatedAt,
                     images = images.map { PostImageCacheDto(id = it.id, url = it.url, sortOrder = it.sortOrder) },

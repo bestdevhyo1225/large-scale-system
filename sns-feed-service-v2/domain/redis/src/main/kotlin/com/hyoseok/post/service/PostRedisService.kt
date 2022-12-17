@@ -1,11 +1,13 @@
 package com.hyoseok.post.service
 
 import com.hyoseok.post.dto.PostCacheDto
-import com.hyoseok.post.entity.PostCache
+import com.hyoseok.post.entity.PostCache.Companion.getPostViewsKeyAndExpireTime
+import com.hyoseok.post.entity.PostCache.Companion.getPostWishesKeyAndExpireTime
 import com.hyoseok.post.repository.PostRedisRepository
 import com.hyoseok.post.repository.PostRedisTransactionRepository
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
+import java.util.concurrent.TimeUnit.SECONDS
 
 @Service
 @ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
@@ -15,10 +17,24 @@ class PostRedisService(
 ) {
 
     fun createOrUpdate(dto: PostCacheDto) {
-        postRedisTransactionRepository.createPostCache(postCache = dto.toEntity(), postViewCount = dto.viewCount)
-    }
+        with(receiver = dto) {
+            postRedisTransactionRepository.createPostCache(postCache = toEntity())
 
-    fun increasePostView(id: Long) {
-        postRedisRepository.hIncrement(key = PostCache.getPostViewBucketKey(id = id), hashKey = id, value = 1L)
+            val (postViewKey: String, postViewExpireTime: Long) = getPostViewsKeyAndExpireTime(id = id)
+            val (postWishKey: String, postWishExpireTime: Long) = getPostWishesKeyAndExpireTime(id = id)
+
+            postRedisRepository.set(
+                key = postViewKey,
+                value = viewCount,
+                expireTime = postViewExpireTime,
+                timeUnit = SECONDS,
+            )
+            postRedisRepository.set(
+                key = postWishKey,
+                value = wishCount,
+                expireTime = postWishExpireTime,
+                timeUnit = SECONDS,
+            )
+        }
     }
 }

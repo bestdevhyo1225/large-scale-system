@@ -71,8 +71,7 @@ internal class PostRedisPipelineRepositoryTests : DescribeSpec() {
                         updatedAt = LocalDateTime.now().withNano(0),
                         images = listOf(PostImageCache(id = 1L, url = "url", sortOrder = 1)),
                     )
-                    val postViewCount: Long = 1
-                    postRedisTransactionRepository.createPostCache(postCache = postCache, postViewCount = postViewCount)
+                    postRedisTransactionRepository.createPostCache(postCache = postCache)
                 }
 
                 // when

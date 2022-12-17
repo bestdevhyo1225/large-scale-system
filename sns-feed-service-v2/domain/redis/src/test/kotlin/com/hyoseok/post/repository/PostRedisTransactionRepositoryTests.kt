@@ -4,6 +4,8 @@ import com.hyoseok.config.PostRedisConfig
 import com.hyoseok.config.PostRedisTemplateConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.post.entity.PostCache
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
+import com.hyoseok.post.entity.PostCache.Companion.getPostMemberKey
 import com.hyoseok.post.entity.PostImageCache
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -54,7 +56,7 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
         }
 
         this.describe("createPostCache 메서드는") {
-            it("트랜잭션을 활용해서 PostCache, PostViewCount를 저장한다") {
+            it("트랜잭션을 활용해서 PostCache를 저장한다") {
                 // given
                 val postCache = PostCache(
                     id = 1231623,
@@ -66,21 +68,19 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
                     updatedAt = LocalDateTime.now().withNano(0),
                     images = listOf(PostImageCache(id = 1L, url = "url", sortOrder = 1)),
                 )
-                val postViewCount: Long = 1
 
                 // when
-                postRedisTransactionRepository.createPostCache(postCache = postCache, postViewCount = postViewCount)
+                postRedisTransactionRepository.createPostCache(postCache = postCache)
 
                 // then
+
                 postRedisRepository.get(
-                    key = PostCache.getPostIdKey(id = postCache.id),
+                    key = getPostIdKey(id = postCache.id),
                     clazz = PostCache::class.java,
                 ).shouldBe(postCache)
 
-                postRedisRepository.get(
-                    key = PostCache.getPostIdViewsKey(id = postCache.id),
-                    clazz = Long::class.java,
-                ).shouldBe(postViewCount)
+                postRedisRepository.zcard(key = getPostMemberKey(memberId = postCache.memberId))
+                    .shouldBe(1)
             }
         }
     }

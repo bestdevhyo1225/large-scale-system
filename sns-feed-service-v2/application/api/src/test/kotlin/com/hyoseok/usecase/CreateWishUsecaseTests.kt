@@ -1,10 +1,11 @@
 package com.hyoseok.usecase
 
+import com.hyoseok.member.dto.MemberDto
+import com.hyoseok.member.service.MemberReadService
+import com.hyoseok.post.dto.PostDto
+import com.hyoseok.post.dto.PostImageDto
+import com.hyoseok.post.service.PostReadService
 import com.hyoseok.wish.dto.WishCacheDto
-import com.hyoseok.wish.dto.WishEventDto
-import com.hyoseok.wish.dto.WishEventLogDto
-import com.hyoseok.wish.producer.WishKafkaProducer
-import com.hyoseok.wish.service.WishEventLogService
 import com.hyoseok.wish.service.WishRedisService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
@@ -15,50 +16,44 @@ import java.time.LocalDateTime
 
 internal class CreateWishUsecaseTests : BehaviorSpec(
     {
-        val mockWishEventLogService: WishEventLogService = mockk()
+        val mockMemberReadService: MemberReadService = mockk()
+        val mockPostReadService: PostReadService = mockk()
         val mockWishRedisService: WishRedisService = mockk()
-        val mockWishKafkaProducer: WishKafkaProducer = mockk()
         val createWishUsecase = CreateWishUsecase(
-            wishEventLogService = mockWishEventLogService,
+            memberReadService = mockMemberReadService,
+            postReadService = mockPostReadService,
             wishRedisService = mockWishRedisService,
-            wishKafkaProducer = mockWishKafkaProducer,
         )
 
         given("좋아요를 처리하기 위해 아래와 같은 상황이 주어지면") {
-            val wishCacheDto = WishCacheDto(postId = 1L, memberId = 1L)
-            val wishEventLogDto = WishEventLogDto(
+            val memberDto =
+                MemberDto(id = 1L, name = "name", influencer = false, createdAt = LocalDateTime.now().withNano(0))
+            val postDto = PostDto(
                 id = 1L,
-                postId = wishCacheDto.postId,
-                memberId = wishCacheDto.memberId,
-                isProcessed = false,
-                publishedAt = LocalDateTime.now().withNano(0),
-                processedAt = null,
+                memberId = 2L,
+                title = "title",
+                contents = "contents",
+                writer = "writer",
+                viewCount = 11234L,
+                wishCount = 11234L,
+                createdAt = LocalDateTime.now().withNano(0),
+                updatedAt = LocalDateTime.now().withNano(0),
+                images = listOf(
+                    PostImageDto(id = 1L, url = "url", sortOrder = 1),
+                ),
             )
-            val wishEventDto = WishEventDto(
-                wishEventLogId = wishEventLogDto.id,
-                postId = wishCacheDto.postId,
-                memberId = wishCacheDto.memberId,
-            )
+            val wishCacheDto = WishCacheDto(postId = 1L, memberId = 1L)
 
+            every { mockMemberReadService.findMember(id = memberDto.id) } returns memberDto
+            every { mockPostReadService.findPost(id = postDto.id) } returns postDto
             justRun { mockWishRedisService.create(dto = wishCacheDto) }
-            every {
-                mockWishEventLogService.create(
-                    postId = wishCacheDto.postId,
-                    memberId = wishCacheDto.memberId,
-                )
-            } returns wishEventLogDto
-            justRun { mockWishKafkaProducer.sendAsync(event = wishEventDto) }
 
             `when`("좋아요 캐시를 저장하는데") {
                 createWishUsecase.execute(postId = wishCacheDto.postId, memberId = wishCacheDto.memberId)
 
                 then("이와 관련된 메서드들은 최소 1번씩 호출된다") {
-                    verify {
-                        mockWishEventLogService.create(
-                            postId = wishCacheDto.postId,
-                            memberId = wishCacheDto.memberId,
-                        )
-                    }
+                    verify { mockMemberReadService.findMember(id = memberDto.id) }
+                    verify { mockPostReadService.findPost(id = postDto.id) }
                 }
             }
         }

@@ -2,6 +2,9 @@ package com.hyoseok.post.service
 
 import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdViewsKey
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdWishesKey
 import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
 import com.hyoseok.util.PageRequestByPosition
@@ -16,17 +19,16 @@ class PostRedisReadService(
 ) {
 
     fun findPostCache(id: Long): PostCacheDto? {
-        val postCache: PostCache = postRedisRepository.get(
-            key = PostCache.getPostIdKey(id = id),
-            clazz = PostCache::class.java,
-        ) ?: return null
+        val postCache: PostCache =
+            postRedisRepository.get(key = getPostIdKey(id = id), clazz = PostCache::class.java) ?: return null
 
-        val postViewCache: Long = postRedisRepository.get(
-            key = PostCache.getPostIdViewsKey(id = id),
-            clazz = Long::class.java,
-        ) ?: 0L
+        val postViewCache: Long =
+            postRedisRepository.get(key = getPostIdViewsKey(id = id), clazz = Long::class.java) ?: 0L
 
-        return PostCacheDto(postCache = postCache, viewCount = postViewCache)
+        val postWishCache: Long =
+            postRedisRepository.get(key = getPostIdWishesKey(id = id), clazz = Long::class.java) ?: 0L
+
+        return PostCacheDto(postCache = postCache, viewCount = postViewCache, wishCount = postWishCache)
     }
 
     fun findPostCaches(ids: List<Long>): List<PostCacheDto> =

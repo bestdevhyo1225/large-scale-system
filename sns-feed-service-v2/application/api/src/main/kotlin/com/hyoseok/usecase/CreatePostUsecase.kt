@@ -56,6 +56,7 @@ class CreatePostUsecase(
                     contents = contents,
                     writer = writer,
                     viewCount = viewCount,
+                    wishCount = wishCount,
                     createdAt = createdAt,
                     updatedAt = updatedAt,
                     images = images.map { PostImageCacheDto(id = it.id, url = it.url, sortOrder = it.sortOrder) },

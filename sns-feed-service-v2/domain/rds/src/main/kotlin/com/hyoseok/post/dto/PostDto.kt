@@ -10,6 +10,7 @@ data class PostDto(
     val contents: String,
     val writer: String,
     val viewCount: Long,
+    val wishCount: Long,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val images: List<PostImageDto>,
@@ -24,6 +25,7 @@ data class PostDto(
                     contents = contents,
                     writer = writer,
                     viewCount = viewCount,
+                    wishCount = wishCount,
                     createdAt = createdAt,
                     updatedAt = updatedAt,
                     images = postImages.map {
