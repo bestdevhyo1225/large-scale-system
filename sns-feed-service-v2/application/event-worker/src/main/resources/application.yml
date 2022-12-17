@@ -31,7 +31,6 @@ spring:
       group-id: sns-feed-event-worker
     topics:
       feed: feed-topic
-      wish: wish-topic
 
 ---
 spring:
@@ -51,4 +50,3 @@ spring:
       group-id: sns-feed-event-worker
     topics:
       feed: feed-topic
-      wish: wish-topic

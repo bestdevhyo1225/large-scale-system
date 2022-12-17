@@ -23,16 +23,16 @@ class FollowReadRepositoryImpl(
 
     override fun countByFolloweeId(followeeId: Long): Long =
         jpaQueryFactory
-            .select(follow.count())
-            .from(follow)
-            .where(followFolloweeIdEq(followeeId = followeeId))
+            .select(followCount.totalFollower)
+            .from(followCount)
+            .where(followCountMemberIdEq(memberId = followeeId))
             .fetchOne() ?: 0L
 
     override fun countByFollowerId(followerId: Long): Long =
         jpaQueryFactory
-            .select(follow.count())
-            .from(follow)
-            .where(followFollowerIdEq(followerId = followerId))
+            .select(followCount.totalFollowee)
+            .from(followCount)
+            .where(followCountMemberIdEq(memberId = followerId))
             .fetchOne() ?: 0L
 
     override fun findById(id: Long): Follow =
@@ -89,10 +89,17 @@ class FollowReadRepositoryImpl(
             .fetch()
 
     private fun followIdEq(id: Long): BooleanExpression = follow.id.eq(id)
+
     private fun followFolloweeIdEq(followeeId: Long): BooleanExpression = follow.followeeId.eq(followeeId)
+
     private fun followFolloweeIdEq(followeeId: NumberPath<Long>): BooleanExpression = follow.followeeId.eq(followeeId)
+
     private fun followFollowerIdEq(followerId: Long): BooleanExpression = follow.followerId.eq(followerId)
+
+    private fun followCountMemberIdEq(memberId: Long): BooleanExpression = followCount.memberId.eq(memberId)
+
     private fun followCountTotalFollowerGoe(totalFollower: Long): BooleanExpression =
         followCount.totalFollower.goe(totalFollower)
+
     private fun followIdDesc(): OrderSpecifier<*> = follow.id.desc()
 }

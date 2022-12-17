@@ -11,6 +11,7 @@ data class PostCacheDto(
     val contents: String,
     val writer: String,
     val viewCount: Long,
+    val wishCount: Long,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val images: List<PostImageCacheDto>,
@@ -29,7 +30,7 @@ data class PostCacheDto(
         )
 
     companion object {
-        operator fun invoke(postCache: PostCache, viewCount: Long): PostCacheDto =
+        operator fun invoke(postCache: PostCache, viewCount: Long, wishCount: Long): PostCacheDto =
             with(receiver = postCache) {
                 PostCacheDto(
                     id = id,
@@ -38,6 +39,7 @@ data class PostCacheDto(
                     contents = contents,
                     writer = writer,
                     viewCount = viewCount,
+                    wishCount = wishCount,
                     createdAt = createdAt,
                     updatedAt = updatedAt,
                     images = images.map {

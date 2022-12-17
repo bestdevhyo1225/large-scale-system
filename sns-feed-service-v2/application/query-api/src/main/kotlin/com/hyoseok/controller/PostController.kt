@@ -1,10 +1,10 @@
 package com.hyoseok.controller
 
+import com.hyoseok.post.dto.PostDto
 import com.hyoseok.response.SuccessResponse
-import com.hyoseok.usecase.FindPostTimelineUsecase
+import com.hyoseok.usecase.FindPostsTimelineUsecase
 import com.hyoseok.usecase.FindPostUsecase
 import com.hyoseok.usecase.FindPostsUsecase
-import com.hyoseok.usecase.dto.FindPostWishUsecaseDto
 import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
 import org.springframework.http.ResponseEntity
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/posts")
 class PostController(
     private val findPostsUsecase: FindPostsUsecase,
-    private val findPostTimelineUsecase: FindPostTimelineUsecase,
+    private val findPostsTimelineUsecase: FindPostsTimelineUsecase,
     private val findPostUsecase: FindPostUsecase,
 ) {
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<SuccessResponse<FindPostWishUsecaseDto>> =
+    fun get(@PathVariable id: Long): ResponseEntity<SuccessResponse<PostDto>> =
         ResponseEntity.ok(SuccessResponse(data = findPostUsecase.execute(postId = id)))
 
     @GetMapping("/members/{memberId}")
@@ -30,7 +30,7 @@ class PostController(
         @PathVariable
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
-    ): ResponseEntity<SuccessResponse<PageByPosition<FindPostWishUsecaseDto>>> =
+    ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
         ResponseEntity.ok(
             SuccessResponse(
                 data = findPostsUsecase.execute(
@@ -45,10 +45,10 @@ class PostController(
         @PathVariable
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
-    ): ResponseEntity<SuccessResponse<PageByPosition<FindPostWishUsecaseDto>>> =
+    ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
         ResponseEntity.ok(
             SuccessResponse(
-                data = findPostTimelineUsecase.execute(
+                data = findPostsTimelineUsecase.execute(
                     memberId,
                     pageRequestByPosition = pageRequestByPosition,
                 ),

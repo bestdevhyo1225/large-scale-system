@@ -18,8 +18,8 @@ class UpdateMemberInfluencerUsecase(
 
     @RateLimiter(name = UPDATE_MEMBER_INFLUENCER_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long) {
-        val followerCount: Long = followReadService.getFollowerCount(followeeId = memberId)
-        memberService.updateInfluenerAccount(memberId = memberId, followerCount = followerCount)
+        followReadService.checkInfluencer(followeeId = memberId)
+        memberService.updateInfluener(memberId = memberId)
     }
 
     private fun fallbackExecute(exception: Exception) {

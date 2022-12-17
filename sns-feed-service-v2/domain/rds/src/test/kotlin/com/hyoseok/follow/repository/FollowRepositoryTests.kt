@@ -48,6 +48,7 @@ internal class FollowRepositoryTests : DescribeSpec() {
         this.afterSpec {
             withContext(Dispatchers.IO) {
                 followRepository.deleteAll()
+                followCountRepository.deleteAll()
             }
         }
 
@@ -75,9 +76,12 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 val offset = 0L
                 val followerId = 1L
                 val follows: List<Follow> = (2L..11L).map { Follow(followerId = followerId, followeeId = it) }
+                val followCount =
+                    FollowCount(memberId = followerId, totalFollowee = follows.size.toLong(), totalFollower = 0)
 
                 withContext(Dispatchers.IO) {
                     followRepository.saveAll(follows)
+                    followCountRepository.save(followCount)
                 }
 
                 // when
@@ -137,9 +141,12 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 val offset = 0L
                 val followeeId = 1L
                 val follows: List<Follow> = (2L..11L).map { Follow(followerId = it, followeeId = followeeId) }
+                val followCount =
+                    FollowCount(memberId = followeeId, totalFollowee = 0, totalFollower = follows.size.toLong())
 
                 withContext(Dispatchers.IO) {
                     followRepository.saveAll(follows)
+                    followCountRepository.save(followCount)
                 }
 
                 // when
@@ -159,9 +166,12 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 // given
                 val followeeId = 1L
                 val follows: List<Follow> = (2L..11L).map { Follow(followerId = it, followeeId = followeeId) }
+                val followCount =
+                    FollowCount(memberId = followeeId, totalFollowee = 0, totalFollower = follows.size.toLong())
 
                 withContext(Dispatchers.IO) {
                     followRepository.saveAll(follows)
+                    followCountRepository.save(followCount)
                 }
 
                 // when
@@ -177,9 +187,12 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 // given
                 val followerId = 1L
                 val follows: List<Follow> = (2L..11L).map { Follow(followerId = followerId, followeeId = it) }
+                val followCount =
+                    FollowCount(memberId = followerId, totalFollowee = follows.size.toLong(), totalFollower = 0)
 
                 withContext(Dispatchers.IO) {
                     followRepository.saveAll(follows)
+                    followCountRepository.save(followCount)
                 }
 
                 // when

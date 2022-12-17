@@ -27,6 +27,7 @@ class Post private constructor(
     contents: String,
     writer: String,
     viewCount: Long = 0,
+    wishCount: Long = 0,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
     deletedAt: LocalDateTime? = null,
@@ -52,6 +53,10 @@ class Post private constructor(
     var viewCount: Long = viewCount
         protected set
 
+    @Column(name = "wish_count", nullable = false)
+    var wishCount: Long = wishCount
+        protected set
+
     @Column(name = "updated_at", nullable = false, columnDefinition = "DATETIME")
     var updatedAt: LocalDateTime = updatedAt
         protected set
@@ -65,7 +70,7 @@ class Post private constructor(
 
     override fun toString(): String =
         "Post(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer, viewCount=$viewCount," +
-            "createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
+            "wishCount=$wishCount, createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
     object ErrorMessage {
         const val INVALID_VIEW_COUNT = "유효하지 않는 조회 카운트가 입력되었습니다"
@@ -73,6 +78,8 @@ class Post private constructor(
     }
 
     companion object {
+        const val POST_IDS_LIMIT_SIZE = 1_000
+
         operator fun invoke(
             memberId: Long,
             title: String,
@@ -110,5 +117,11 @@ class Post private constructor(
             throw IllegalArgumentException(INVALID_CURRENT_VIEW_COUNT_IS_ZERO)
         }
         this.viewCount -= viewCount
+    }
+
+    fun updateWishCount(value: Long) {
+        if (value > 0) {
+            this.wishCount += value
+        }
     }
 }
