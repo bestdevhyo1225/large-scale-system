@@ -38,10 +38,10 @@ class CreatePostUsecase(
         val postCreateDto: PostCreateDto = createPostUsecaseDto.toDomainDto(memberDto = memberDto)
         val postDto: PostDto = postService.create(dto = postCreateDto)
 
-        CoroutineScope(context = Dispatchers.IO).launch {
-            createPostCache(postDto = postDto)
-            sendFeedEvent(postDto = postDto, influencer = memberDto.influencer)
-        }
+//        CoroutineScope(context = Dispatchers.IO).launch {
+//            createPostCache(postDto = postDto)
+//            sendFeedEvent(postDto = postDto, influencer = memberDto.influencer)
+//        }
 
         return postDto
     }
