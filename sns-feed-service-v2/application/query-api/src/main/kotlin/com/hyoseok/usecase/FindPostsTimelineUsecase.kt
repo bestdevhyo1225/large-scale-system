@@ -23,7 +23,7 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 
 @Service
-class FindPostTimelineUsecase(
+class FindPostsTimelineUsecase(
     private val followReadService: FollowReadService,
     private val feedRedisReadService: FeedRedisReadService,
     private val memberReadService: MemberReadService,

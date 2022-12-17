@@ -2,7 +2,7 @@ package com.hyoseok.controller
 
 import com.hyoseok.post.dto.PostDto
 import com.hyoseok.response.SuccessResponse
-import com.hyoseok.usecase.FindPostTimelineUsecase
+import com.hyoseok.usecase.FindPostsTimelineUsecase
 import com.hyoseok.usecase.FindPostUsecase
 import com.hyoseok.usecase.FindPostsUsecase
 import com.hyoseok.util.PageByPosition
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/posts")
 class PostController(
     private val findPostsUsecase: FindPostsUsecase,
-    private val findPostTimelineUsecase: FindPostTimelineUsecase,
+    private val findPostsTimelineUsecase: FindPostsTimelineUsecase,
     private val findPostUsecase: FindPostUsecase,
 ) {
 
@@ -48,7 +48,7 @@ class PostController(
     ): ResponseEntity<SuccessResponse<PageByPosition<PostDto>>> =
         ResponseEntity.ok(
             SuccessResponse(
-                data = findPostTimelineUsecase.execute(
+                data = findPostsTimelineUsecase.execute(
                     memberId,
                     pageRequestByPosition = pageRequestByPosition,
                 ),
