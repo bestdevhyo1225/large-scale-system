@@ -5,8 +5,10 @@ import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdViewsKey
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdWishesKey
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdsByMemberIdKey
 import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
+import com.hyoseok.util.PageRequestByPosition
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
@@ -37,31 +39,26 @@ class PostRedisReadService(
             listOf()
         }
 
-//    fun findPostCaches(memberIds: List<Long>, pageRequestByPosition: PageRequestByPosition): List<PostCacheDto> {
-//        val (start: Long, size: Long) = pageRequestByPosition
-//
-//        if (start <= -1L || size == 0L) {
-//            return listOf()
-//        }
-//
-//        val keys: String = getPostIdsByMemberIdKey(memberId = memberId)
-//        val end: Long = start.plus(size).minus(other = 1)
-//        val nowDateTime: LocalDateTime = LocalDateTime.now().withNano(0)
-//        val minScore: Double = Timestamp.valueOf(nowDateTime.minusDays(1)).time.toDouble()
-//        val maxScore: Double = Timestamp.valueOf(nowDateTime).time.toDouble()
-//        val postIds: List<Long> = postRedisRepository.zrevRangeByScore(
-//            key = key,
-//            minScore = minScore,
-//            maxScore = maxScore,
-//            start = start,
-//            end = end,
-//            clazz = Long::class.java,
-//        )
-//
-//        if (postIds.isEmpty()) {
-//            return listOf()
-//        }
-//
-//        return postRedisPipelineRepository.getPostCaches(ids = postIds)
-//    }
+    fun findPostCaches(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<PostCacheDto> {
+        val (start: Long, size: Long) = pageRequestByPosition
+
+        if (start <= -1L || size == 0L) {
+            return listOf()
+        }
+
+        val key: String = getPostIdsByMemberIdKey(memberId = memberId)
+        val end: Long = start.plus(size).minus(other = 1)
+        val postIds: List<Long> = postRedisRepository.zrevRange(
+            key = key,
+            start = start,
+            end = end,
+            clazz = Long::class.java,
+        )
+
+        if (postIds.isEmpty()) {
+            return listOf()
+        }
+
+        return postRedisPipelineRepository.getPostCaches(ids = postIds)
+    }
 }
