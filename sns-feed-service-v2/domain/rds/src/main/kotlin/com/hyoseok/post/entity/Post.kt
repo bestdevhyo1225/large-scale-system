@@ -78,6 +78,8 @@ class Post private constructor(
     }
 
     companion object {
+        const val POST_IDS_LIMIT_SIZE = 1_000
+
         operator fun invoke(
             memberId: Long,
             title: String,
