@@ -21,7 +21,7 @@ data class PostCache(
         fun getPostBucketKey(id: Long) = "post:bucket:${id.div(HASH_MAX_ENTRIES)}"
         fun getPostViewBucketKey(id: Long) = "post:view:bucket:${id.div(HASH_MAX_ENTRIES)}"
         fun getPostMemberIdBucketKey(memberId: Long) = "post:memberid:bucket:${memberId.div(HASH_MAX_ENTRIES)}"
-        fun getPostMemberKey(memberId: Long) = "post:member:$memberId"
+        fun getPostIdsByMemberIdKey(memberId: Long) = "post:ids:member:$memberId"
         fun getPostIdKey(id: Long) = "post:$id"
         fun getPostIdViewsKey(id: Long) = "post:$id:views"
         fun getPostIdWishesKey(id: Long) = "post:$id:wishes"

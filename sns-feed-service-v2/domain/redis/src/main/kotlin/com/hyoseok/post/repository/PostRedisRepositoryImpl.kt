@@ -106,4 +106,21 @@ class PostRedisRepositoryImpl(
 
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
     }
+
+    override fun <T : Any> zrevRangeByScore(
+        key: String,
+        minScore: Double,
+        maxScore: Double,
+        start: Long,
+        end: Long,
+        clazz: Class<T>,
+    ): List<T> {
+        val values: Set<String?>? = redisTemplate.opsForZSet().reverseRangeByScore(key, minScore, maxScore, start, end)
+
+        if (values.isNullOrEmpty()) {
+            return listOf()
+        }
+
+        return values.map { jacksonObjectMapper.readValue(it, clazz) }
+    }
 }

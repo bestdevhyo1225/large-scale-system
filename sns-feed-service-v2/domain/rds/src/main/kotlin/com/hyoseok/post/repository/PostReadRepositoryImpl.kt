@@ -4,10 +4,12 @@ import com.hyoseok.post.entity.Post
 import com.hyoseok.post.entity.QPost.post
 import com.hyoseok.post.entity.QPostImage.postImage
 import com.hyoseok.post.repository.PostReadRepositoryImpl.ErrorMessage.NOT_FOUND_POST
+import com.querydsl.core.types.OrderSpecifier
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Repository
 @Transactional(readOnly = true)
@@ -36,26 +38,46 @@ class PostReadRepositoryImpl(
         jpaQueryFactory
             .selectFrom(post)
             .where(postIdIn(ids = ids))
+            .orderBy(postIdDesc())
             .fetch()
 
-    override fun findAllByMemberIdAndLimitAndCount(memberId: Long, limit: Long, offset: Long): List<Post> =
+    override fun findAllByMemberIdAndLimitAndOffset(memberId: Long, limit: Long, offset: Long): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
             .where(postMemberIdEq(memberId = memberId))
+            .orderBy(postIdDesc())
             .limit(limit)
             .offset(offset)
             .fetch()
 
-    override fun findAllByMemberIdsAndLimitAndCount(memberIds: List<Long>, limit: Long, offset: Long): List<Post> =
+    override fun findAllByMemberIdsAndCreatedAtAndLimitAndOffset(
+        memberIds: List<Long>,
+        fromCreatedAt: LocalDateTime,
+        toCreatedAt: LocalDateTime,
+        limit: Long,
+        offset: Long,
+    ): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
-            .where(postMemberIdIn(memberIds = memberIds))
+            .where(
+                postMemberIdIn(memberIds = memberIds),
+                postCreatedAtBetween(fromCreatedAt, toCreatedAt),
+            )
+            .orderBy(postIdDesc())
             .limit(limit)
             .offset(offset)
             .fetch()
 
     private fun postIdEq(id: Long): BooleanExpression = post.id.eq(id)
+
     private fun postIdIn(ids: List<Long>): BooleanExpression = post.id.`in`(ids)
+
     private fun postMemberIdEq(memberId: Long): BooleanExpression = post.memberId.eq(memberId)
+
     private fun postMemberIdIn(memberIds: List<Long>): BooleanExpression = post.memberId.`in`(memberIds)
+
+    private fun postCreatedAtBetween(fromCreatedAt: LocalDateTime, toCreatedAt: LocalDateTime): BooleanExpression =
+        post.createdAt.between(fromCreatedAt, toCreatedAt)
+
+    private fun postIdDesc(): OrderSpecifier<Long> = post.id.desc()
 }

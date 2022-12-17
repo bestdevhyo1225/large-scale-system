@@ -5,7 +5,7 @@ import com.hyoseok.config.PostRedisTemplateConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
-import com.hyoseok.post.entity.PostCache.Companion.getPostMemberKey
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdsByMemberIdKey
 import com.hyoseok.post.entity.PostImageCache
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
@@ -79,7 +79,7 @@ internal class PostRedisTransactionRepositoryTests : DescribeSpec() {
                     clazz = PostCache::class.java,
                 ).shouldBe(postCache)
 
-                postRedisRepository.zcard(key = getPostMemberKey(memberId = postCache.memberId))
+                postRedisRepository.zcard(key = getPostIdsByMemberIdKey(memberId = postCache.memberId))
                     .shouldBe(1)
             }
         }

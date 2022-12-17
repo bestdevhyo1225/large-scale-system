@@ -2,12 +2,13 @@ package com.hyoseok.post.repository
 
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.POST_MEMBER_MAX_LIMIT
+import com.hyoseok.post.entity.PostCache.Companion.getPostIdsByMemberIdKey
 import com.hyoseok.post.entity.PostCache.Companion.getPostKeyAndExpireTime
-import com.hyoseok.post.entity.PostCache.Companion.getPostMemberKey
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
+import java.sql.Timestamp
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Repository
@@ -21,7 +22,8 @@ class PostRedisTransactionRepositoryImpl(
     override fun createPostCache(postCache: PostCache): Boolean =
         redisTemplate.execute { redisConnection ->
             val (postKey: String, postExpireTime: Long) = getPostKeyAndExpireTime(id = postCache.id)
-            val postMemberKey: String = getPostMemberKey(memberId = postCache.memberId)
+            val postIdsByMemberIdKey: String = getPostIdsByMemberIdKey(memberId = postCache.memberId)
+            val postIdsByMemberIdScore: Double = Timestamp.valueOf(postCache.createdAt).time.toDouble()
 
             try {
                 redisConnection.multi()
@@ -32,9 +34,13 @@ class PostRedisTransactionRepositoryImpl(
                     expireTime = postExpireTime,
                     timeUnit = SECONDS,
                 )
-                postRedisRepository.zadd(key = postMemberKey, value = postCache.id, score = postCache.id.toDouble())
+                postRedisRepository.zadd(
+                    key = postIdsByMemberIdKey,
+                    value = postCache.id,
+                    score = postIdsByMemberIdScore,
+                )
                 postRedisRepository.zremRangeByRank(
-                    key = postMemberKey,
+                    key = postIdsByMemberIdKey,
                     start = POST_MEMBER_MAX_LIMIT,
                     end = POST_MEMBER_MAX_LIMIT,
                 )

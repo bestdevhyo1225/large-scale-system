@@ -1,8 +1,7 @@
 package com.hyoseok.follow.service
 
 import com.hyoseok.follow.entity.Follow
-import com.hyoseok.follow.entity.Follow.Companion.FIND_MAX_LIMIT
-import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_CHECK_TOTAL_COUNT
+import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_MIN_LIMIT_COUNT
 import com.hyoseok.follow.repository.FollowReadRepository
 import com.hyoseok.follow.service.FollowReadService.ErrorMessage.FAILED_UPDATE_INFLUENCER
 import org.springframework.stereotype.Service
@@ -18,8 +17,11 @@ class FollowReadService(
         const val FAILED_UPDATE_INFLUENCER = "인플루언서로 변경할 수 있는 조건이 아닙니다."
     }
 
-    fun getFollowerCount(followeeId: Long): Long =
-        followReadRepository.countByFolloweeId(followeeId = followeeId)
+    fun checkInfluencer(followeeId: Long) {
+        if (followReadRepository.countByFolloweeId(followeeId = followeeId) < INFLUENCER_MIN_LIMIT_COUNT) {
+            throw IllegalArgumentException(FAILED_UPDATE_INFLUENCER)
+        }
+    }
 
     fun findFollowerIds(followeeId: Long, influencer: Boolean, limit: Long, offset: Long): Pair<Long, List<Long>> {
         // 인플루언서의 경우, 이벤트를 발행하지 않겠다.
@@ -37,32 +39,10 @@ class FollowReadService(
         return Pair(first = total, second = followers.map { it.followerId })
     }
 
-    fun findFolloweeIds(followerId: Long, limit: Long, offset: Long): Pair<Long, List<Long>> {
-        if (limit == 0L || offset <= -1) {
-            return Pair(first = 0L, second = listOf())
-        }
-
-        val (total: Long, followees: List<Follow>) = followReadRepository.findAllByFollowerIdAndLimitAndOffset(
+    fun findInfluencerFolloweeIds(followerId: Long, findFolloweeMaxLimit: Long): List<Long> =
+        followReadRepository.findAllByFollowerIdAndLimitOrderByIdDesc(
             followerId = followerId,
-            limit = limit,
-            offset = offset,
-        )
-
-        return Pair(first = total, second = followees.map { it.followeeId })
-    }
-
-    fun findFolloweeIdsByStaticLimit(followerId: Long): List<Long> =
-        followReadRepository
-            .findAllByFollowerIdAndLimitOrderByIdDesc(
-                followerId = followerId,
-                influencerCheckTotalCount = INFLUENCER_CHECK_TOTAL_COUNT,
-                limit = FIND_MAX_LIMIT,
-            )
-            .map { it.followeeId }
-
-    fun checkInfluencer(followeeId: Long) {
-        if (followReadRepository.countByFolloweeId(followeeId = followeeId) < INFLUENCER_CHECK_TOTAL_COUNT) {
-            throw IllegalArgumentException(FAILED_UPDATE_INFLUENCER)
-        }
-    }
+            checkTotalFollower = INFLUENCER_MIN_LIMIT_COUNT,
+            limit = findFolloweeMaxLimit,
+        ).map { it.followeeId }
 }
