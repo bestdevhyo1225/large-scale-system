@@ -28,8 +28,8 @@ class MemberService(
                 }
             }
 
-    fun updateInfluenerAccount(memberId: Long, followerCount: Long) {
+    fun updateInfluener(memberId: Long) {
         memberRepository.findByIdOrNull(id = memberId)
-            ?.switchInfluencerAccount(followerCount = followerCount) ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
+            ?.changeInfluencer(influencer = true) ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
     }
 }

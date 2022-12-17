@@ -3,7 +3,6 @@ package com.hyoseok.member.repository
 import com.hyoseok.config.BasicDataSourceConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.member.entity.Member
-import com.hyoseok.member.entity.Member.Companion.NUMBER_OF_INFLUENCER
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -69,7 +68,7 @@ internal class MemberRepositoryTests : DescribeSpec() {
                     val normalMembers: List<Member> = (1..5).map { Member(name = "normal-$it") }
                     val influencerMembers: List<Member> = (1..5).map {
                         val member = Member(name = "influencer-$it")
-                        member.switchInfluencerAccount(followerCount = NUMBER_OF_INFLUENCER.plus(other = 1))
+                        member.changeInfluencer(influencer = true)
                         member
                     }
                     val members: List<Member> = normalMembers.plus(influencerMembers)

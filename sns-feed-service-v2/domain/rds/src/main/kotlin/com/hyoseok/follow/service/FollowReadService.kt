@@ -4,6 +4,7 @@ import com.hyoseok.follow.entity.Follow
 import com.hyoseok.follow.entity.Follow.Companion.FIND_MAX_LIMIT
 import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_CHECK_TOTAL_COUNT
 import com.hyoseok.follow.repository.FollowReadRepository
+import com.hyoseok.follow.service.FollowReadService.ErrorMessage.FAILED_UPDATE_INFLUENCER
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -12,6 +13,10 @@ import org.springframework.transaction.annotation.Transactional
 class FollowReadService(
     private val followReadRepository: FollowReadRepository,
 ) {
+
+    object ErrorMessage {
+        const val FAILED_UPDATE_INFLUENCER = "인플루언서로 변경할 수 있는 조건이 아닙니다."
+    }
 
     fun getFollowerCount(followeeId: Long): Long =
         followReadRepository.countByFolloweeId(followeeId = followeeId)
@@ -54,4 +59,10 @@ class FollowReadService(
                 limit = FIND_MAX_LIMIT,
             )
             .map { it.followeeId }
+
+    fun checkInfluencer(followeeId: Long) {
+        if (followReadRepository.countByFolloweeId(followeeId = followeeId) < INFLUENCER_CHECK_TOTAL_COUNT) {
+            throw IllegalArgumentException(FAILED_UPDATE_INFLUENCER)
+        }
+    }
 }

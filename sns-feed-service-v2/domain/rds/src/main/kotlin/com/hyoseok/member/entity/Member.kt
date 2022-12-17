@@ -2,8 +2,6 @@ package com.hyoseok.member.entity
 
 import com.hyoseok.base.entity.BaseEntity
 import com.hyoseok.member.entity.Member.ErrorMessage.MAX_LIMIT
-import com.hyoseok.member.entity.Member.ErrorMessage.NOT_INFLUENCER
-import com.hyoseok.member.entity.Member.ErrorMessage.NOT_NORMAL
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.Column
@@ -43,7 +41,6 @@ class Member private constructor(
 
     companion object {
         private const val MAX_LIMIT_NAME_LENGTH = 20
-        const val NUMBER_OF_INFLUENCER = 10_000L
 
         operator fun invoke(name: String): Member {
             validateName(name = name)
@@ -60,21 +57,7 @@ class Member private constructor(
 
     fun isInfluencer(): Boolean = influencer
 
-    fun switchInfluencerAccount(followerCount: Long) {
-        if (followerCount < NUMBER_OF_INFLUENCER) {
-            throw IllegalArgumentException(NOT_INFLUENCER)
-        }
-        changeInfluencer(influencer = true)
-    }
-
-    fun switchNormalAccount(followerCount: Long) {
-        if (followerCount >= NUMBER_OF_INFLUENCER) {
-            throw IllegalArgumentException(NOT_NORMAL)
-        }
-        changeInfluencer(influencer = false)
-    }
-
-    private fun changeInfluencer(influencer: Boolean) {
+    public fun changeInfluencer(influencer: Boolean) {
         this.influencer = influencer
     }
 }
