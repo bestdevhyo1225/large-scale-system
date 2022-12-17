@@ -51,6 +51,7 @@ include(
     "sns-feed-service:infrastructure:okhttp3",
     // sns-feed-service-v2
     "sns-feed-service-v2:application:api",
+    "sns-feed-service-v2:application:batch",
     "sns-feed-service-v2:application:event-worker",
     "sns-feed-service-v2:application:query-api",
     "sns-feed-service-v2:client:event-publisher",
