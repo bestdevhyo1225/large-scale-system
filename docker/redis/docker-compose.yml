@@ -1,38 +1,6 @@
 version: '3.8'
 
 services:
-  large-scale-system-redis-1:
-    image: redis:latest
-    container_name: large-scale-system-redis-1
-    command: redis-server --port 6379
-    ports:
-      - '6379:6379'
-    restart: always
-
-  large-scale-system-redis-2:
-    image: redis:latest
-    container_name: large-scale-system-redis-2
-    command: redis-server --port 6380
-    ports:
-      - '6380:6380'
-    restart: always
-
-  large-scale-system-redis-3:
-    image: redis:latest
-    container_name: large-scale-system-redis-3
-    command: redis-server --port 6381
-    ports:
-      - '6381:6381'
-    restart: always
-
-  large-scale-system-redis-lock:
-    image: redis:latest
-    container_name: large-scale-system-redis-lock
-    command: redis-server --port 6382
-    ports:
-      - '6382:6382'
-    restart: always
-
   sns-post-redis:
     image: redis:latest
     container_name: sns-post-redis
@@ -57,18 +25,18 @@ services:
       - '6385:6385'
     restart: always
 
-  sns-member-redis:
-    image: redis:latest
-    container_name: sns-member-redis
-    command: redis-server --port 6386
-    ports:
-      - '6386:6386'
-    restart: always
-
-  sns-follow-redis:
-    image: redis:latest
-    container_name: sns-follow-redis
-    command: redis-server --port 6387
-    ports:
-      - '6387:6387'
-    restart: always
+#  sns-member-redis:
+#    image: redis:latest
+#    container_name: sns-member-redis
+#    command: redis-server --port 6386
+#    ports:
+#      - '6386:6386'
+#    restart: always
+#
+#  sns-follow-redis:
+#    image: redis:latest
+#    container_name: sns-follow-redis
+#    command: redis-server --port 6387
+#    ports:
+#      - '6387:6387'
+#    restart: always
