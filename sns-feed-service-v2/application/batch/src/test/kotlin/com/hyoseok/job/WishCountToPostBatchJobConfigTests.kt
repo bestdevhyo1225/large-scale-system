@@ -106,7 +106,7 @@ internal class WishCountToPostBatchJobConfigTests : DescribeSpec() {
             redisTemplate.delete(redisTemplate.keys("*"))
         }
 
-        this.describe("WishCountToPostBatchJobConfig 배치 작업은") {
+        this.describe("WishCountToPostBatchJobConfig 클래스는") {
             it("좋아요 캐시를 Post 엔티티의 wishCount에 반영한다") {
                 // given
 
