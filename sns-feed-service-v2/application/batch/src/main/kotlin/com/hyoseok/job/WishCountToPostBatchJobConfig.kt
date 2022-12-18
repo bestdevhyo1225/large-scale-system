@@ -66,12 +66,13 @@ class WishCountToPostBatchJobConfig(
             val nowDateTime: LocalDateTime = LocalDateTime.now()
             val minScore: Double = Timestamp.valueOf(nowDateTime.minusMinutes(30)).time.toDouble()
             val maxScore: Double = Timestamp.valueOf(nowDateTime).time.toDouble()
-            val postWishCount: Long = wishRedisRepository.zrevRangeByScore(
+            val wishedMemberIds: List<Long> = wishRedisRepository.zrevRangeByScore(
                 key = key,
                 minScore = minScore,
                 maxScore = maxScore,
                 clazz = Long::class.java,
-            ).size.toLong()
+            )
+            val postWishCount: Long = wishedMemberIds.size.toLong()
             wishRedisRepository.zremRangeByScore(key = key, minScore = minScore, maxScore = maxScore)
 
             post.updateWishCount(value = postWishCount)
