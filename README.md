@@ -110,7 +110,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### SNS 피드 서비스 아키텍처
 
-<img width="1882" alt="image" src="https://user-images.githubusercontent.com/23515771/208303690-74286ea3-9394-417c-8489-92a53554ec48.png">
+<img width="1882" alt="image" src="https://user-images.githubusercontent.com/23515771/208303790-ec90177c-87d0-42fe-9a34-f964ff0650be.png">
 
 ### 팬 아웃(포스팅 전송) 프로세스
 
