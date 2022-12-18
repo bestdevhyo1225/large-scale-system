@@ -12,13 +12,13 @@ class RedisEmbbededServerConfig {
 
     private val logger = KotlinLogging.logger {}
 
-    private lateinit var embeddedRedisFeedServer: RedisServer
+    private lateinit var embeddedRedisServer: RedisServer
 
     @PostConstruct
     fun startEmbeddedRedisServer() {
         try {
-            embeddedRedisFeedServer = RedisServer(6379)
-            embeddedRedisFeedServer.start()
+            embeddedRedisServer = RedisServer(6379)
+            embeddedRedisServer.start()
         } catch (exception: EmbeddedRedisException) {
             logger.error { exception }
         }
@@ -27,7 +27,7 @@ class RedisEmbbededServerConfig {
     @PreDestroy
     fun stopEmbeddedRedisServer() {
         try {
-            embeddedRedisFeedServer.stop()
+            embeddedRedisServer.stop()
         } catch (exception: EmbeddedRedisException) {
             logger.error { exception }
         }
