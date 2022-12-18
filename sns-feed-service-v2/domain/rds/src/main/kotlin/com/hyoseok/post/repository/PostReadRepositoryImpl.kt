@@ -24,27 +24,41 @@ class PostReadRepositoryImpl(
     override fun findById(id: Long): Post =
         jpaQueryFactory
             .selectFrom(post)
-            .where(postIdEq(id = id))
+            .where(
+                postIdEq(id = id),
+                postDeletedAtIsNull(),
+            )
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_POST)
 
     override fun findByIdWithPostImage(id: Long): Post =
         jpaQueryFactory
             .selectFrom(post)
             .innerJoin(post.postImages, postImage).fetchJoin()
-            .where(postIdEq(id))
+            .where(
+                postIdEq(id),
+                postDeletedAtIsNull(),
+            )
             .fetchOne() ?: throw NoSuchElementException(NOT_FOUND_POST)
 
     override fun findAllByInId(ids: List<Long>): List<Post> =
         jpaQueryFactory
-            .selectFrom(post)
-            .where(postIdIn(ids = ids))
+            .selectFrom(post).distinct()
+            .innerJoin(post.postImages, postImage).fetchJoin()
+            .where(
+                postIdIn(ids = ids),
+                postDeletedAtIsNull(),
+            )
             .orderBy(postIdDesc())
             .fetch()
 
     override fun findAllByMemberIdAndLimitAndOffset(memberId: Long, limit: Long, offset: Long): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
-            .where(postMemberIdEq(memberId = memberId))
+            .innerJoin(post.postImages, postImage).fetchJoin()
+            .where(
+                postMemberIdEq(memberId = memberId),
+                postDeletedAtIsNull(),
+            )
             .orderBy(postIdDesc())
             .limit(limit)
             .offset(offset)
@@ -59,9 +73,11 @@ class PostReadRepositoryImpl(
     ): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
+            .innerJoin(post.postImages, postImage).fetchJoin()
             .where(
                 postMemberIdIn(memberIds = memberIds),
                 postCreatedAtBetween(fromCreatedAt, toCreatedAt),
+                postDeletedAtIsNull(),
             )
             .orderBy(postIdDesc())
             .limit(limit)
@@ -75,6 +91,8 @@ class PostReadRepositoryImpl(
     private fun postMemberIdEq(memberId: Long): BooleanExpression = post.memberId.eq(memberId)
 
     private fun postMemberIdIn(memberIds: List<Long>): BooleanExpression = post.memberId.`in`(memberIds)
+
+    private fun postDeletedAtIsNull(): BooleanExpression = post.deletedAt.isNull
 
     private fun postCreatedAtBetween(fromCreatedAt: LocalDateTime, toCreatedAt: LocalDateTime): BooleanExpression =
         post.createdAt.between(fromCreatedAt, toCreatedAt)

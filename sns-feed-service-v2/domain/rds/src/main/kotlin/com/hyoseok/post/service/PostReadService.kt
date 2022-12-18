@@ -15,7 +15,7 @@ class PostReadService(
     private val postReadRepository: PostReadRepository,
 ) {
 
-    fun findPost(id: Long) = PostDto(post = postReadRepository.findById(id = id))
+    fun findPost(id: Long) = PostDto(post = postReadRepository.findByIdWithPostImage(id = id))
 
     fun findPosts(ids: List<Long>): List<PostDto> {
         if (ids.isEmpty()) {

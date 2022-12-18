@@ -100,11 +100,11 @@ internal class WishRedisRepositoryTests : DescribeSpec() {
                     WishCache(postId = postId, memberId = it)
                 }
 
-                wishCaches.forEach { wishCache ->
+                wishCaches.forEachIndexed { index, wishCache ->
                     wishRedisRepository.zaddAndExpire(
                         key = wishCache.getWishPostKey(),
                         value = wishCache.memberId,
-                        score = Timestamp.valueOf(LocalDateTime.now()).time.toDouble(),
+                        score = Timestamp.valueOf(LocalDateTime.now().plusMinutes(index.toLong())).time.toDouble(),
                         expireTime = wishCache.expireTime,
                         timeUnit = SECONDS,
                     )
@@ -140,11 +140,11 @@ internal class WishRedisRepositoryTests : DescribeSpec() {
                     WishCache(postId = postId, memberId = it)
                 }
 
-                wishCaches.forEach { wishCache ->
+                wishCaches.forEachIndexed { index, wishCache ->
                     wishRedisRepository.zaddAndExpire(
                         key = wishCache.getWishPostKey(),
                         value = wishCache.memberId,
-                        score = Timestamp.valueOf(LocalDateTime.now()).time.toDouble(),
+                        score = Timestamp.valueOf(LocalDateTime.now().plusMinutes(index.toLong())).time.toDouble(),
                         expireTime = wishCache.expireTime,
                         timeUnit = SECONDS,
                     )
@@ -176,11 +176,11 @@ internal class WishRedisRepositoryTests : DescribeSpec() {
                     WishCache(postId = postId, memberId = it)
                 }
 
-                wishCaches.forEach { wishCache ->
+                wishCaches.forEachIndexed { index, wishCache ->
                     wishRedisRepository.zaddAndExpire(
                         key = wishCache.getWishPostKey(),
                         value = wishCache.memberId,
-                        score = Timestamp.valueOf(LocalDateTime.now()).time.toDouble(),
+                        score = Timestamp.valueOf(LocalDateTime.now().plusMinutes(index.toLong())).time.toDouble(),
                         expireTime = wishCache.expireTime,
                         timeUnit = SECONDS,
                     )
