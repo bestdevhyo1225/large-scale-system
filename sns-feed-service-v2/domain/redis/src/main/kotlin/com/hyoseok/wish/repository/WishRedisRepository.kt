@@ -16,4 +16,6 @@ interface WishRedisRepository {
         end: Long,
         clazz: Class<T>,
     ): List<T>
+    fun <T : Any> zrevRangeByScore(key: String, minScore: Double, maxScore: Double, clazz: Class<T>): List<T>
+    fun zremRangeByScore(key: String, minScore: Double, maxScore: Double)
 }
