@@ -34,7 +34,7 @@ class WishRedisRepositoryImpl(
 
     override fun <T : Any> zaddAndExpire(key: String, value: T, score: Double, expireTime: Long, timeUnit: TimeUnit) {
         zadd(key = key, value = value, score = score)
-        setExpire(key, expireTime, timeUnit)
+        setExpire(key = key, expireTime = expireTime, timeUnit = timeUnit)
     }
 
     override fun zcard(key: String): Long? = redisTemplate.opsForZSet().zCard(key) ?: 0L
@@ -54,6 +54,20 @@ class WishRedisRepositoryImpl(
         }
 
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
+    }
+
+    override fun <T : Any> zrevRangeByScore(key: String, minScore: Double, maxScore: Double, clazz: Class<T>): List<T> {
+        val values: Set<String?>? = redisTemplate.opsForZSet().reverseRangeByScore(key, minScore, maxScore)
+
+        if (values.isNullOrEmpty()) {
+            return listOf()
+        }
+
+        return values.map { jacksonObjectMapper.readValue(it, clazz) }
+    }
+
+    override fun zremRangeByScore(key: String, minScore: Double, maxScore: Double) {
+        redisTemplate.opsForZSet().removeRangeByScore(key, minScore, maxScore)
     }
 
     private fun setExpire(key: String, expireTime: Long, timeUnit: TimeUnit) {
