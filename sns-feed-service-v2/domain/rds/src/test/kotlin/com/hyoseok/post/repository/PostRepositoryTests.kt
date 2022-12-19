@@ -141,7 +141,6 @@ internal class PostRepositoryTests : DescribeSpec() {
                         ),
                     )
                 }
-                val expectPostIds: List<Long> = listOf(5L, 4L, 3L, 2L, 1L)
 
                 withContext(Dispatchers.IO) {
                     postRepository.saveAll(posts)
@@ -157,9 +156,8 @@ internal class PostRepositoryTests : DescribeSpec() {
                 // then
                 findPosts.shouldNotBeEmpty()
                 findPosts.shouldHaveSize(limit.toInt())
-                findPosts.forEachIndexed { index, post ->
-                    post.id.shouldBe(expectPostIds[index])
-                    post.postImages.size.shouldBe(2)
+                findPosts.forEach {
+                    it.postImages.size.shouldBe(2)
                 }
             }
         }
