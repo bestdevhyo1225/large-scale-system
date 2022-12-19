@@ -156,6 +156,9 @@ internal class PostRepositoryTests : DescribeSpec() {
                 // then
                 findPosts.shouldNotBeEmpty()
                 findPosts.shouldHaveSize(limit.toInt())
+                findPosts.forEach {
+                    it.postImages.size.shouldBe(2)
+                }
             }
         }
 
@@ -198,6 +201,9 @@ internal class PostRepositoryTests : DescribeSpec() {
                 findPosts.shouldNotBeEmpty()
                 findPosts.shouldHaveSize(limit.toInt())
                 findPosts.map { it.memberId.shouldBeIn(memberIds) }
+                findPosts.forEach {
+                    it.postImages.size.shouldBe(2)
+                }
             }
         }
     }
