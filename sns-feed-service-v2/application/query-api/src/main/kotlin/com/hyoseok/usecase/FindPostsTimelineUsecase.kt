@@ -61,7 +61,7 @@ class FindPostsTimelineUsecase(
             if (postCacheDtos.isNotEmpty() && postCacheDtos.size == pageRequestByPosition.size.toInt()) {
                 postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) }
             } else {
-                findPostAndCreatePostCache(postCacheDtos, postIds)
+                findPostAndCreatePostCache(postCacheDtos = postCacheDtos, postIds = postIds)
             }
 
         return PageByPosition(
