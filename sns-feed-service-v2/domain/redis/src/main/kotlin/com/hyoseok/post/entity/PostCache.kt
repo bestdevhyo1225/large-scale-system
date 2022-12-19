@@ -8,6 +8,7 @@ data class PostCache(
     val title: String,
     val contents: String,
     val writer: String,
+    val wishCount: Long,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val images: List<PostImageCache>,
@@ -23,11 +24,6 @@ data class PostCache(
         fun getPostMemberIdBucketKey(memberId: Long) = "post:memberid:bucket:${memberId.div(HASH_MAX_ENTRIES)}"
         fun getPostIdsByMemberIdKey(memberId: Long) = "post:ids:member:$memberId"
         fun getPostIdKey(id: Long) = "post:$id"
-        fun getPostIdViewsKey(id: Long) = "post:$id:views"
-        fun getPostIdWishesKey(id: Long) = "post:$id:wishes"
         fun getPostKeyAndExpireTime(id: Long) = Pair(first = getPostIdKey(id = id), second = 60L * 30L) // 30분
-        fun getPostViewsKeyAndExpireTime(id: Long) = Pair(first = getPostIdViewsKey(id = id), second = 60L * 30L) // 30분
-        fun getPostWishesKeyAndExpireTime(id: Long) =
-            Pair(first = getPostIdWishesKey(id = id), second = 60L * 30L) // 30분
     }
 }

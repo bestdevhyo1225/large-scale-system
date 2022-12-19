@@ -55,7 +55,6 @@ class CreatePostUsecase(
                     title = title,
                     contents = contents,
                     writer = writer,
-                    viewCount = viewCount,
                     wishCount = wishCount,
                     createdAt = createdAt,
                     updatedAt = updatedAt,

@@ -34,7 +34,6 @@ internal class CreateWishUsecaseTests : BehaviorSpec(
                 title = "title",
                 contents = "contents",
                 writer = "writer",
-                viewCount = 11234L,
                 wishCount = 11234L,
                 createdAt = LocalDateTime.now().withNano(0),
                 updatedAt = LocalDateTime.now().withNano(0),
