@@ -24,13 +24,15 @@ data class PostCacheDto(
             title = title,
             contents = contents,
             writer = writer,
+            viewCount = viewCount,
+            wishCount = wishCount,
             createdAt = createdAt,
             updatedAt = updatedAt,
             images = images.map { PostImageCache(id = it.id, url = it.url, sortOrder = it.sortOrder) },
         )
 
     companion object {
-        operator fun invoke(postCache: PostCache, viewCount: Long, wishCount: Long): PostCacheDto =
+        operator fun invoke(postCache: PostCache): PostCacheDto =
             with(receiver = postCache) {
                 PostCacheDto(
                     id = id,

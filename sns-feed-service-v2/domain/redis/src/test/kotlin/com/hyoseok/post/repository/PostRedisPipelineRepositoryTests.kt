@@ -67,6 +67,8 @@ internal class PostRedisPipelineRepositoryTests : DescribeSpec() {
                         title = "title",
                         contents = "contents",
                         writer = "writer",
+                        viewCount = 1,
+                        wishCount = 1,
                         createdAt = LocalDateTime.now().withNano(0),
                         updatedAt = LocalDateTime.now().withNano(0),
                         images = listOf(PostImageCache(id = 1L, url = "url", sortOrder = 1)),

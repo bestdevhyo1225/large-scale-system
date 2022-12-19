@@ -63,6 +63,8 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
                     title = "title",
                     contents = "contents",
                     writer = "writer",
+                    viewCount = 1,
+                    wishCount = 1,
                     createdAt = LocalDateTime.now().withNano(0),
                     updatedAt = LocalDateTime.now().withNano(0),
                     images = listOf(PostImageCache(id = 1L, url = "https://test.com", sortOrder = 0)),
@@ -121,8 +123,7 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
         this.describe("increment 메서드는") {
             it("정수형의 value를 1 증가 시킨다") {
                 // given
-                val postId: Long = 1
-                val key: String = PostCache.getPostIdViewsKey(id = postId)
+                val key = "testKey"
 
                 // when
                 postRedisRepository.increment(key = key)
@@ -144,6 +145,8 @@ internal class PostRedisRepositoryTests : DescribeSpec() {
                     title = "title",
                     contents = "contents",
                     writer = "writer",
+                    viewCount = 1,
+                    wishCount = 1,
                     createdAt = LocalDateTime.now().withNano(0),
                     updatedAt = LocalDateTime.now().withNano(0),
                     images = listOf(PostImageCache(id = 1L, url = "https://test.com", sortOrder = 0)),

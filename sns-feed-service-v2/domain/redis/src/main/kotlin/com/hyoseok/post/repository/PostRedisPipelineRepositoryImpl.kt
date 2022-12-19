@@ -3,8 +3,6 @@ package com.hyoseok.post.repository
 import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
-import com.hyoseok.post.entity.PostCache.Companion.getPostIdViewsKey
-import com.hyoseok.post.entity.PostCache.Companion.getPostIdWishesKey
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.data.redis.core.RedisTemplate
@@ -26,20 +24,8 @@ class PostRedisPipelineRepositoryImpl(
                 val postCache: PostCache? =
                     postRedisRepository.get(key = getPostIdKey(id = id), clazz = PostCache::class.java)
 
-                val postViewCount: Long =
-                    postRedisRepository.get(key = getPostIdViewsKey(id = id), clazz = Long::class.java) ?: 0L
-
-                val postWishCount: Long =
-                    postRedisRepository.get(key = getPostIdWishesKey(id = id), clazz = Long::class.java) ?: 0L
-
                 if (postCache != null) {
-                    result.add(
-                        PostCacheDto(
-                            postCache = postCache,
-                            viewCount = postViewCount,
-                            wishCount = postWishCount,
-                        ),
-                    )
+                    result.add(PostCacheDto(postCache = postCache))
                 }
             }
 
