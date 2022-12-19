@@ -8,7 +8,6 @@ data class PostCache(
     val title: String,
     val contents: String,
     val writer: String,
-    val viewCount: Long,
     val wishCount: Long,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,

@@ -24,7 +24,6 @@ class Post private constructor(
     title: String,
     contents: String,
     writer: String,
-    viewCount: Long = 0,
     wishCount: Long = 0,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
@@ -47,10 +46,6 @@ class Post private constructor(
     var writer: String = writer
         protected set
 
-    @Column(name = "view_count", nullable = false)
-    var viewCount: Long = viewCount
-        protected set
-
     @Column(name = "wish_count", nullable = false)
     var wishCount: Long = wishCount
         protected set
@@ -67,7 +62,7 @@ class Post private constructor(
     var postImages: MutableList<PostImage> = mutableListOf()
 
     override fun toString(): String =
-        "Post(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer, viewCount=$viewCount," +
+        "Post(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer," +
             "wishCount=$wishCount, createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
     companion object {
@@ -93,18 +88,6 @@ class Post private constructor(
     fun addPostImage(postImage: PostImage) {
         postImages.add(postImage)
         postImage.changePost(post = this)
-    }
-
-    fun increaseViewCount(viewCount: Long) {
-        if (viewCount > 0) {
-            this.viewCount += viewCount
-        }
-    }
-
-    fun decreaseViewCount(viewCount: Long) {
-        if (viewCount > 0) {
-            this.viewCount -= viewCount
-        }
     }
 
     fun updateWishCount(value: Long) {
