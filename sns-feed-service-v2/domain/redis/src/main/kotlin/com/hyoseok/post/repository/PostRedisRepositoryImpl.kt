@@ -91,6 +91,11 @@ class PostRedisRepositoryImpl(
         redisTemplate.opsForZSet().add(key, jacksonObjectMapper.writeValueAsString(value), score)
     }
 
+    override fun <T : Any> zaddAndExpire(key: String, value: T, score: Double, expireTime: Long, timeUnit: TimeUnit) {
+        zadd(key = key, value = value, score = score)
+        setExpire(key = key, expireTime = expireTime, timeUnit = timeUnit)
+    }
+
     override fun zcard(key: String): Long = redisTemplate.opsForZSet().zCard(key) ?: 0L
 
     override fun zremRangeByRank(key: String, start: Long, end: Long) {
@@ -122,5 +127,9 @@ class PostRedisRepositoryImpl(
         }
 
         return values.map { jacksonObjectMapper.readValue(it, clazz) }
+    }
+
+    private fun setExpire(key: String, expireTime: Long, timeUnit: TimeUnit) {
+        redisTemplate.expire(key, expireTime, timeUnit)
     }
 }

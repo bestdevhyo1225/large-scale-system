@@ -37,11 +37,6 @@ class PostReadService(
 
     fun findPosts(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> {
         val (start: Long, size: Long) = pageRequestByPosition
-
-        if (start <= -1L || size == 0L) {
-            return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
-        }
-
         val postDtos: List<PostDto> = postReadRepository
             .findAllByMemberIdAndLimitAndOffset(memberId = memberId, limit = size, offset = start)
             .map { PostDto(post = it) }
@@ -58,11 +53,6 @@ class PostReadService(
         }
 
         val (start: Long, size: Long) = pageRequestByPosition
-
-        if (start < 0L || size == 0L) {
-            return listOf()
-        }
-
         val toCreatedAt: LocalDateTime = LocalDateTime.now().withNano(0)
         val fromCreatedAt: LocalDateTime = toCreatedAt.minusDays(1)
 

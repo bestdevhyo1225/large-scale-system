@@ -13,6 +13,7 @@ interface PostRedisRepository {
     fun <T : Any> set(key: String, value: T, expireTime: Long, timeUnit: TimeUnit)
     fun setAllUsePipeline(keysAndValues: Map<String, PostCache>, expireTime: Long, timeUnit: TimeUnit)
     fun <T : Any> zadd(key: String, value: T, score: Double)
+    fun <T : Any> zaddAndExpire(key: String, value: T, score: Double, expireTime: Long, timeUnit: TimeUnit)
     fun zcard(key: String): Long
     fun zremRangeByRank(key: String, start: Long, end: Long)
     fun <T : Any> zrevRange(key: String, start: Long, end: Long, clazz: Class<T>): List<T>
