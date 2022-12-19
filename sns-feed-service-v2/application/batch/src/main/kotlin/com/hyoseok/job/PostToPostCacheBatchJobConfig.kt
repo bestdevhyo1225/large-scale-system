@@ -15,6 +15,7 @@ import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilde
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.LocalDateTime
 import javax.persistence.EntityManagerFactory
 
 @Configuration
@@ -48,13 +49,28 @@ class PostToPostCacheBatchJobConfig(
             .build()
 
     @Bean(name = ["${POST_TO_POST_CACHE}Reader"])
-    fun reader(): JpaPagingItemReader<Post> =
-        JpaPagingItemReaderBuilder<Post>()
+    fun reader(): JpaPagingItemReader<Post> {
+        val sql = """
+            SELECT p
+            FROM Post p
+            INNER JOIN FETCH p.postImages
+            WHERE p.createdAt BETWEEN :fromCreatedAt AND :toCreatedAt
+            AND p.deletedAt IS NULL
+            """
+        val nowDateTime: LocalDateTime = LocalDateTime.now()
+        val params: Map<String, Any> = mapOf(
+            "fromCreatedAt" to nowDateTime.minusDays(5),
+            "toCreatedAt" to nowDateTime.plusDays(1),
+        )
+
+        return JpaPagingItemReaderBuilder<Post>()
             .name("${POST_TO_POST_CACHE}Reader")
             .entityManagerFactory(entityManagerFactory)
             .pageSize(chunkSize)
-            .queryString("SELECT p FROM Post p INNER JOIN FETCH p.postImages WHERE p.deletedAt IS NULL")
+            .queryString(sql)
+            .parameterValues(params)
             .build()
+    }
 
     @Bean(name = ["${POST_TO_POST_CACHE}Processor"])
     fun processor(): ItemProcessor<Post, PostCacheDto> =
