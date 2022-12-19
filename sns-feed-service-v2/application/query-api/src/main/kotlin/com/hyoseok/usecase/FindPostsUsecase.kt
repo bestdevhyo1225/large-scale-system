@@ -39,27 +39,53 @@ class FindPostsUsecase(
             postRedisReadService.findPostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
         if (postCacheDtos.isEmpty()) {
-            val pageByPositionPostDto: PageByPosition<PostDto> =
-                postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
-
-            CoroutineScope(context = Dispatchers.IO).launch {
-                pageByPositionPostDto.items.forEach {
-                    postRedisService.createOrUpdate(dto = PostCacheDtoMapper.of(postDto = it))
-                }
-            }
-
-            return pageByPositionPostDto
+            return findPostsAndCreatePostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
         }
 
         if (notExistsPostIds.isEmpty()) {
-            val postDtos: List<PostDto> = postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) }
-
-            return PageByPosition(
-                items = postDtos,
-                nextPageRequestByPosition = pageRequestByPosition.next(itemSize = postDtos.size),
-            )
+            return getPostsByPostCaches(postCacheDtos = postCacheDtos, pageRequestByPosition = pageRequestByPosition)
         }
 
+        return findPostsAndCreatePostCaches(
+            notExistsPostIds = notExistsPostIds,
+            postCacheDtos = postCacheDtos,
+            pageRequestByPosition = pageRequestByPosition,
+        )
+    }
+
+    private fun findPostsAndCreatePostCaches(
+        memberId: Long,
+        pageRequestByPosition: PageRequestByPosition,
+    ): PageByPosition<PostDto> {
+        val pageByPositionPostDto: PageByPosition<PostDto> =
+            postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
+
+        CoroutineScope(context = Dispatchers.IO).launch {
+            pageByPositionPostDto.items.forEach {
+                postRedisService.createOrUpdate(dto = PostCacheDtoMapper.of(postDto = it))
+            }
+        }
+
+        return pageByPositionPostDto
+    }
+
+    private fun getPostsByPostCaches(
+        postCacheDtos: List<PostCacheDto>,
+        pageRequestByPosition: PageRequestByPosition,
+    ): PageByPosition<PostDto> {
+        val postDtos: List<PostDto> = postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) }
+
+        return PageByPosition(
+            items = postDtos,
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = postDtos.size),
+        )
+    }
+
+    private fun findPostsAndCreatePostCaches(
+        notExistsPostIds: List<Long>,
+        postCacheDtos: List<PostCacheDto>,
+        pageRequestByPosition: PageRequestByPosition,
+    ): PageByPosition<PostDto> {
         val postDtos: List<PostDto> = postReadService.findPosts(ids = notExistsPostIds)
         val appendedPostDtos: List<PostDto> = postDtos.plus(postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) })
 

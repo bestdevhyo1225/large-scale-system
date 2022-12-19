@@ -15,11 +15,6 @@ class FeedRedisReadService(
 
     fun findFeeds(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<FeedDto> {
         val (start: Long, size: Long) = pageRequestByPosition
-
-        if (start < 0L || size == 0L) {
-            return listOf()
-        }
-
         val key: String = Feed.getMemberIdFeedsKey(id = memberId)
         val end: Long = start.plus(size).minus(other = 1)
 

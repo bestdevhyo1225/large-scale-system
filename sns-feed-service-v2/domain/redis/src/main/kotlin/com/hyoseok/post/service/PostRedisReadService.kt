@@ -24,12 +24,8 @@ class PostRedisReadService(
         return PostCacheDto(postCache = postCache)
     }
 
-    fun findPostCaches(ids: List<Long>): List<PostCacheDto> =
-        if (ids.isNotEmpty()) {
-            postRedisPipelineRepository.getPostCaches(ids = ids)
-        } else {
-            listOf()
-        }
+    fun findPostCaches(ids: List<Long>): Pair<List<PostCacheDto>, List<Long>> =
+        getPostCacheDtosAndNotExistsPostIds(postIds = ids)
 
     fun findPostCaches(
         memberId: Long,
@@ -44,6 +40,10 @@ class PostRedisReadService(
             clazz = Long::class.java,
         )
 
+        return getPostCacheDtosAndNotExistsPostIds(postIds = postIds)
+    }
+
+    private fun getPostCacheDtosAndNotExistsPostIds(postIds: List<Long>): Pair<List<PostCacheDto>, List<Long>> {
         if (postIds.isEmpty()) {
             return Pair(first = listOf(), second = listOf())
         }

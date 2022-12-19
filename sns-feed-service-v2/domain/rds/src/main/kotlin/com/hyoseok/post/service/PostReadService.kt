@@ -53,11 +53,6 @@ class PostReadService(
         }
 
         val (start: Long, size: Long) = pageRequestByPosition
-
-        if (start < 0L || size == 0L) {
-            return listOf()
-        }
-
         val toCreatedAt: LocalDateTime = LocalDateTime.now().withNano(0)
         val fromCreatedAt: LocalDateTime = toCreatedAt.minusDays(1)
 
