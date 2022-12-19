@@ -29,29 +29,50 @@ class FindPostsUsecase(
 
     @RateLimiter(name = FIND_POSTS_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> {
-        val postCacheDtos: List<PostCacheDto> =
+        val (start: Long, size: Long) = pageRequestByPosition
+
+        if (start < 0 || size == 0L) {
+            return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
+        }
+
+        val (postCacheDtos: List<PostCacheDto>, notExistsPostIds: List<Long>) =
             postRedisReadService.findPostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
-        if (postCacheDtos.isNotEmpty() && postCacheDtos.size == pageRequestByPosition.size.toInt()) {
+        if (postCacheDtos.isEmpty()) {
+            val pageByPositionPostDto: PageByPosition<PostDto> =
+                postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
+
+            CoroutineScope(context = Dispatchers.IO).launch {
+                pageByPositionPostDto.items.forEach {
+                    postRedisService.createOrUpdate(dto = PostCacheDtoMapper.of(postDto = it))
+                }
+            }
+
+            return pageByPositionPostDto
+        }
+
+        if (notExistsPostIds.isEmpty()) {
             val postDtos: List<PostDto> = postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) }
+
             return PageByPosition(
                 items = postDtos,
                 nextPageRequestByPosition = pageRequestByPosition.next(itemSize = postDtos.size),
             )
         }
 
-        val postIdMapByPostCacheDtos: Map<Long, Boolean> = postCacheDtos.associate { it.id to true }
-        val pageByPositionPostDto: PageByPosition<PostDto> =
-            postReadService.findPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
-        val createPostCacheDto: List<PostCacheDto> = pageByPositionPostDto.items
-            .filter { postIdMapByPostCacheDtos[it.id] == null || postIdMapByPostCacheDtos[it.id] == false }
-            .map { PostCacheDtoMapper.of(postDto = it) }
+        val postDtos: List<PostDto> = postReadService.findPosts(ids = notExistsPostIds)
+        val appendedPostDtos: List<PostDto> = postDtos.plus(postCacheDtos.map { PostDtoMapper.of(postCacheDto = it) })
 
         CoroutineScope(context = Dispatchers.IO).launch {
-            createPostCacheDto.forEach { postRedisService.createOrUpdate(dto = it) }
+            postDtos.forEach {
+                postRedisService.createOrUpdate(dto = PostCacheDtoMapper.of(postDto = it))
+            }
         }
 
-        return pageByPositionPostDto
+        return PageByPosition(
+            items = appendedPostDtos,
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = appendedPostDtos.size),
+        )
     }
 
     private fun fallbackExecute(exception: Exception): PageByPosition<PostDto> {

@@ -31,26 +31,27 @@ class PostRedisReadService(
             listOf()
         }
 
-    fun findPostCaches(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<PostCacheDto> {
+    fun findPostCaches(
+        memberId: Long,
+        pageRequestByPosition: PageRequestByPosition,
+    ): Pair<List<PostCacheDto>, List<Long>> {
         val (start: Long, size: Long) = pageRequestByPosition
-
-        if (start <= -1L || size == 0L) {
-            return listOf()
-        }
-
-        val key: String = getPostIdsByMemberIdKey(memberId = memberId)
         val end: Long = start.plus(size).minus(other = 1)
         val postIds: List<Long> = postRedisRepository.zrevRange(
-            key = key,
+            key = getPostIdsByMemberIdKey(memberId = memberId),
             start = start,
             end = end,
             clazz = Long::class.java,
         )
 
         if (postIds.isEmpty()) {
-            return listOf()
+            return Pair(first = listOf(), second = listOf())
         }
 
-        return postRedisPipelineRepository.getPostCaches(ids = postIds)
+        val postCacheDtos: List<PostCacheDto> = postRedisPipelineRepository.getPostCaches(ids = postIds)
+        val postCacheIdMap: Map<Long, Boolean> = postCacheDtos.associate { it.id to true }
+        val notExistsPostIds: List<Long> = postIds.filter { postCacheIdMap[it] == null || postCacheIdMap[it] == false }
+
+        return Pair(first = postCacheDtos, second = notExistsPostIds)
     }
 }
