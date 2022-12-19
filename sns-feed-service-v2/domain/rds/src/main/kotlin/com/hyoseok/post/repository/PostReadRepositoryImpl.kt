@@ -54,7 +54,6 @@ class PostReadRepositoryImpl(
     override fun findAllByMemberIdAndLimitAndOffset(memberId: Long, limit: Long, offset: Long): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
-            .innerJoin(post.postImages, postImage).fetchJoin()
             .where(
                 postMemberIdEq(memberId = memberId),
                 postDeletedAtIsNull(),
@@ -73,7 +72,6 @@ class PostReadRepositoryImpl(
     ): List<Post> =
         jpaQueryFactory
             .selectFrom(post)
-            .innerJoin(post.postImages, postImage).fetchJoin()
             .where(
                 postMemberIdIn(memberIds = memberIds),
                 postCreatedAtBetween(fromCreatedAt, toCreatedAt),
