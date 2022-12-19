@@ -44,7 +44,10 @@ class FindPostsTimelineUsecase(
             feedRedisReadService.findFeeds(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
         if (feedDtos.isEmpty()) {
-            return findPostsAndCreatePostCaches(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
+            return findInfluencerPostsAndCreatePostCaches(
+                memberId = memberId,
+                pageRequestByPosition = pageRequestByPosition,
+            )
         }
 
         val postIds: List<Long> = feedDtos.map { it.postId }
@@ -66,7 +69,7 @@ class FindPostsTimelineUsecase(
         )
     }
 
-    private fun findPostsAndCreatePostCaches(
+    private fun findInfluencerPostsAndCreatePostCaches(
         memberId: Long,
         pageRequestByPosition: PageRequestByPosition,
     ): PageByPosition<PostDto> {
