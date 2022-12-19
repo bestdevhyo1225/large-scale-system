@@ -1,8 +1,6 @@
 package com.hyoseok.post.entity
 
 import com.hyoseok.base.entity.BaseEntity
-import com.hyoseok.post.entity.Post.ErrorMessage.INVALID_CURRENT_VIEW_COUNT_IS_ZERO
-import com.hyoseok.post.entity.Post.ErrorMessage.INVALID_VIEW_COUNT
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.CascadeType.PERSIST
@@ -72,11 +70,6 @@ class Post private constructor(
         "Post(id=$id, memberId=$memberId, title=$title, contents=$contents, writer=$writer, viewCount=$viewCount," +
             "wishCount=$wishCount, createdAt=$createdAt, updatedAt=$updatedAt, deletedAt=$deletedAt)"
 
-    object ErrorMessage {
-        const val INVALID_VIEW_COUNT = "유효하지 않는 조회 카운트가 입력되었습니다"
-        const val INVALID_CURRENT_VIEW_COUNT_IS_ZERO = "현재 조회 수는 0입니다"
-    }
-
     companion object {
         const val POST_IDS_LIMIT_SIZE = 1_000
 
@@ -103,20 +96,15 @@ class Post private constructor(
     }
 
     fun increaseViewCount(viewCount: Long) {
-        if (viewCount <= 0) {
-            throw IllegalArgumentException(INVALID_VIEW_COUNT)
+        if (viewCount > 0) {
+            this.viewCount += viewCount
         }
-        this.viewCount += viewCount
     }
 
     fun decreaseViewCount(viewCount: Long) {
-        if (viewCount <= 0) {
-            throw IllegalArgumentException(INVALID_VIEW_COUNT)
+        if (viewCount > 0) {
+            this.viewCount -= viewCount
         }
-        if (this.viewCount == 0L) {
-            throw IllegalArgumentException(INVALID_CURRENT_VIEW_COUNT_IS_ZERO)
-        }
-        this.viewCount -= viewCount
     }
 
     fun updateWishCount(value: Long) {
