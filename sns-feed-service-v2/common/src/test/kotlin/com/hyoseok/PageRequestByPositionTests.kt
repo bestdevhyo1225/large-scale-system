@@ -9,8 +9,8 @@ import io.kotest.matchers.shouldBe
 internal class PageRequestByPositionTests : DescribeSpec(
     {
         describe("next 메서드는") {
-            context("itemSize 값이 0보다 큰 경우") {
-                it("start.plus(size) 결과를 반환한다") {
+            context("itemSize 값이 0보다 크지만 size 보다 작은 경우") {
+                it("next start 값은 -1을 반환한다") {
                     // given
                     val start = 0L
                     val size = 10L
@@ -20,7 +20,7 @@ internal class PageRequestByPositionTests : DescribeSpec(
                     val nextPageRequestByPosition: PageRequestByPosition = pageRequestByPosition.next(itemSize = 1)
 
                     // then
-                    nextPageRequestByPosition.start.shouldBe(start.plus(size))
+                    nextPageRequestByPosition.start.shouldBe(NONE_START)
                 }
             }
 

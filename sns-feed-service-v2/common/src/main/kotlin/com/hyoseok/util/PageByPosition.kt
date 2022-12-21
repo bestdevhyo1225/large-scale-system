@@ -23,7 +23,7 @@ data class PageRequestByPosition(
         if (itemSize < 0) {
             throw IllegalArgumentException("itemSize is negative value")
         }
-        val nextStart: Long = if (itemSize == 0) NONE_START else start.plus(size)
+        val nextStart: Long = if (itemSize == 0 || itemSize < size) NONE_START else start.plus(size)
         return PageRequestByPosition(start = nextStart, size = size)
     }
 
