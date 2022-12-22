@@ -136,27 +136,62 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### 캐시 메모리 계산
 
-캐시 데이터가 억 단위를 넘어가는 경우, [Redis에 심플한 key-value 로 수 억개의 데이터 저장하기](https://charsyam.wordpress.com/2011/11/06/redis%EC%97%90-%EC%8B%AC%ED%94%8C%ED%95%9C-key-value-%EB%A1%9C-%EC%88%98-%EC%96%B5%EA%B0%9C%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0/)
+캐시 데이터가 억 단위를 넘어가는
+경우, [Redis에 심플한 key-value 로 수 억개의 데이터 저장하기](https://charsyam.wordpress.com/2011/11/06/redis%EC%97%90-%EC%8B%AC%ED%94%8C%ED%95%9C-key-value-%EB%A1%9C-%EC%88%98-%EC%96%B5%EA%B0%9C%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0/)
 을 참고해서 `Hashes` 자료구조로 개선하자.
 
-### 팬 아웃(포스팅 전송) 성능 테스트 결과
+### 성능 테스트
 
-- `Number Of Threads (users)` : 2,000명, `Ramp-up Period (seoncds)` : 1초
+#### 인스턴스 사양
 
-| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+> Amazon MSK
+
+- `kafka.t3.small`
+    - `vCpu` : `2048`
+    - `메모리(GiB)` : `2G`
+    - `네트워크 대역폭 (Gbps)` : `5 Gbps`
+
+> Amazon Elasticache
+
+- `cache.t3.small`
+    - `메모리(GiB)` : `1.37 GiB`
+    - `Up to 5 Gigabit nework perfomance`
+
+> AWS ECS Fargate
+
+- `vCpu` : `2048`
+- `Memory` : `6G`
+
+> Spring Boot Application
+
+- `Xms` : `4096MB (4G)`
+- `Xmx` : `4096MB (4G)`
+- `GC` : `ZGC`
+
+#### 결과
+
+- `사용자 수` : `2,000명`
+- `Ramp Up 시간 (초)` : `1초`
+- `테스트 지속 시간` : `60초`
+
+| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| /api/v1/posts | 16,328회 | 3,824ms | 1ms | 6,707ms | 0.02% | 476.8/sec |
-| /api/v1/posts | 17,136회 | 3,649ms | 2ms | 8,303ms | 0.06% | 504.3/sec |
+| 회원 생성 | 79,690 | 1,495ms | 52ms | 4,831ms | 0.00% | 1293.7/sec |
 
-### 피드 조회 성능 테스트 결과
-
-- `Number Of Threads (users)` : 1,000명, `Ramp-up Period (seoncds)` : 1초
-
-| Label | Samples | Average | Min | Max | Erros (%) | Throughput |
+| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| /api/v1/feeds/{memberId}/posts | 142,327회 | 843ms | 19ms | 3,813ms | 0.00% | 1175.4/sec |
-| /api/v1/feeds/{memberId}/posts | 105,393회 | 1,138ms | 31ms | 3,847ms | 0.00% | 870.6/sec |
-| /api/v1/feeds/{memberId}/posts | 122,928회 | 975ms | 163ms | 2,192ms | 0.00% | 1016.2/sec |
+| 게시물 생성 | 43,119 | 2,822ms | 89ms | 75,006ms | 0.05% | 569.5/sec |
+
+> Query API
+
+- RateLimiter 의 `limitForPeriod` 값이 `1,000` 일 때 결과
+
+| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 게시물 리스트 조회 | 26,013 | 1,703ms | 46ms | 18,888ms | 0.00% | 422.9/sec |
+| 게시물 타임라인 조회 | 25,304 | 1,530ms | 52ms | 11,860ms | 0.00% | 411.2/sec |
+| 게시물 상세 조회 | 24,616 | 1,477ms | 59ms | 18,813ms | 0.00% | 412.5/sec |
+| 총계 | 75,933 | 1,572ms | 46ms | 18,888ms | 0.00% | 1232.9/sec |
 
 ## :pushpin: 쿠폰 이벤트 선착순 시스템 설계
 
