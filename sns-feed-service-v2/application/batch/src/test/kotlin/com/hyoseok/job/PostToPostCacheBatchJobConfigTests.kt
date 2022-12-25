@@ -6,9 +6,9 @@ import com.hyoseok.config.PostRedisConfig
 import com.hyoseok.config.PostRedisTemplateConfig
 import com.hyoseok.config.jpa.JpaConfig
 import com.hyoseok.post.entity.Post
-import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostImage
-import com.hyoseok.post.repository.PostRedisRepository
+import com.hyoseok.post.repository.PostRedisPipelineRepository
+import com.hyoseok.post.repository.PostRedisPipelineRepositoryImpl
 import com.hyoseok.post.repository.PostRedisRepositoryImpl
 import com.hyoseok.post.repository.PostRedisTransactionRepositoryImpl
 import com.hyoseok.post.repository.PostRepository
@@ -39,6 +39,7 @@ import org.springframework.data.redis.core.RedisTemplate
         PostRedisConfig::class,
         PostRedisTemplateConfig::class,
         PostToPostCacheBatchJobConfig::class,
+        PostRedisPipelineRepositoryImpl::class,
         PostRedisTransactionRepositoryImpl::class,
         PostRedisRepositoryImpl::class,
         PostRedisService::class,
@@ -61,7 +62,7 @@ internal class PostToPostCacheBatchJobConfigTests : DescribeSpec() {
     private lateinit var postRepository: PostRepository
 
     @Autowired
-    private lateinit var postRedisRepository: PostRedisRepository
+    private lateinit var postRedisPipelineRepository: PostRedisPipelineRepository
 
     private val postIds: MutableList<Long> = mutableListOf()
 
@@ -93,8 +94,6 @@ internal class PostToPostCacheBatchJobConfigTests : DescribeSpec() {
         this.describe("PostToPostCacheBatchJob 클래스는") {
             it("Post 엔티티를 PostCache 엔티티에 반영한다") {
                 // given
-                val keys: List<String> = postIds.map { PostCache.getPostIdKey(id = it) }
-
                 // when
                 val jobExecution: JobExecution = jobLauncherTestUtils.launchJob()
 
@@ -102,9 +101,9 @@ internal class PostToPostCacheBatchJobConfigTests : DescribeSpec() {
                 jobExecution.status.shouldBe(BatchStatus.COMPLETED)
                 jobExecution.exitStatus.shouldBe(ExitStatus.COMPLETED)
 
-                postRedisRepository.mget(keys)
+                postRedisPipelineRepository.hgetPostCaches(ids = postIds)
                     .shouldNotBeEmpty()
-                    .shouldHaveSize(keys.size)
+                    .shouldHaveSize(postIds.size)
             }
         }
     }

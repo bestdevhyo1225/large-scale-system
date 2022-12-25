@@ -20,6 +20,10 @@ class PostRedisRepositoryImpl(
 
     private val jacksonObjectMapper = jacksonObjectMapper().registerModule(JavaTimeModule())
 
+    object ErrorMessage {
+        const val NOT_FOUND_POST_CACHE = "Post 캐시를 찾을 수 없습니다."
+    }
+
     override fun <T> get(key: String, clazz: Class<T>): T? {
         val remainingExpiryTimeMS: Long = redisTemplate.getExpire(key, MILLISECONDS)
 

@@ -6,6 +6,8 @@ import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdsByMemberIdKey
 import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
+import com.hyoseok.post.repository.PostRedisRepositoryImpl.ErrorMessage.NOT_FOUND_POST_CACHE
+import com.hyoseok.util.PageByPosition
 import com.hyoseok.util.PageRequestByPosition
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
@@ -24,8 +26,54 @@ class PostRedisReadService(
         return PostCacheDto(postCache = postCache)
     }
 
-    fun findPostCaches(ids: List<Long>): Pair<List<PostCacheDto>, List<Long>> =
-        getPostCacheDtosAndNotExistsPostIds(postIds = ids)
+    fun findPostCacheThrow(id: Long): PostCacheDto {
+        val postCache: PostCache =
+            postRedisRepository.hget(key = getPostIdKey(id = id), hashKey = id, clazz = PostCache::class.java)
+                ?: throw NoSuchElementException(NOT_FOUND_POST_CACHE)
+
+        return PostCacheDto(postCache = postCache)
+    }
+
+    fun findPostCaches(ids: List<Long>): List<PostCacheDto> {
+        if (ids.isEmpty()) {
+            return listOf()
+        }
+
+        return postRedisPipelineRepository.hgetPostCaches(ids = ids)
+    }
+
+    fun findPageOfPostCaches(
+        memberId: Long,
+        pageRequestByPosition: PageRequestByPosition,
+    ): PageByPosition<PostCacheDto> {
+        val (start: Long, size: Long) = pageRequestByPosition
+
+        if (start < 0 || size == 0L) {
+            return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
+        }
+
+        val end: Long = start.plus(size).minus(other = 1)
+        val postIds: List<Long> = postRedisRepository.zrevRange(
+            key = getPostIdsByMemberIdKey(memberId = memberId),
+            start = start,
+            end = end,
+            clazz = Long::class.java,
+        )
+
+        if (postIds.isEmpty()) {
+            return PageByPosition(
+                items = listOf(),
+                nextPageRequestByPosition = pageRequestByPosition.next(itemSize = 0),
+            )
+        }
+
+        val postCacheDtos: List<PostCacheDto> = postRedisPipelineRepository.getPostCaches(ids = postIds)
+
+        return PageByPosition(
+            items = postCacheDtos,
+            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = postCacheDtos.size),
+        )
+    }
 
     fun findPostCaches(
         memberId: Long,
