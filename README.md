@@ -171,8 +171,8 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 > AWS ECS Fargate
 
-- `vCpu` : `2048`
-- `Memory` : `6G`
+- `vCpu` : `2048` or `4096`
+- `Memory` : `6G` or `8G`
 
 > Spring Boot Application
 
@@ -197,6 +197,10 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 > Query API
 
 - RateLimiter 의 `limitForPeriod` 값이 `1,000` 일 때 결과
+- AWS ECS `vCpu` : `2048`
+- AWS ECS `Memory` : `6G`
+- AWS ECS 인스턴스 수 : `1대`
+- Tomcat Max Thread: `150`
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -204,6 +208,30 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | 게시물 타임라인 조회 | 25,304 | 1,530ms | 52ms | 11,860ms | 0.00% | 411.2/sec |
 | 게시물 상세 조회 | 24,616 | 1,477ms | 59ms | 18,813ms | 0.00% | 412.5/sec |
 | 총계 | 75,933 | 1,572ms | 46ms | 18,888ms | 0.00% | 1232.9/sec |
+
+- RateLimiter 의 `limitForPeriod` 값이 `3,000`
+- AWS ECS `vCpu` : `4096`
+- AWS ECS `Memory` : `8G`
+- AWS ECS 인스턴스 수 : `1대`
+- Tomcat Max Thread: `150`
+- 게시물 리스트, 타임라인, 상세 조회 총계
+
+| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 총계 | 153,403 | 779ms | 21ms | 67,121ms | 0.00% | 2222.0/sec |
+| 총계 | 162,329 | 738ms | 18ms | 75,003ms | 0.05% | 2121.7/sec |
+| 총계 | 169,267 | 708ms | 17ms | 67,301ms | 0.00% | 2442.8/sec |
+
+- RateLimiter 의 `limitForPeriod` 값이 `3,000`
+- AWS ECS `vCpu` : `4096`
+- AWS ECS `Memory` : `8G`
+- AWS ECS 인스턴스 수 : `1대`
+- Tomcat Max Thread: `200`
+- 게시물 리스트, 타임라인, 상세 조회 총계
+
+| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 총계 | 161,657 | 735ms | 15ms | 67,120ms | 0.00% | 2340.7/sec |
 
 ## :pushpin: 쿠폰 이벤트 선착순 시스템 설계
 
