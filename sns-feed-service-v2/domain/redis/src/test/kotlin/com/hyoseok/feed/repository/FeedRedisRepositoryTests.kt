@@ -3,7 +3,7 @@ package com.hyoseok.feed.repository
 import com.hyoseok.config.FeedRedisConfig
 import com.hyoseok.config.FeedRedisTemplateConfig
 import com.hyoseok.config.RedisEmbbededServerConfig
-import com.hyoseok.feed.entity.Feed
+import com.hyoseok.feed.entity.FeedCache
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -55,7 +55,7 @@ internal class FeedRedisRepositoryTests : DescribeSpec() {
                 // given
                 val postId = 1L
                 val memberId = 1L
-                val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+                val key: String = FeedCache.getMemberIdFeedsKey(id = memberId)
                 val score: Double = Timestamp.valueOf(LocalDateTime.now().withNano(0)).time.toDouble()
 
                 // when
@@ -75,7 +75,7 @@ internal class FeedRedisRepositoryTests : DescribeSpec() {
                 // given
                 val postId = 1245L
                 val memberId = 19283L
-                val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+                val key: String = FeedCache.getMemberIdFeedsKey(id = memberId)
                 val score = Timestamp.valueOf(LocalDateTime.now().withNano(0)).time.toDouble()
 
                 feedRedisRepository.zadd(key = key, value = postId, score = score)
@@ -84,10 +84,10 @@ internal class FeedRedisRepositoryTests : DescribeSpec() {
                 feedRedisRepository.zremRangeByRank(key = key, start = 0, end = 1)
 
                 // then
-                val feeds: List<Feed> =
-                    feedRedisRepository.zrevRange(key = key, start = 0, end = 1, clazz = Feed::class.java)
+                val feedCaches: List<FeedCache> =
+                    feedRedisRepository.zrevRange(key = key, start = 0, end = 1, clazz = FeedCache::class.java)
 
-                feeds.size.shouldBeZero()
+                feedCaches.size.shouldBeZero()
             }
         }
 
@@ -95,7 +95,7 @@ internal class FeedRedisRepositoryTests : DescribeSpec() {
             it("start, end 범위에 포함된 데이터를 조회한다") {
                 // given
                 val memberId = 1L
-                val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+                val key: String = FeedCache.getMemberIdFeedsKey(id = memberId)
                 (1L..10L).forEachIndexed { index, postId ->
                     val createdAt: LocalDateTime = LocalDateTime.now().withNano(0).plusMinutes(index.toLong())
                     val score = Timestamp.valueOf(createdAt).time.toDouble()

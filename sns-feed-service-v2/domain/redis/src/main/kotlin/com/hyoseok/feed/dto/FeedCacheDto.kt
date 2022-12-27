@@ -1,6 +1,6 @@
 package com.hyoseok.feed.dto
 
-data class FeedDto(
+data class FeedCacheDto(
     val memberId: Long,
     val postId: Long,
 )

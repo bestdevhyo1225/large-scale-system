@@ -1,6 +1,6 @@
 package com.hyoseok.feed.entity
 
-class Feed {
+class FeedCache {
     companion object {
         const val ZSET_FEED_MAX_LIMIT = -801L
 

@@ -1,7 +1,7 @@
 package com.hyoseok.feed.service
 
-import com.hyoseok.feed.dto.FeedDto
-import com.hyoseok.feed.entity.Feed
+import com.hyoseok.feed.dto.FeedCacheDto
+import com.hyoseok.feed.entity.FeedCache.Companion.getMemberIdFeedsKey
 import com.hyoseok.feed.repository.FeedRedisRepository
 import com.hyoseok.util.PageRequestByPosition
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -13,13 +13,13 @@ class FeedRedisReadService(
     private val feedRedisRepository: FeedRedisRepository,
 ) {
 
-    fun findFeeds(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<FeedDto> {
+    fun findFeeds(memberId: Long, pageRequestByPosition: PageRequestByPosition): List<FeedCacheDto> {
         val (start: Long, size: Long) = pageRequestByPosition
-        val key: String = Feed.getMemberIdFeedsKey(id = memberId)
+        val key: String = getMemberIdFeedsKey(id = memberId)
         val end: Long = start.plus(size).minus(other = 1)
 
         return feedRedisRepository
             .zrevRange(key = key, start = start, end = end, clazz = Long::class.java)
-            .map { FeedDto(memberId = memberId, postId = it) }
+            .map { FeedCacheDto(memberId = memberId, postId = it) }
     }
 }

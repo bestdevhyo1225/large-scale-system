@@ -2,7 +2,7 @@ package com.hyoseok.usecase
 
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_TIMELINE_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
-import com.hyoseok.feed.dto.FeedDto
+import com.hyoseok.feed.dto.FeedCacheDto
 import com.hyoseok.feed.service.FeedRedisReadService
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.mapper.PostCacheDtoMapper
@@ -40,14 +40,14 @@ class FindPostsTimelineUsecase(
             return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
         }
 
-        val feedDtos: List<FeedDto> =
+        val feedCacheDtos: List<FeedCacheDto> =
             feedRedisReadService.findFeeds(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
-        if (feedDtos.isEmpty()) {
+        if (feedCacheDtos.isEmpty()) {
             return findInfluencerPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
         }
 
-        val postIds: List<Long> = feedDtos.map { it.postId }
+        val postIds: List<Long> = feedCacheDtos.map { it.postId }
         val (postCacheDtos: List<PostCacheDto>, notExistsPostIds: List<Long>) =
             postRedisReadService.findPostCaches(ids = postIds)
 
