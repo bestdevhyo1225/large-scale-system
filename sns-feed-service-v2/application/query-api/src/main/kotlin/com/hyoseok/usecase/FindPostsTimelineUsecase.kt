@@ -44,7 +44,8 @@ class FindPostsTimelineUsecase(
             feedRedisReadService.findFeeds(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
         if (feedCacheDtos.isEmpty()) {
-            return findInfluencerPosts(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
+            // Feed 캐시 갱신 로직을 넣어야 할 듯
+            return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
         }
 
         val postIds: List<Long> = feedCacheDtos.map { it.postId }
@@ -63,27 +64,6 @@ class FindPostsTimelineUsecase(
             notExistsPostIds = notExistsPostIds,
             postCacheDtos = postCacheDtos,
             pageRequestByPosition = pageRequestByPosition,
-        )
-    }
-
-    private fun findInfluencerPosts(
-        memberId: Long,
-        pageRequestByPosition: PageRequestByPosition,
-    ): PageByPosition<PostDto> {
-        val findFolloweeMaxLimit: Long = 1_000
-        val followeeIds: List<Long> = followReadService.findInfluencerFolloweeIds(
-            followerId = memberId,
-            findFolloweeMaxLimit = findFolloweeMaxLimit,
-        )
-
-        // followeeIds 들이 등록한 PostCache를 가져올 수 있는 방법
-
-        val postDtos: List<PostDto> =
-            postReadService.findPosts(memberIds = followeeIds, pageRequestByPosition = pageRequestByPosition)
-
-        return PageByPosition(
-            items = postDtos,
-            nextPageRequestByPosition = pageRequestByPosition.next(itemSize = postDtos.size),
         )
     }
 
