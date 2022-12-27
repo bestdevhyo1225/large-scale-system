@@ -2,7 +2,7 @@ package com.hyoseok.feed.entity
 
 class Feed {
     companion object {
-        const val ZSET_FEED_MAX_LIMIT = -101L
+        const val ZSET_FEED_MAX_LIMIT = -801L
 
         fun getMemberIdFeedsKey(id: Long) = "member:$id:feeds"
         fun getMemberIdFeedsKeyAndExpireTime(id: Long) =
