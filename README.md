@@ -247,6 +247,10 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 <img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327876-5b53d114-a32f-4fe5-b346-1d20e7a5973d.png">
 
+### Write Back 패턴 사용
+
+- 선착순의 경우, DB에 갑작스런 쓰기 요청이 몰리게 되면 DB 서버가 죽을 수도 있다. 따라서 임시적으로 Redis 서버에 캐시 데이터를 적재하고 Kafka를 활용해서 DB에 쓰기 작업을 처리한다.
+
 ### 쿠폰 서비스 Swagger
 
 > **coupon-command-api**
