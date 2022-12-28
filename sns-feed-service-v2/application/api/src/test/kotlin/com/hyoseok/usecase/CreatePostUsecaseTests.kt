@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 internal class CreatePostUsecaseTests : BehaviorSpec(
     {
         val mockFeedKafkaProducer: FeedKafkaProducer = mockk(relaxed = true)
-        val mockFollowReadService: FollowReadService = mockk()
+        val mockFollowReadService: FollowReadService = mockk(relaxed = true)
         val mockMemberReadService: MemberReadService = mockk()
         val mockPostService: PostService = mockk()
         val mockPostRedisService: PostRedisService = mockk()
