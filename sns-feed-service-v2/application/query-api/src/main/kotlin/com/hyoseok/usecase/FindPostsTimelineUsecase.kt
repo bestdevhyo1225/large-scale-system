@@ -42,7 +42,6 @@ class FindPostsTimelineUsecase(
             feedRedisReadService.findFeeds(memberId = memberId, pageRequestByPosition = pageRequestByPosition)
 
         if (feedCacheDtos.isEmpty()) {
-            // Feed 캐시 갱신 로직을 넣어야 할 듯
             return PageByPosition(items = listOf(), nextPageRequestByPosition = pageRequestByPosition)
         }
 
