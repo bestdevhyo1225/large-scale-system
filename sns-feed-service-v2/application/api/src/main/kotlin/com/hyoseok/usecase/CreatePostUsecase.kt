@@ -4,6 +4,7 @@ import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.feed.dto.FeedEventDto
 import com.hyoseok.feed.producer.FeedKafkaProducer
+import com.hyoseok.follow.dto.FollowDto
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.service.MemberReadService
@@ -65,26 +66,29 @@ class CreatePostUsecase(
     }
 
     private suspend fun sendFeedEvent(postDto: PostDto, influencer: Boolean) {
+        if (influencer) {
+            return
+        }
+
+        var lastId = 0L
         val limit = 1_000L
-        var offset = 0L
-        var isProgress = true
-        while (isProgress) {
-            val (total: Long, followerIds: List<Long>) = followReadService.findFollowerIds(
+
+        while (true) {
+            val followDtos: List<FollowDto> = followReadService.findFollowers(
                 followeeId = postDto.memberId,
-                influencer = influencer,
+                lastId = lastId,
                 limit = limit,
-                offset = offset,
             )
 
-            followerIds.forEach {
-                feedKafkaProducer.sendAsync(event = FeedEventDto(postId = postDto.id, followerId = it))
+            if (followDtos.isEmpty()) {
+                break
             }
 
-            offset += limit
-
-            if (offset >= total) {
-                isProgress = false
+            followDtos.forEach {
+                feedKafkaProducer.sendAsync(event = FeedEventDto(postId = postDto.id, followerId = it.followerId))
             }
+
+            lastId = followDtos.last().id
         }
     }
 
