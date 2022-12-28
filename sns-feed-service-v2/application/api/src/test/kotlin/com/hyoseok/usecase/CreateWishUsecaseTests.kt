@@ -26,8 +26,13 @@ internal class CreateWishUsecaseTests : BehaviorSpec(
         )
 
         given("좋아요를 처리하기 위해 아래와 같은 상황이 주어지면") {
-            val memberDto =
-                MemberDto(id = 1L, name = "name", influencer = false, createdAt = LocalDateTime.now().withNano(0))
+            val memberDto = MemberDto(
+                id = 1L,
+                name = "name",
+                influencer = false,
+                createdAt = LocalDateTime.now().withNano(0),
+                lastLoginDatetime = LocalDateTime.now().withNano(0),
+            )
             val postDto = PostDto(
                 id = 1L,
                 memberId = 2L,

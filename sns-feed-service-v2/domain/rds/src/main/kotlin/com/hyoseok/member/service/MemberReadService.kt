@@ -12,6 +12,12 @@ class MemberReadService(
 ) {
     fun findMember(id: Long): MemberDto =
         with(receiver = memberReadRepository.findById(id = id)) {
-            MemberDto(id = id, name = name, influencer = getInfluencer(), createdAt = createdAt)
+            MemberDto(
+                id = id,
+                name = name,
+                influencer = getInfluencer(),
+                createdAt = createdAt,
+                lastLoginDatetime = lastLoginDatetime,
+            )
         }
 }

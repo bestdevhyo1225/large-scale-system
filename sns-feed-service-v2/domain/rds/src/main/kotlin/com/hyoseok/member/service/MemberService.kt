@@ -8,6 +8,7 @@ import com.hyoseok.member.repository.MemberRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 /*
 * 도메인 비즈니스
@@ -24,12 +25,24 @@ class MemberService(
             .run { memberRepository.save(this) }
             .let {
                 with(receiver = it) {
-                    MemberDto(id = id!!, name = name, influencer = getInfluencer(), createdAt = createdAt)
+                    MemberDto(
+                        id = id!!,
+                        name = name,
+                        influencer = getInfluencer(),
+                        createdAt = createdAt,
+                        lastLoginDatetime = lastLoginDatetime,
+                    )
                 }
             }
 
     fun updateInfluener(memberId: Long) {
         memberRepository.findByIdOrNull(id = memberId)
             ?.changeInfluencer(influencer = true) ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
+    }
+
+    fun updateLastLoginDatetime(memberId: Long) {
+        memberRepository.findByIdOrNull(id = memberId)
+            ?.changeLastLoginDatetime(lastLoginDatetime = LocalDateTime.now().withNano(0))
+            ?: throw NoSuchElementException(NOT_FOUND_MEMBER)
     }
 }

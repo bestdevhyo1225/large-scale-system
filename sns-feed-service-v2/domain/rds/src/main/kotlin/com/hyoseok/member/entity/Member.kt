@@ -16,6 +16,7 @@ class Member private constructor(
     influencer: Int,
     createdAt: LocalDateTime,
     updatedAt: LocalDateTime,
+    lastLoginDatetime: LocalDateTime,
 ) : BaseEntity(createdAt = createdAt) {
 
     @Column(name = "name", nullable = false)
@@ -30,8 +31,12 @@ class Member private constructor(
     var updatedAt: LocalDateTime = updatedAt
         protected set
 
+    @Column(name = "last_login_datetime", nullable = false, columnDefinition = "DATETIME")
+    var lastLoginDatetime: LocalDateTime = lastLoginDatetime
+        protected set
+
     override fun toString(): String = "Member(id=$id, name=$name, influencer=$influencer, " +
-        "createdAt=$createdAt, updatedAt=$updatedAt)"
+        "createdAt=$createdAt, updatedAt=$updatedAt, lastLoginDatetime=$lastLoginDatetime)"
 
     object ErrorMessage {
         const val MAX_LIMIT = "입력할 수 있는 이름의 길이를 초과했습니다"
@@ -45,7 +50,13 @@ class Member private constructor(
         operator fun invoke(name: String): Member {
             validateName(name = name)
             val nowDatetime: LocalDateTime = LocalDateTime.now()
-            return Member(name = name, influencer = INFLUENCER_FALSE, createdAt = nowDatetime, updatedAt = nowDatetime)
+            return Member(
+                name = name,
+                influencer = INFLUENCER_FALSE,
+                createdAt = nowDatetime,
+                updatedAt = nowDatetime,
+                lastLoginDatetime = nowDatetime,
+            )
         }
 
         private fun validateName(name: String) {
@@ -59,5 +70,9 @@ class Member private constructor(
 
     fun changeInfluencer(influencer: Boolean) {
         this.influencer = if (influencer) INFLUENCER_TRUE else INFLUENCER_FALSE
+    }
+
+    fun changeLastLoginDatetime(lastLoginDatetime: LocalDateTime) {
+        this.lastLoginDatetime = lastLoginDatetime
     }
 }

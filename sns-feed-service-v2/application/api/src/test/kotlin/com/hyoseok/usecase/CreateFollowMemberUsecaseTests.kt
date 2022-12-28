@@ -26,12 +26,14 @@ internal class CreateFollowMemberUsecaseTests : BehaviorSpec(
                 name = "팔로워",
                 influencer = false,
                 createdAt = LocalDateTime.now().withNano(0),
+                lastLoginDatetime = LocalDateTime.now().withNano(0),
             )
             val followeeMemberDto = MemberDto(
                 id = 2L,
                 name = "팔로이",
                 influencer = false,
                 createdAt = LocalDateTime.now().withNano(0),
+                lastLoginDatetime = LocalDateTime.now().withNano(0),
             )
             val followCreateDto = FollowCreateDto(
                 followerId = followerMemberDto.id,

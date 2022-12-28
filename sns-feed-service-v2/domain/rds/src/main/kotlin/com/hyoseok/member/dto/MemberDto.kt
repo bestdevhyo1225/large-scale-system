@@ -7,6 +7,7 @@ data class MemberDto(
     val name: String,
     val influencer: Boolean,
     val createdAt: LocalDateTime,
+    val lastLoginDatetime: LocalDateTime,
 )
 
 data class MemberCreateDto(

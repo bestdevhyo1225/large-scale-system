@@ -4,9 +4,15 @@ import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_P
 import com.hyoseok.exception.QueryApiRateLimitException
 import com.hyoseok.feed.service.FeedRedisService
 import com.hyoseok.follow.service.FollowReadService
+import com.hyoseok.member.dto.MemberDto
+import com.hyoseok.member.service.MemberReadService
+import com.hyoseok.member.service.MemberService
 import com.hyoseok.post.dto.PostDto
 import com.hyoseok.post.service.PostReadService
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -15,6 +21,8 @@ import java.time.LocalDateTime
 class FindPostsRefreshTimelineUsecase(
     private val feedRedisService: FeedRedisService,
     private val followReadService: FollowReadService,
+    private val memberService: MemberService,
+    private val memberReadService: MemberReadService,
     private val postReadService: PostReadService,
 ) {
 
@@ -22,25 +30,25 @@ class FindPostsRefreshTimelineUsecase(
 
     @RateLimiter(name = FIND_POST_REFRESH_TIMELINE_USECASE, fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long) {
-        val findFolloweeMaxLimit: Long = 1_000
         val followeeIds: List<Long> = followReadService.findInfluencerFolloweeIds(
             followerId = memberId,
-            findFolloweeMaxLimit = findFolloweeMaxLimit,
+            findFolloweeMaxLimit = 1_000, // 비즈니스 요구사항에 맞게 조정하면 되지만, 1 ~ 1,000 범위에서만 가져오자
         )
-        val toCreatedAt: LocalDateTime = LocalDateTime.now().withNano(0)
-        val fromCreatedAt: LocalDateTime = toCreatedAt.minusMinutes(10)
-        val postLimit: Long = 1_000
-        val postOffset: Long = 0
+        val memberDto: MemberDto = memberReadService.findMember(id = memberId)
         val postDtos: List<PostDto> = postReadService.findPosts(
             memberIds = followeeIds,
-            fromCreatedAt = fromCreatedAt,
-            toCreatedAt = toCreatedAt,
-            limit = postLimit,
-            offset = postOffset,
+            fromCreatedAt = memberDto.lastLoginDatetime, // 마지막 접속 날짜
+            toCreatedAt = LocalDateTime.now().withNano(0),
+            limit = 100, // 비즈니스 요구사항에 맞게 조정하면 되지만, 가능하다면 1 ~ 1,000 범위에서만 가져오자
+            offset = 0,
         )
 
         postDtos.forEach {
             feedRedisService.create(memberId = memberId, postId = it.id)
+        }
+
+        CoroutineScope(context = Dispatchers.IO).launch {
+            memberService.updateLastLoginDatetime(memberId = memberId)
         }
     }
 
