@@ -1,8 +1,10 @@
 package com.hyoseok.config.resilience4j.ratelimiter
 
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POSTS_USECASE
+import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_REFRESH_TIMELINE_USECASE
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_TIMELINE_USECASE
 import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_USECASE
+import com.hyoseok.config.resilience4j.ratelimiter.property.FindPostRefreshTimelineUsecaseProperty
 import com.hyoseok.config.resilience4j.ratelimiter.property.FindPostTimelineUsecaseProperty
 import com.hyoseok.config.resilience4j.ratelimiter.property.FindPostUsecaseProperty
 import com.hyoseok.config.resilience4j.ratelimiter.property.FindPostsUsecaseProperty
@@ -17,34 +19,37 @@ import java.time.Duration
 @Configuration
 @EnableConfigurationProperties(
     value = [
-        FindPostsUsecaseProperty::class,
+        FindPostRefreshTimelineUsecaseProperty::class,
         FindPostTimelineUsecaseProperty::class,
+        FindPostsUsecaseProperty::class,
         FindPostUsecaseProperty::class,
     ],
 )
 class RateLimiterConfig(
-    private val findPostsUsecaseProperty: FindPostsUsecaseProperty,
+    private val findPostRefreshTimelineUsecaseProperty: FindPostRefreshTimelineUsecaseProperty,
     private val findPostTimelineUsecaseProperty: FindPostTimelineUsecaseProperty,
+    private val findPostsUsecaseProperty: FindPostsUsecaseProperty,
     private val findPostUsecaseProperty: FindPostUsecaseProperty,
 ) {
 
     object Name {
-        const val FIND_POSTS_USECASE = "findPostsUsecase"
+        const val FIND_POST_REFRESH_TIMELINE_USECASE = "findPostRefreshTimelineUsecase"
         const val FIND_POST_TIMELINE_USECASE = "findPostTimelineUsecase"
+        const val FIND_POSTS_USECASE = "findPostsUsecase"
         const val FIND_POST_USECASE = "findPostUsecase"
     }
 
     @Bean
-    fun findPostsUsecaseRateLimiter(): RateLimiter {
+    fun findPostRefreshTimelineUsecaseRateLimiter(): RateLimiter {
         val rateLimiterConfig: RateLimiterConfig = RateLimiterConfig.custom()
-            .limitForPeriod(findPostsUsecaseProperty.limitForPeriod)
-            .limitRefreshPeriod(Duration.ofSeconds(findPostsUsecaseProperty.limitRefreshPeriod))
-            .timeoutDuration(Duration.ofSeconds(findPostsUsecaseProperty.timeoutDuration))
+            .limitForPeriod(findPostRefreshTimelineUsecaseProperty.limitForPeriod)
+            .limitRefreshPeriod(Duration.ofSeconds(findPostRefreshTimelineUsecaseProperty.limitRefreshPeriod))
+            .timeoutDuration(Duration.ofSeconds(findPostRefreshTimelineUsecaseProperty.timeoutDuration))
             .build()
 
         return RateLimiterRegistry
             .of(rateLimiterConfig)
-            .rateLimiter(FIND_POSTS_USECASE)
+            .rateLimiter(FIND_POST_REFRESH_TIMELINE_USECASE)
     }
 
     @Bean
@@ -58,6 +63,19 @@ class RateLimiterConfig(
         return RateLimiterRegistry
             .of(rateLimiterConfig)
             .rateLimiter(FIND_POST_TIMELINE_USECASE)
+    }
+
+    @Bean
+    fun findPostsUsecaseRateLimiter(): RateLimiter {
+        val rateLimiterConfig: RateLimiterConfig = RateLimiterConfig.custom()
+            .limitForPeriod(findPostsUsecaseProperty.limitForPeriod)
+            .limitRefreshPeriod(Duration.ofSeconds(findPostsUsecaseProperty.limitRefreshPeriod))
+            .timeoutDuration(Duration.ofSeconds(findPostsUsecaseProperty.timeoutDuration))
+            .build()
+
+        return RateLimiterRegistry
+            .of(rateLimiterConfig)
+            .rateLimiter(FIND_POSTS_USECASE)
     }
 
     @Bean

@@ -64,4 +64,24 @@ class PostReadService(
             offset = start,
         ).map { PostDto(post = it) }
     }
+
+    fun findPosts(
+        memberIds: List<Long>,
+        fromCreatedAt: LocalDateTime,
+        toCreatedAt: LocalDateTime,
+        limit: Long,
+        offset: Long,
+    ): List<PostDto> {
+        if (memberIds.isEmpty()) {
+            return listOf()
+        }
+
+        return postReadRepository.findAllByMemberIdsAndCreatedAtAndLimitAndOffset(
+            memberIds = memberIds,
+            fromCreatedAt = fromCreatedAt,
+            toCreatedAt = toCreatedAt,
+            limit = limit,
+            offset = offset,
+        ).map { PostDto(post = it) }
+    }
 }
