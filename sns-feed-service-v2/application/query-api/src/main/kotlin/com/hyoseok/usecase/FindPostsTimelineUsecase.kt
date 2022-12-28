@@ -4,7 +4,6 @@ import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_P
 import com.hyoseok.exception.QueryApiRateLimitException
 import com.hyoseok.feed.dto.FeedCacheDto
 import com.hyoseok.feed.service.FeedRedisReadService
-import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.mapper.PostCacheDtoMapper
 import com.hyoseok.mapper.PostDtoMapper
 import com.hyoseok.post.dto.PostCacheDto
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service
 @Service
 class FindPostsTimelineUsecase(
     private val feedRedisReadService: FeedRedisReadService,
-    private val followReadService: FollowReadService,
     private val postRedisReadService: PostRedisReadService,
     private val postRedisService: PostRedisService,
     private val postReadService: PostReadService,
