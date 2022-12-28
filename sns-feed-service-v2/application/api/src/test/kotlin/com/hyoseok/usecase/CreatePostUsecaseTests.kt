@@ -51,6 +51,7 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                 name = "사용자",
                 influencer = false,
                 createdAt = LocalDateTime.now().withNano(0),
+                lastLoginDatetime = LocalDateTime.now().withNano(0),
             )
             val postCreateDto = PostCreateDto(
                 memberId = memberDto.id,
