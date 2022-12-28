@@ -54,7 +54,7 @@ class FollowCount(
     }
 
     companion object {
-        const val INFLUENCER_MIN_LIMIT_COUNT = 10_000L
+        const val INFLUENCER_MIN_LIMIT_COUNT = 1_000_000L
 
         operator fun invoke(memberId: Long, totalFollower: Long, totalFollowee: Long): FollowCount {
             val nowDateTime: LocalDateTime = LocalDateTime.now().withNano(0)
