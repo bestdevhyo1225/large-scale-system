@@ -32,14 +32,14 @@ class FindPostsRefreshTimelineUsecase(
     fun execute(memberId: Long) {
         val followeeIds: List<Long> = followReadService.findInfluencerFolloweeIds(
             followerId = memberId,
-            findFolloweeMaxLimit = 1_000,
+            findFolloweeMaxLimit = 1_000, // 비즈니스 요구사항에 맞게 조정하면 되지만, 1 ~ 1,000 범위에서만 가져오자
         )
         val memberDto: MemberDto = memberReadService.findMember(id = memberId)
         val postDtos: List<PostDto> = postReadService.findPosts(
             memberIds = followeeIds,
             fromCreatedAt = memberDto.lastLoginDatetime, // 마지막 접속 날짜
             toCreatedAt = LocalDateTime.now().withNano(0),
-            limit = 100,
+            limit = 100, // 비즈니스 요구사항에 맞게 조정하면 되지만, 가능하다면 1 ~ 1,000 범위에서만 가져오자
             offset = 0,
         )
 
