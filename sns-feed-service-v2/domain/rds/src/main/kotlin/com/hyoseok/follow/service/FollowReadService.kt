@@ -1,7 +1,10 @@
 package com.hyoseok.follow.service
 
+import com.hyoseok.follow.dto.FollowDto
 import com.hyoseok.follow.entity.Follow
+import com.hyoseok.follow.entity.FollowCount
 import com.hyoseok.follow.entity.FollowCount.Companion.INFLUENCER_MIN_LIMIT_COUNT
+import com.hyoseok.follow.repository.FollowCountReadRepository
 import com.hyoseok.follow.repository.FollowReadRepository
 import com.hyoseok.follow.service.FollowReadService.ErrorMessage.FAILED_UPDATE_INFLUENCER
 import org.springframework.stereotype.Service
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class FollowReadService(
     private val followReadRepository: FollowReadRepository,
+    private val followCountReadRepository: FollowCountReadRepository,
 ) {
 
     object ErrorMessage {
@@ -37,6 +41,21 @@ class FollowReadService(
         )
 
         return Pair(first = total, second = followers.map { it.followerId })
+    }
+
+    fun findFollowers(followeeId: Long, lastId: Long, limit: Long): List<FollowDto> {
+        val followCount: FollowCount =
+            followCountReadRepository.findByMemberId(memberId = followeeId) ?: return listOf()
+
+        if (followCount.totalFollower >= INFLUENCER_MIN_LIMIT_COUNT) {
+            return listOf()
+        }
+
+        return followReadRepository.findAllByFolloweeIdAndLastIdAndLimit(
+            followeeId = followeeId,
+            lastId = lastId,
+            limit = limit,
+        ).map { FollowDto(follow = it) }
     }
 
     fun findInfluencerFolloweeIds(followerId: Long, findFolloweeMaxLimit: Long): List<Long> =

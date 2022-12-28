@@ -202,5 +202,45 @@ internal class FollowRepositoryTests : DescribeSpec() {
                 totalCount.shouldBe(follows.size)
             }
         }
+
+        this.describe("findAllByFolloweeIdAndLastIdAndLimit 메서드는") {
+            it("lastId를 기준으로 limit 만큼 팔로워를 가져온다") {
+                // given
+                val followeeId = 1L
+                val follows: List<Follow> = (2L..11L).map { Follow(followerId = it, followeeId = followeeId) }
+                val followCount =
+                    FollowCount(memberId = followeeId, totalFollowee = 0, totalFollower = follows.size.toLong())
+
+                withContext(Dispatchers.IO) {
+                    followRepository.saveAll(follows)
+                    followCountRepository.save(followCount)
+                }
+
+                val lastId = 0L
+                val limit = 4L
+
+                // when
+                val findFollows1: List<Follow> = followReadRepository.findAllByFolloweeIdAndLastIdAndLimit(
+                    followeeId = followeeId,
+                    lastId = lastId,
+                    limit = limit,
+                )
+                val findFollows2: List<Follow> = followReadRepository.findAllByFolloweeIdAndLastIdAndLimit(
+                    followeeId = followeeId,
+                    lastId = findFollows1.last().id!!,
+                    limit = limit,
+                )
+                val findFollows3: List<Follow> = followReadRepository.findAllByFolloweeIdAndLastIdAndLimit(
+                    followeeId = followeeId,
+                    lastId = findFollows2.last().id!!,
+                    limit = limit,
+                )
+
+                // then
+                findFollows1.shouldHaveSize(limit.toInt())
+                findFollows2.shouldHaveSize(limit.toInt())
+                findFollows3.shouldHaveSize(limit.minus(2).toInt())
+            }
+        }
     }
 }

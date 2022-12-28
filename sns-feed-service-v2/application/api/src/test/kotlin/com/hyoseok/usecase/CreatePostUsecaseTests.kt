@@ -2,6 +2,7 @@ package com.hyoseok.usecase
 
 import com.hyoseok.feed.dto.FeedEventDto
 import com.hyoseok.feed.producer.FeedKafkaProducer
+import com.hyoseok.follow.dto.FollowDto
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.service.MemberReadService
@@ -89,21 +90,27 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                 )
             }
             val limit = 1_000L
-            val offset = 0L
-            val pairResult: Pair<Long, List<Long>> = Pair(first = 1L, second = listOf(3L))
+            val lastId = 0L
+            val followDtos: List<FollowDto> = listOf(
+                FollowDto(
+                    id = 1L,
+                    followeeId = postDto.memberId,
+                    followerId = 3,
+                    createdAt = LocalDateTime.now().withNano(0),
+                ),
+            )
             val feedEventDto = FeedEventDto(postId = postCacheDto.id, followerId = postCacheDto.memberId)
 
             every { mockMemberReadService.findMember(id = createPostUsecaseDto.memberId) } returns memberDto
             every { mockPostService.create(dto = postCreateDto) } returns postDto
             justRun { mockPostRedisService.createOrUpdate(dto = postCacheDto) }
             every {
-                mockFollowReadService.findFollowerIds(
+                mockFollowReadService.findFollowers(
                     followeeId = postDto.memberId,
-                    influencer = memberDto.influencer,
+                    lastId = lastId,
                     limit = limit,
-                    offset = offset,
                 )
-            } returns pairResult
+            } returns followDtos
             justRun { mockFeedKafkaProducer.sendAsync(event = feedEventDto) }
 
             `when`("게시물을 저장하는데") {
@@ -113,11 +120,10 @@ internal class CreatePostUsecaseTests : BehaviorSpec(
                     verify { mockMemberReadService.findMember(id = createPostUsecaseDto.memberId) }
                     verify { mockPostService.create(dto = postCreateDto) }
                     verify {
-                        mockFollowReadService.findFollowerIds(
+                        mockFollowReadService.findFollowers(
                             followeeId = postDto.memberId,
-                            influencer = memberDto.influencer,
+                            lastId = lastId,
                             limit = limit,
-                            offset = offset,
                         )
                     }
                 }
