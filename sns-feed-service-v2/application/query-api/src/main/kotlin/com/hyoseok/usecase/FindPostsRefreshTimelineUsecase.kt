@@ -39,7 +39,7 @@ class FindPostsRefreshTimelineUsecase(
             memberIds = followeeIds,
             fromCreatedAt = memberDto.lastLoginDatetime, // 마지막 접속 날짜
             toCreatedAt = LocalDateTime.now().withNano(0),
-            limit = 1_000,
+            limit = 500,
             offset = 0,
         )
 
