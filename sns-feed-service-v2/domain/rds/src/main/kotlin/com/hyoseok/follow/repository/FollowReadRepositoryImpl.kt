@@ -56,6 +56,16 @@ class FollowReadRepositoryImpl(
                 .fetch(),
         )
 
+    override fun findAllByFolloweeIdAndLastIdAndLimit(followeeId: Long, lastId: Long, limit: Long): List<Follow> =
+        jpaQueryFactory
+            .selectFrom(follow)
+            .where(
+                followFolloweeIdEq(followeeId = followeeId),
+                followIdGt(id = lastId),
+            )
+            .limit(limit)
+            .fetch()
+
     override fun findAllByFollowerIdAndLimitAndOffset(
         followerId: Long,
         limit: Long,
@@ -89,6 +99,13 @@ class FollowReadRepositoryImpl(
             .fetch()
 
     private fun followIdEq(id: Long): BooleanExpression = follow.id.eq(id)
+
+    private fun followIdGt(id: Long): BooleanExpression? {
+        if (id == 0L) {
+            return null
+        }
+        return follow.id.gt(id)
+    }
 
     private fun followFolloweeIdEq(followeeId: Long): BooleanExpression = follow.followeeId.eq(followeeId)
 
