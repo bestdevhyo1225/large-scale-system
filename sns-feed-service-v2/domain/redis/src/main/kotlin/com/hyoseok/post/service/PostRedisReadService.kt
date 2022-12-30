@@ -4,7 +4,6 @@ import com.hyoseok.post.dto.PostCacheDto
 import com.hyoseok.post.entity.PostCache
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdKey
 import com.hyoseok.post.entity.PostCache.Companion.getPostIdsByMemberIdKey
-import com.hyoseok.post.repository.PostRedisPipelineRepository
 import com.hyoseok.post.repository.PostRedisRepository
 import com.hyoseok.util.PageRequestByPosition
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service
 @ConditionalOnProperty(prefix = "spring.post.redis", name = ["enable"], havingValue = "true")
 class PostRedisReadService(
     private val postRedisRepository: PostRedisRepository,
-    private val postRedisPipelineRepository: PostRedisPipelineRepository,
 ) {
 
     fun findPostCache(id: Long): PostCacheDto? {
@@ -48,7 +46,9 @@ class PostRedisReadService(
             return Pair(first = listOf(), second = listOf())
         }
 
-        val postCacheDtos: List<PostCacheDto> = postRedisPipelineRepository.getPostCaches(ids = postIds)
+        val keys: List<String> = postIds.map { getPostIdKey(id = it) }
+        val postCaches: List<PostCache> = postRedisRepository.mget(keys = keys)
+        val postCacheDtos: List<PostCacheDto> = postCaches.map { PostCacheDto(postCache = it) }
         val postCacheIdMap: Map<Long, Boolean> = postCacheDtos.associate { it.id to true }
         val notExistsPostIds: List<Long> = postIds.filter { postCacheIdMap[it] == null || postCacheIdMap[it] == false }
 
