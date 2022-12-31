@@ -122,19 +122,15 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 #### :arrow_forward: 프로세스
 
-<img width="1000" alt="image" src="https://user-images.githubusercontent.com/23515771/191925405-713596e6-a47c-4745-8862-309799f71558.png">
-
 1. `Post` 를 데이터베이스에 저장한다.
-2. `PostCache`, `PostViewCount`, `PostKeys(Post Id 리스트를 담고 있는 데이터)` 를 레디스에 캐싱한다.
-    - `PostKeys` 는 `Sorted Set` 컬렉션을 사용하여, 포스팅을 저장한 순서대로 `Id` 를 캐싱한다.
-    - `PostKeys` 는 최대 `100,000` 개만 저장한다.
-        - `zremRangeByRank` 를 활용해서 `100,000` 개를 유지한다.
-3. 사용자를 팔로우한 `Followee` 리스트를 조회한다.
-4. `Feed` 이벤트를 만들어 카프카를 통해 메시지를 발행한다.
-5. `Feed Event Worker` 서버에서는 `Feed` 이벤트를 수신한다.
-6. `FeedCache` 를 만들어 `Followee` 의 Id를 기준으로 `Sorted Set` 컬렉션을 활용하여, `등록 순` 으로 피드 캐시를 저장한다.
+2. `Post 캐시`, `PostIdsByMemberId 캐시(회원이 등록한 Post Id 리스트)` 를 레디스에 캐싱한다.
+    - `PostIdsByMemberId` 는 `Sorted Set` 컬렉션을 사용하여, 포스팅을 저장한 순서대로 `Id` 를 캐싱한다.
+3. `Post` 를 생성한 회원의 `팔로워 Id 리스트` 를 조회한다.
+4. `Feed` 이벤트를 Kafka 브로커로 전송한다.
+5. `Event Worker` 서버에서는 Kafka 브로커에서 `Feed` 이벤트를 수신한다.
+6. `Feed 캐시` 를 `팔로워` 의 피드에 등록순으로 저장한다.
 
-### :white_check_mark: Post 캐시 처리
+### :white_check_mark: Post 캐시
 
 #### :arrow_forward: 프로세스
 
@@ -142,7 +138,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
     - Post 페이지네이션을 활용하기 위해 `memberId` 기준으로 `postId` 를 `SortedSet` 자료구조에 적재한다.
 - `post:$id` Key에는 Post 캐시를 저장한다.
     - 단 건 조회시, `get` 명령을 사용한다.
-    - 페이지네이션 요청시, Redis 클러스터 사용할 것을 고려해 `mget` 을 사용하지 않고, `pipeline` 기능을 활용해서 `get` 을 통한 여러 건을 조회한다.
+    - 여러 건 요청시, `mget` 명령어를 사용한다.
 
 #### :arrow_forward: 캐시 메모리 계산 결과
 
