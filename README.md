@@ -171,10 +171,13 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: SNS 피드 서비스 Swagger
 
-#### :arrow_forward: API 문서 목록
+#### :arrow_forward: api
 
-- [api](http://localhost:9000/swagger-ui/index.html)
-- [query-api](http://localhost:9001/swagger-ui/index.html)
+- http://localhost:9000/swagger-ui/index.html
+
+#### :arrow_forward: query-api
+
+- http://localhost:9001/swagger-ui/index.html
 
 ### :white_check_mark: 성능 테스트
 
@@ -275,6 +278,6 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: 쿠폰 서비스 Swagger
 
-#### :arrow_forward: API 문서 목록
+#### :arrow_forward: command-api
 
-- [command-api](http://localhost:9000/swagger-ui/index.html)
+- http://localhost:9000/swagger-ui/index.html
