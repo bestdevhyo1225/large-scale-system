@@ -134,9 +134,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 #### :arrow_forward: 전략
 
-- `post:ids:member:$memberId` Key에 `postId` 를 저장하고, 만료 시간은 `30일` 을 부여한다.
+- `post:ids:member:$memberId` Key에 `postId` 를 저장한다.
+    - 만료 시간은 `30일` 을 부여한다.
     - Post 페이지네이션을 활용하기 위해 `memberId` 기준으로 `postId` 를 `SortedSet` 자료구조에 적재한다.
 - `post:$id` Key에는 Post 캐시를 저장한다.
+    - 만료 시간은 `12시간` 을 부여한다.
     - 단 건 조회시, `get` 명령을 사용한다.
     - 여러 건 요청시, `mget` 명령어를 사용한다.
 
@@ -152,11 +154,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 #### :arrow_forward: 전략
 
 - `member:$id:feeds` Key에 `postId` 를 저장한다.
-  - `SortedSet` 자료구조를 사용하여, 등록순으로 저장한다.
-  - 최대 `800` 개만 저장이 가능하다.
-  - `800` 개가 넘어가는 경우, `zremRangeByRank` 을 통해 가장 오래된 `postId` 1개를 제거한다.
-  - 마지막 로그인 날짜가 `30일` 이 지난 회원들의 경우, 데이터를 삭제한다.
-    - `Feed` 캐시의 경우, `팔로잉` 한 사람이 등록할 때마다 만료시간이 갱신되기 때문에 만료시간을 부여하지 않았다.
+    - `SortedSet` 자료구조를 사용하여, 등록순으로 저장한다.
+    - 최대 `800` 개만 저장이 가능하다.
+    - `800` 개가 넘어가는 경우, `zremRangeByRank` 을 통해 가장 오래된 `postId` 1개를 제거한다.
+    - 마지막 로그인 날짜가 `30일` 이 지난 회원들의 경우, 데이터를 삭제한다.
+        - `Feed` 캐시의 경우, `팔로잉` 한 사람이 등록할 때마다 만료시간이 갱신되기 때문에 만료시간을 부여하지 않았다.
 
 ### :white_check_mark: Redis 메모리 최적화 관련 참고
 
