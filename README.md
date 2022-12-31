@@ -203,9 +203,9 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 > API
 
-- `사용자 수` : `2,000명`
-- `Ramp Up 시간 (초)` : `1초`
-- `테스트 지속 시간` : `60초`
+- 사용자 수 : `2,000명`
+- Ramp Up 시간 (초) : `1초`
+- 테스트 지속 시간 : `60초`
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -215,11 +215,14 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | 게시물 생성 | 43,119 | 2,822ms | 89ms | 75,006ms | 0.05% | 569.5/sec |
 
-> Query API
+> Query API (테스트 1)
 
-- RateLimiter 의 `limitForPeriod` 값이 `3,000`
+- 사용자 수 : `2,000명`
+- Ramp Up 시간 (초) : `1초`
+- 테스트 지속 시간 : `60초`
+- RateLimiter 의 limitForPeriod : `3,000`
 - AWS ECS 인스턴스 수 : `1대`
-- Tomcat Max Thread: `150`
+- Tomcat Max Thread : `150`
 - 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
@@ -228,9 +231,14 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | 총계 | 160,074 | 737ms | 17ms | 48,889ms | 0.03% | 2606.3/sec |
 | 총계 | 170,529 | 696ms | 10ms | 75,003ms | 0.01% | 2710.7/sec |
 
-- RateLimiter 의 `limitForPeriod` 값이 `3,000`
+> Query API (테스트 2)
+
+- 사용자 수 : `2,000명`
+- Ramp Up 시간 (초) : `1초`
+- 테스트 지속 시간 : `60초`
+- RateLimiter 의 limitForPeriod : `3,000`
 - AWS ECS 인스턴스 수 : `2대`
-- Tomcat Max Thread: `150`
+- Tomcat Max Thread : `150`
 - 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
@@ -239,9 +247,14 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | 총계 | 304,285 | 388ms | 10ms | 59,919ms | 0.00% | 5017.3/sec |
 | 총계 | 309,815 | 286ms | 10ms | 60,473ms | 0.00% | 5109.6/sec |
 
-- RateLimiter 의 `limitForPeriod` 값이 `3,000`
-- AWS ECS 인스턴스 수 : `2대`
-- Tomcat Max Thread: `200`
+> Query API (테스트 3)
+
+- 사용자 수 : `2,000명`
+- Ramp Up 시간 (초) : `1초`
+- 테스트 지속 시간 : `60초`
+- RateLimiter 의 limitForPeriod : `3,000`
+- AWS ECS 인스턴스 수 : `1대`
+- Tomcat Max Thread : `200`
     - 스레드 수가 늘어나도 성능이 좋아짐을 보장할 수
       없다. ([스레드 컨텍스트 스위칭](https://www.inflearn.com/questions/252332/%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%8A%A4%EC%9C%84%EC%B9%AD))
     - 같은 4코어의 CPU를 사용한다면, 스레드 풀이 늘어날 수록 컨텍스트 스위칭 비용은 늘어난다.
