@@ -6,10 +6,10 @@
 
 ## :pushpin: 시스템 설계 리스트
 
-- [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
-- [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+- :white_check_mark: [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
+- :white_check_mark: [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
     - [sns-feed-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
-- [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+- :white_check_mark: [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
     - [coupon-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
 
 ## :pushpin: URL 단축기 설계
