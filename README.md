@@ -110,7 +110,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ## :pushpin: SNS 피드 시스템 설계
 
-#### :arrow_forward: 소스 코드
+### :white_check_mark: 소스 코드
 
 - [sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
 
@@ -258,7 +258,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ## :pushpin: 쿠폰 이벤트 선착순 시스템 설계
 
-#### :arrow_forward: 소스 코드
+### :white_check_mark: 소스 코드
 
 - [coupon-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
 
