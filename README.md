@@ -140,6 +140,8 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: Post 캐시 처리
 
+#### 프로세스
+
 - `post:ids:member:$memberId` Key에 `postId` 를 저장하고, 만료 시간은 `30일` 을 부여한다.
 
     - Post 페이지네이션을 활용하기 위해 `memberId` 기준으로 `postId` 를 `SortedSet` 자료구조에 적재한다.
@@ -150,7 +152,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
     - 페이지네이션 요청시, Redis 클러스터 사용할 것을 고려해 `mget` 을 사용하지 않고, `pipeline` 기능을 활용해서 `get` 을 통한 여러 건을 조회한다.
 
-#### 캐시 메모리 계산
+#### 캐시 메모리 계산 결과
 
 > Post 캐시
 
