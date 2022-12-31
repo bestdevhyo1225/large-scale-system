@@ -112,11 +112,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 - [sns-feed-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
 
-### SNS 피드 서비스 아키텍처
+### :white_check_mark: SNS 피드 서비스 아키텍처
 
 <img width="1882" alt="image" src="https://user-images.githubusercontent.com/23515771/208303790-ec90177c-87d0-42fe-9a34-f964ff0650be.png">
 
-### 팬 아웃(포스팅 전송) 프로세스
+### :white_check_mark: 팬 아웃(포스팅 전송) 프로세스
 
 <img width="1474" alt="image" src="https://user-images.githubusercontent.com/23515771/191925405-713596e6-a47c-4745-8862-309799f71558.png">
 
@@ -138,7 +138,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 6. `FeedCache` 를 만들어 `Followee` 의 Id를 기준으로 `Sorted Set` 컬렉션을 활용하여, `등록 순` 으로 피드 캐시를 저장한다.
 
-### Post 캐시 처리
+### :white_check_mark: Post 캐시 처리
 
 - `post:ids:member:$memberId` Key에 `postId` 를 저장하고, 만료 시간은 `30일` 을 부여한다.
 
@@ -165,7 +165,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
   경우, [Redis에 심플한 key-value 로 수 억개의 데이터 저장하기](https://charsyam.wordpress.com/2011/11/06/redis%EC%97%90-%EC%8B%AC%ED%94%8C%ED%95%9C-key-value-%EB%A1%9C-%EC%88%98-%EC%96%B5%EA%B0%9C%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0/)
   을 참고해서 `Hashes` 자료구조로 개선하자.
 
-### 성능 테스트
+### :white_check_mark: 성능 테스트
 
 #### 인스턴스 사양
 
