@@ -245,7 +245,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | 총계 | 304,285 | 388ms | 10ms | 59,919ms | 0.00% | 5017.3/sec |
 | 총계 | 309,815 | 286ms | 10ms | 60,473ms | 0.00% | 5109.6/sec |
 
-#### :arrow_forward: Query API 서버 성능 테스트 결과 (3)
+#### :arrow_forward: Query API 서버 성능 테스트 결과 (임시)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
