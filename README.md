@@ -140,7 +140,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: Post 캐시 처리
 
-#### 프로세스
+#### :arrow_forward: 프로세스
 
 - `post:ids:member:$memberId` Key에 `postId` 를 저장하고, 만료 시간은 `30일` 을 부여한다.
 
@@ -152,7 +152,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
     - 페이지네이션 요청시, Redis 클러스터 사용할 것을 고려해 `mget` 을 사용하지 않고, `pipeline` 기능을 활용해서 `get` 을 통한 여러 건을 조회한다.
 
-#### 캐시 메모리 계산 결과
+#### :arrow_forward: 캐시 메모리 계산 결과
 
 > Post 캐시
 
@@ -169,7 +169,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: 성능 테스트
 
-#### 인스턴스 사양
+#### :arrow_forward: 인스턴스 사양
 
 > Amazon MSK
 
@@ -195,7 +195,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 - `Xmx` : `4096MB (4G)`
 - `GC` : `ZGC`
 
-#### 결과
+#### :arrow_forward: 성능 테스트 결과
 
 > API
 
