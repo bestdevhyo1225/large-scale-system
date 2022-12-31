@@ -114,11 +114,13 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: SNS 피드 서비스 아키텍처
 
-<img width="1882" alt="image" src="https://user-images.githubusercontent.com/23515771/208303790-ec90177c-87d0-42fe-9a34-f964ff0650be.png">
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/23515771/208303790-ec90177c-87d0-42fe-9a34-f964ff0650be.png">
 
-### :white_check_mark: 팬 아웃(포스팅 전송) 프로세스
+### :white_check_mark: 팬 아웃 Push 모델
 
-<img width="1474" alt="image" src="https://user-images.githubusercontent.com/23515771/191925405-713596e6-a47c-4745-8862-309799f71558.png">
+#### :arrow_forward: 프로세스
+
+<img width="1000" alt="image" src="https://user-images.githubusercontent.com/23515771/191925405-713596e6-a47c-4745-8862-309799f71558.png">
 
 1. `Post` 를 데이터베이스에 저장한다.
 
