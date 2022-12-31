@@ -132,7 +132,7 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 ### :white_check_mark: Post 캐시
 
-#### :arrow_forward: 프로세스
+#### :arrow_forward: 전략
 
 - `post:ids:member:$memberId` Key에 `postId` 를 저장하고, 만료 시간은 `30일` 을 부여한다.
     - Post 페이지네이션을 활용하기 위해 `memberId` 기준으로 `postId` 를 `SortedSet` 자료구조에 적재한다.
@@ -142,14 +142,21 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 #### :arrow_forward: 캐시 메모리 계산 결과
 
-> Post 캐시
-
 - `240,000` 건의 캐시를 저장하는데, `92.3 MB` 를 사용함.
     - `1 GB` 의 경우, 대략 `2,400,000` 건의 Post 관련 캐시를 저장할 수 있음.
     - `10 GB` 의 경우, 대략 `24,000,000` 건의 Post 관련 캐시를 저장할 수 있음.
     - `32 GB` 의 경우, 대략 `76,800,000` 건의 Post 관련 캐시를 저장할 수 있음.
 
-> 메모리 관련 참고 자료
+### :white_check_mark: Feed 캐시
+
+#### :arrow_forward: 전략
+
+- `member:$id:feeds` Key에 `postId` 를 저장한다.
+  - `SortedSet` 자료구조를 사용하여, 등록순으로 저장한다.
+  - 최대 `800` 개만 저장이 가능하다.
+  - `800` 개가 넘어가는 경우, `zremRangeByRank` 을 통해 가장 오래된 `postId` 1개를 제거한다.
+
+### :white_check_mark: Redis 메모리 최적화 관련 참고
 
 - 캐시 데이터가 억 단위를 넘어가는
   경우, [Redis에 심플한 key-value 로 수 억개의 데이터 저장하기](https://charsyam.wordpress.com/2011/11/06/redis%EC%97%90-%EC%8B%AC%ED%94%8C%ED%95%9C-key-value-%EB%A1%9C-%EC%88%98-%EC%96%B5%EA%B0%9C%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0/)
