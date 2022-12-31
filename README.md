@@ -8,9 +8,9 @@
 
 - [URL 단축기 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-url-%EB%8B%A8%EC%B6%95%EA%B8%B0-%EC%84%A4%EA%B3%84)
 - [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
-  - [sns-feed-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
+    - [sns-feed-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
 - [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
-  - [coupon-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
+    - [coupon-service-v2 소스 코드](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
 
 ## :pushpin: URL 단축기 설계
 
@@ -237,25 +237,27 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 | 총계 | 160,074 | 737ms | 17ms | 48,889ms | 0.03% | 2606.3/sec |
 | 총계 | 170,529 | 696ms | 10ms | 75,003ms | 0.01% | 2710.7/sec |
 
-- RateLimiter 의 `limitForPeriod` 값이 `3,000`
-- AWS ECS `vCpu` : `4096`
-- AWS ECS `Memory` : `8G`
 - AWS ECS 인스턴스 수 : `2대`
-- Tomcat Max Thread: `150`
-- 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
+    - 나머지는 위의 조건과 동일
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| 총계 | 274,447 | 430ms | 9ms | 60,155ms | 0.00% | 4523.0/sec |
+| 총계 | 292,245 | 406ms | 10ms | 60,184ms | 0.00% | 4809.4/sec |
+| 총계 | 298,464 | 396ms | 9ms | 60,014ms | 0.00% | 4925.9/sec |
+| 총계 | 304,285 | 388ms | 10ms | 59,919ms | 0.00% | 5017.3/sec |
+| 총계 | 309,815 | 286ms | 10ms | 60,473ms | 0.00% | 5109.6/sec |
 
 - RateLimiter 의 `limitForPeriod` 값이 `3,000`
 - AWS ECS `vCpu` : `4096`
 - AWS ECS `Memory` : `8G`
 - AWS ECS 인스턴스 수 : `1대`
 - Tomcat Max Thread: `200`
-  - 스레드 수가 늘어나도 성능이 좋아짐을 보장할 수 없다. ([스레드 컨텍스트 스위칭](https://www.inflearn.com/questions/252332/%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%8A%A4%EC%9C%84%EC%B9%AD))
-  - 같은 4코어의 CPU를 사용한다면, 스레드 풀이 늘어날 수록 컨텍스트 스위칭 비용은 늘어난다.
-    - `200` 개의 스레드 / `4` 코어 = `50` 번의 컨텍스트 스위칭
-    - `150` 개의 스레드 / `4` 코어 = `37.5` 번의 컨텍스트 스위칭
+    - 스레드 수가 늘어나도 성능이 좋아짐을 보장할 수
+      없다. ([스레드 컨텍스트 스위칭](https://www.inflearn.com/questions/252332/%EC%8A%A4%EB%A0%88%EB%93%9C-%EC%BB%A8%ED%85%8D%EC%8A%A4%ED%8A%B8-%EC%8A%A4%EC%9C%84%EC%B9%AD))
+    - 같은 4코어의 CPU를 사용한다면, 스레드 풀이 늘어날 수록 컨텍스트 스위칭 비용은 늘어난다.
+        - `200` 개의 스레드 / `4` 코어 = `50` 번의 컨텍스트 스위칭
+        - `150` 개의 스레드 / `4` 코어 = `37.5` 번의 컨텍스트 스위칭
 - 게시물 리스트, 타임라인, 상세 조회 총계
 
 | 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
