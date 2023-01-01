@@ -124,11 +124,11 @@ CQRS 패턴을 적용한 `Command, Query` 모듈 서버에서는 `651.7 TPS` 의
 
 1. `Post` 를 데이터베이스에 저장한다.
 2. `Post 캐시`, `PostIdsByMemberId 캐시(회원이 등록한 Post Id 리스트)` 를 레디스에 캐싱한다.
-    - `PostIdsByMemberId` 는 `Sorted Set` 컬렉션을 사용하여, 포스팅을 저장한 순서대로 `Id` 를 캐싱한다.
+    - `PostIdsByMemberId` 는 `Sorted Set` 컬렉션을 사용하여, `등록순` 으로 `postId` 를 캐싱한다.
 3. `Post` 를 생성한 회원의 `팔로워 Id 리스트` 를 조회한다.
 4. `Feed` 이벤트를 Kafka 브로커로 전송한다.
 5. `Event Worker` 서버에서는 Kafka 브로커에서 `Feed` 이벤트를 수신한다.
-6. `Feed 캐시` 를 `팔로워` 의 피드에 등록순으로 저장한다.
+6. `Feed 캐시` 를 `팔로워` 의 피드에 `등록순` 으로 `memberId, postId` 를 캐싱한다.
 
 ### :white_check_mark: Post 캐시
 
