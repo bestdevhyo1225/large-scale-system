@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.UPDATE_MEMBER_INFLUENCER_USECASE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.follow.service.FollowReadService
 import com.hyoseok.member.service.MemberService
@@ -16,7 +15,7 @@ class UpdateMemberInfluencerUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = UPDATE_MEMBER_INFLUENCER_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "updateMemberInfluencerUsecase", fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long) {
         followReadService.checkInfluencer(followeeId = memberId)
         memberService.updateInfluener(memberId = memberId)

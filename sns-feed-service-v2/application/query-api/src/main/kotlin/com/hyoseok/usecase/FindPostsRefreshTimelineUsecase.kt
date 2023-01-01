@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_REFRESH_TIMELINE_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
 import com.hyoseok.feed.service.FeedRedisService
 import com.hyoseok.follow.service.FollowReadService
@@ -28,7 +27,7 @@ class FindPostsRefreshTimelineUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = FIND_POST_REFRESH_TIMELINE_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "findPostsRefreshTimelineUsecase", fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long) {
         val followeeIds: List<Long> = followReadService.findInfluencerFolloweeIds(
             followerId = memberId,

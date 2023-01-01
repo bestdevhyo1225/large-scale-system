@@ -19,24 +19,29 @@ spring:
 
 resilience4j:
   ratelimiter:
-    usecase:
-      create-follow-member:
+    #    configs:
+    #      default:
+    #       registerHealthIndicator: false # actuator를 통해 ratelimiter 상태를 체크하기 위한 여부
+    #       allowHealthIndicatorToFail: false
+    #       subscribeForEvents: true
+    #       eventConsumerBufferSize: 50
+    instances:
+      createFollowMemberUsecase:
         limitForPeriod: 500 # limitRefreshPeriod 기간 동안 허용되는 요청 수
-        limitRefreshPeriod: 1 # limitRefresh 기간 (초)
-        timeoutDuration: 3 # 권한 acquire(허가)를 위해 스레드가 대기하는 시간 (초)
-      #      registerHealthIndicator: true # actuator를 통해 ratelimiter 상태를 체크하기 위한 여부
-      create-post:
+        limitRefreshPeriod: 1s # limitRefresh 기간 (초)
+        timeoutDuration: 3s # 권한 acquire(허가)를 위해 스레드가 대기하는 시간 (초)
+      createPostUsecase:
         limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
-      create-wish:
-        limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
-      update-member-influencer:
-        limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
+      createWishUsecase:
+        limitForPeriod: 1000
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
+      updateMemberInfluencerUsecase:
+        limitForPeriod: 1000
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
 
 ---
 spring:
