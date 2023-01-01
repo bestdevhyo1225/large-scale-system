@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POST_TIMELINE_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
 import com.hyoseok.feed.dto.FeedCacheDto
 import com.hyoseok.feed.service.FeedRedisReadService
@@ -30,7 +29,7 @@ class FindPostsTimelineUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = FIND_POST_TIMELINE_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "findPostsTimelineUsecase", fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> {
         val (start: Long, size: Long) = pageRequestByPosition
 

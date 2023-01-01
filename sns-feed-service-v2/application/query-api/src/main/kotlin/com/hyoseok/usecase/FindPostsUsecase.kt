@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.FIND_POSTS_USECASE
 import com.hyoseok.exception.QueryApiRateLimitException
 import com.hyoseok.mapper.PostCacheDtoMapper
 import com.hyoseok.mapper.PostDtoMapper
@@ -27,7 +26,7 @@ class FindPostsUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = FIND_POSTS_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "findPostsUsecase", fallbackMethod = "fallbackExecute")
     fun execute(memberId: Long, pageRequestByPosition: PageRequestByPosition): PageByPosition<PostDto> {
         val (start: Long, size: Long) = pageRequestByPosition
 
