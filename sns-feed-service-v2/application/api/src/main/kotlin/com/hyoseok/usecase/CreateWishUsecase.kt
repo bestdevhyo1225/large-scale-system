@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE_WISH_USECASE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.member.dto.MemberDto
 import com.hyoseok.member.service.MemberReadService
@@ -21,7 +20,7 @@ class CreateWishUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = CREATE_WISH_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "createWishUsecase", fallbackMethod = "fallbackExecute")
     fun execute(postId: Long, memberId: Long) {
         val memberDto: MemberDto = memberReadService.findMember(id = memberId)
         val postDto: PostDto = postReadService.findPost(id = postId)

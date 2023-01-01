@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE_FOLLOW_MEMBER_USECASE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.follow.dto.FollowCreateDto
 import com.hyoseok.follow.dto.FollowDto
@@ -19,7 +18,7 @@ class CreateFollowMemberUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = CREATE_FOLLOW_MEMBER_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "createFollowMemberUsecase", fallbackMethod = "fallbackExecute")
     fun execute(followerId: Long, followeeId: Long): FollowDto {
         val followerMemberDto: MemberDto = memberReadService.findMember(id = followerId)
         val followeeMemberDto: MemberDto = memberReadService.findMember(id = followeeId)

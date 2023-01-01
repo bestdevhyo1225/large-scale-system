@@ -1,6 +1,5 @@
 package com.hyoseok.usecase
 
-import com.hyoseok.config.resilience4j.ratelimiter.RateLimiterConfig.Name.CREATE_POST_USECASE
 import com.hyoseok.exception.ApiRateLimitException
 import com.hyoseok.feed.dto.FeedEventDto
 import com.hyoseok.feed.producer.FeedKafkaProducer
@@ -33,7 +32,7 @@ class CreatePostUsecase(
 
     private val logger = KotlinLogging.logger {}
 
-    @RateLimiter(name = CREATE_POST_USECASE, fallbackMethod = "fallbackExecute")
+    @RateLimiter(name = "createPostUsecase", fallbackMethod = "fallbackExecute")
     fun execute(createPostUsecaseDto: CreatePostUsecaseDto): PostDto {
         val memberDto: MemberDto = memberReadService.findMember(id = createPostUsecaseDto.memberId)
         val postCreateDto: PostCreateDto = createPostUsecaseDto.toDomainDto(memberDto = memberDto)
