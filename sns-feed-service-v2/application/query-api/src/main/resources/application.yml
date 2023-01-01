@@ -27,19 +27,19 @@ resilience4j:
     #       eventConsumerBufferSize: 50
     instances:
       findPostsRefreshTimelineUsecase:
-        limitForPeriod: 2000 # limitRefreshPeriod 기간 동안 허용되는 요청 수
+        limitForPeriod: 3000 # limitRefreshPeriod 기간 동안 허용되는 요청 수
         limitRefreshPeriod: 1s # limitRefresh 기간 (초)
         timeoutDuration: 3s # 권한 acquire(허가)를 위해 스레드가 대기하는 시간 (초)
       findPostsTimelineUsecase:
-        limitForPeriod: 2000
+        limitForPeriod: 3000
         limitRefreshPeriod: 1s
         timeoutDuration: 3s
       findPostsUsecase:
-        limitForPeriod: 2000
+        limitForPeriod: 3000
         limitRefreshPeriod: 1s
         timeoutDuration: 3s
       findPostUsecase:
-        limitForPeriod: 2000
+        limitForPeriod: 3000
         limitRefreshPeriod: 1s
         timeoutDuration: 3s
 
