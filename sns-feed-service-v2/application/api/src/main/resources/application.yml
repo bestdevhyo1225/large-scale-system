@@ -29,23 +29,23 @@ resilience4j:
       createFollowMemberUsecase:
         #        baseConfig: default
         limitForPeriod: 500 # limitRefreshPeriod 기간 동안 허용되는 요청 수
-        limitRefreshPeriod: 1 # limitRefresh 기간 (초)
-        timeoutDuration: 3 # 권한 acquire(허가)를 위해 스레드가 대기하는 시간 (초)
+        limitRefreshPeriod: 1s # limitRefresh 기간 (초)
+        timeoutDuration: 3s # 권한 acquire(허가)를 위해 스레드가 대기하는 시간 (초)
       createPostUsecase:
         #        baseConfig: default
         limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
       createWishUsecase:
         #        baseConfig: default
-        limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
+        limitForPeriod: 1000
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
       updateMemberInfluencerUsecase:
         #        baseConfig: default
-        limitForPeriod: 500
-        limitRefreshPeriod: 1
-        timeoutDuration: 3
+        limitForPeriod: 1000
+        limitRefreshPeriod: 1s
+        timeoutDuration: 3s
 
 ---
 spring:
