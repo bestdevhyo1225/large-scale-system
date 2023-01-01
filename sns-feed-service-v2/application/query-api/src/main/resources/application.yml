@@ -19,12 +19,12 @@ spring:
 
 resilience4j:
   ratelimiter:
-#    configs:
-#      default:
-#       registerHealthIndicator: false # actuator를 통해 ratelimiter 상태를 체크하기 위한 여부
-#       allowHealthIndicatorToFail: false
-#       subscribeForEvents: true
-#       eventConsumerBufferSize: 50
+    #    configs:
+    #      default:
+    #       registerHealthIndicator: false # actuator를 통해 ratelimiter 상태를 체크하기 위한 여부
+    #       allowHealthIndicatorToFail: false
+    #       subscribeForEvents: true
+    #       eventConsumerBufferSize: 50
     instances:
       findPostsRefreshTimelineUsecase:
 #        baseConfig: default
