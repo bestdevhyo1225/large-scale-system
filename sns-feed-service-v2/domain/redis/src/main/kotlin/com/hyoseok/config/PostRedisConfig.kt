@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.RedisStaticMasterReplicaConfiguration
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration
 import java.time.Duration
@@ -53,7 +54,7 @@ class PostRedisConfig(
                 logger.info { "post redis standalone mode" }
 
                 val (host: String, port: Int) = getHostAndPort()
-                LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettucePoolingClientConfiguration())
+                LettuceConnectionFactory(RedisStandaloneConfiguration(host, port), lettuceClientConfig())
             }
 
             Replication -> {
@@ -62,13 +63,13 @@ class PostRedisConfig(
                 val (host: String, port: Int) = getHostAndPort()
                 val staticMasterReplicaConfiguration = RedisStaticMasterReplicaConfiguration(host, port)
                 setReplicaNodes(staticMasterReplicaConfiguration = staticMasterReplicaConfiguration)
-                LettuceConnectionFactory(staticMasterReplicaConfiguration, lettucePoolingClientConfiguration())
+                LettuceConnectionFactory(staticMasterReplicaConfiguration, lettuceClientConfig())
             }
 
             Cluster -> {
                 logger.info { "post redis cluster mode" }
 
-                LettuceConnectionFactory(RedisClusterConfiguration(nodes), lettucePoolingClientConfiguration())
+                LettuceConnectionFactory(RedisClusterConfiguration(nodes), lettuceClientConfig())
             }
         }
 
@@ -99,11 +100,17 @@ class PostRedisConfig(
         poolConfig.setMaxWait(Duration.ofMillis(maxWait))
 
         return LettucePoolingClientConfiguration.builder()
-            .clientName("post-redis-client")
+            .clientName("post-redis-pooling-client")
             .readFrom(ReadFrom.REPLICA_PREFERRED)
             .poolConfig(poolConfig)
             .build()
     }
+
+    private fun lettuceClientConfig(): LettuceClientConfiguration =
+        LettuceClientConfiguration.builder()
+            .clientName("post-redis-client")
+            .readFrom(ReadFrom.REPLICA_PREFERRED)
+            .build()
 
     private fun getHostAndPort(): Pair<String, Int> {
         val splits: List<String> = nodes.first().split(":")
