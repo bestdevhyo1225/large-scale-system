@@ -26,6 +26,7 @@ abstract class BaseEntity(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         val otherBase: BaseEntity = (other as? BaseEntity) ?: return false
+        // '스레드 == 트랜잭션 == 영속성 컨텍스트' 범위내에서는 id 값만 같아도 같은 객체이다. (영속성 컨텍스트는 REPEATABLE READ로 동작한다.)
         return this.id == otherBase.id
     }
 }
