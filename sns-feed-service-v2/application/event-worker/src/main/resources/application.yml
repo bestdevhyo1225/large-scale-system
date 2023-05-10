@@ -13,6 +13,16 @@ spring:
     redis:
       enable: true
 
+management:
+  endpoint:
+    health:
+      show-details: always # 상세하게 보고 싶을때
+  #      show-components: always # UP, DOWN 상태만 보고 싶을때
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 ---
 spring:
   config:
