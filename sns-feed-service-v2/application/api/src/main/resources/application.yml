@@ -1,6 +1,8 @@
 server:
   port: 9000
   tomcat:
+    mbeanregistry:
+      enabled: true # tomcat 과 관련된 메트릭 정보를 상세하게 알 수 있다.
     threads:
       min-spare: 20
       max: 150
