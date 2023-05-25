@@ -11,6 +11,10 @@ spring:
   profiles:
     active: develop
 
+  output:
+    ansi:
+      enabled: always
+
   post:
     redis:
       enable: true
