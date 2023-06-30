@@ -6,17 +6,17 @@
 
 ## :pushpin: 시스템 설계 리스트
 
-:white_check_mark: [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
-</br>
-:white_check_mark: [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+:arrow_forward: [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+:arrow_forward: [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 
 ## :pushpin: SNS 피드 시스템 설계
 
 ### :white_check_mark: 소스 코드
 
-- [large-scale-system:sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
-- [kotlin-multi-module-template](https://github.com/bestdevhyo1225/kotlin-multi-module-template)
-  - `2023.06.27 ~ 진행중` - 다시 한 번 만들어보고 있음
+:arrow_forward: [large-scale-system:sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
+:arrow_forward: [kotlin-multi-module-template](https://github.com/bestdevhyo1225/kotlin-multi-module-template)
+
+- `2023.06.27 ~ 진행중` - 다시 한 번 만들어보고 있음
 
 ### :white_check_mark: SNS 피드 서비스 아키텍처
 
@@ -104,13 +104,13 @@
 - Ramp Up 시간 (초) : `1초`
 - 테스트 지속 시간 : `60초`
 
-| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 회원 생성 | 79,690 | 1,495ms | 52ms | 4,831ms | 0.00% | 1293.7/sec |
+|  라벨   |  표본 수  | 평균(ms)  | 최소값(ms) | 최대값(ms) | 오류 (%) |    처리량     |
+|:-----:|:------:|:-------:|:-------:|:-------:|:------:|:----------:|
+| 회원 생성 | 79,690 | 1,495ms |  52ms   | 4,831ms | 0.00%  | 1293.7/sec |
 
-| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 게시물 생성 | 43,119 | 2,822ms | 89ms | 75,006ms | 0.05% | 569.5/sec |
+|   라벨   |  표본 수  | 평균(ms)  | 최소값(ms) | 최대값(ms)  | 오류 (%) |    처리량    |
+|:------:|:------:|:-------:|:-------:|:--------:|:------:|:---------:|
+| 게시물 생성 | 43,119 | 2,822ms |  89ms   | 75,006ms | 0.05%  | 569.5/sec |
 
 #### :arrow_forward: Query API 서버 성능 테스트 결과 (1)
 
@@ -122,11 +122,11 @@
 - Tomcat Max Thread : `150`
 - 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
 
-| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 총계 | 191,195 | 622ms | 20ms | 66,046ms | 0.01% | 2821.1/sec |
-| 총계 | 160,074 | 737ms | 17ms | 48,889ms | 0.03% | 2606.3/sec |
-| 총계 | 170,529 | 696ms | 10ms | 75,003ms | 0.01% | 2710.7/sec |
+| 라벨 |  표본 수   | 평균(ms) | 최소값(ms) | 최대값(ms)  | 오류 (%) |    처리량     |
+|:--:|:-------:|:------:|:-------:|:--------:|:------:|:----------:|
+| 총계 | 191,195 | 622ms  |  20ms   | 66,046ms | 0.01%  | 2821.1/sec |
+| 총계 | 160,074 | 737ms  |  17ms   | 48,889ms | 0.03%  | 2606.3/sec |
+| 총계 | 170,529 | 696ms  |  10ms   | 75,003ms | 0.01%  | 2710.7/sec |
 
 #### :arrow_forward: Query API 서버 성능 테스트 결과 (2)
 
@@ -138,11 +138,11 @@
 - Tomcat Max Thread : `150`
 - 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
 
-| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 총계 | 298,464 | 396ms | 9ms | 60,014ms | 0.00% | 4925.9/sec |
-| 총계 | 304,285 | 388ms | 10ms | 59,919ms | 0.00% | 5017.3/sec |
-| 총계 | 309,815 | 286ms | 10ms | 60,473ms | 0.00% | 5109.6/sec |
+| 라벨 |  표본 수   | 평균(ms) | 최소값(ms) | 최대값(ms)  | 오류 (%) |    처리량     |
+|:--:|:-------:|:------:|:-------:|:--------:|:------:|:----------:|
+| 총계 | 298,464 | 396ms  |   9ms   | 60,014ms | 0.00%  | 4925.9/sec |
+| 총계 | 304,285 | 388ms  |  10ms   | 59,919ms | 0.00%  | 5017.3/sec |
+| 총계 | 309,815 | 286ms  |  10ms   | 60,473ms | 0.00%  | 5109.6/sec |
 
 #### :arrow_forward: Query API 서버 성능 테스트 결과 (임시)
 
@@ -159,9 +159,9 @@
         - `150` 개의 스레드 / `4` 코어 = `37.5` 번의 컨텍스트 스위칭
 - 게시물 리스트, 타임라인, 타임라인 새로고침, 상세 조회 총계
 
-| 라벨 | 표본 수 | 평균(ms) | 최소값(ms) | 최대값(ms) | 오류 (%) | 처리량 |
-| :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-| 총계 | 161,657 | 735ms | 15ms | 67,120ms | 0.00% | 2340.7/sec |
+| 라벨 |  표본 수   | 평균(ms) | 최소값(ms) | 최대값(ms)  | 오류 (%) |    처리량     |
+|:--:|:-------:|:------:|:-------:|:--------:|:------:|:----------:|
+| 총계 | 161,657 | 735ms  |  15ms   | 67,120ms | 0.00%  | 2340.7/sec |
 
 ### :white_check_mark: 정리
 
