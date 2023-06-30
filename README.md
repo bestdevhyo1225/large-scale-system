@@ -23,7 +23,7 @@
 
 ### :white_check_mark: 팬 아웃 Push 모델
 
-> **프로세스**
+#### **프로세스**
 
 1. `Post` 를 데이터베이스에 저장한다.
 2. `Post 캐시`, `PostIdsByMemberId 캐시(회원이 등록한 Post Id 리스트)` 를 레디스에 캐싱한다.
