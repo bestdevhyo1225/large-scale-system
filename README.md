@@ -35,7 +35,7 @@
 
 ### :white_check_mark: Post 캐시
 
-> **전략**
+#### :large_orange_diamond: 전략
 
 - `post:ids:member:$memberId` Key에 `postId` 를 저장한다.
     - 만료 시간은 `30일` 을 부여한다.
@@ -45,7 +45,7 @@
     - 단 건 조회시, `get` 명령을 사용한다.
     - 여러 건 요청시, `mget` 명령어를 사용한다.
 
-> 캐시 메모리 계산 결과
+#### :large_orange_diamond: 캐시 메모리 계산 결과
 
 - `240,000` 건의 캐시를 저장하는데, `92.3 MB` 를 사용함.
     - `1 GB` 의 경우, 대략 `2,400,000` 건의 Post 관련 캐시를 저장할 수 있음.
@@ -54,7 +54,7 @@
 
 ### :white_check_mark: Feed 캐시
 
-> 전략
+#### :large_orange_diamond: 전략
 
 - `member:$id:feeds` Key에 `postId` 를 저장한다.
     - `SortedSet` 자료구조를 사용하여, 등록순으로 저장한다.
@@ -71,7 +71,7 @@
 
 ### :white_check_mark: 성능 테스트
 
-> 인스턴스 사양
+#### :large_orange_diamond: 인스턴스 사양
 
 - **Amazon MSK**
     - `kafka.t3.small`
@@ -93,7 +93,7 @@
     - `Xmx` : `4096MB (4G)`
     - `GC` : `ZGC`
 
-> API 서버 성능 테스트 결과
+#### :large_orange_diamond: API 서버 성능 테스트 결과
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -107,7 +107,7 @@
 |:------:|:------:|:-------:|:-------:|:--------:|:------:|:---------:|
 | 게시물 생성 | 43,119 | 2,822ms |  89ms   | 75,006ms | 0.05%  | 569.5/sec |
 
-> Query API 서버 성능 테스트 결과 (1)
+#### :large_orange_diamond: Query API 서버 성능 테스트 결과 (1)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -123,7 +123,7 @@
 | 총계 | 160,074 | 737ms  |  17ms   | 48,889ms | 0.03%  | 2606.3/sec |
 | 총계 | 170,529 | 696ms  |  10ms   | 75,003ms | 0.01%  | 2710.7/sec |
 
-> Query API 서버 성능 테스트 결과 (2)
+#### :large_orange_diamond: Query API 서버 성능 테스트 결과 (2)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -139,7 +139,7 @@
 | 총계 | 304,285 | 388ms  |  10ms   | 59,919ms | 0.00%  | 5017.3/sec |
 | 총계 | 309,815 | 286ms  |  10ms   | 60,473ms | 0.00%  | 5109.6/sec |
 
-> Query API 서버 성능 테스트 결과 (임시)
+#### :large_orange_diamond: Query API 서버 성능 테스트 결과 (임시)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -173,6 +173,6 @@
 
 <img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327876-5b53d114-a32f-4fe5-b346-1d20e7a5973d.png">
 
-> Write Through 패턴 사용
+#### :large_orange_diamond: Write Through 패턴 사용
 
 - 선착순의 경우, DB에 갑작스런 쓰기 요청이 몰리게 되면 DB 서버가 죽을 수도 있다. 따라서 임시적으로 Redis 서버에 캐시 데이터를 적재하고 Kafka를 활용해서 DB에 쓰기 작업을 처리한다.
