@@ -2,19 +2,19 @@
 
 ## :pushpin: 참고 서적
 
-[:arrow_forward: 가상 면접 사례로 배우는 대규모 시스템 설계 기초](http://www.yes24.com/Product/Goods/102819435)
+- [가상 면접 사례로 배우는 대규모 시스템 설계 기초](http://www.yes24.com/Product/Goods/102819435)
 
 ## :pushpin: 시스템 설계 리스트
 
-:arrow_forward: [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
-:arrow_forward: [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+- [SNS 피드 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-sns-%ED%94%BC%EB%93%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
+- [쿠폰 이벤트 선착순 시스템 설계](https://github.com/bestdevhyo1225/large-system-design#pushpin-%EC%BF%A0%ED%8F%B0-%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%84%A0%EC%B0%A9%EC%88%9C-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%84%A4%EA%B3%84)
 
 ## :pushpin: SNS 피드 시스템 설계
 
 ### :white_check_mark: 소스 코드
 
-:arrow_forward: [large-scale-system:sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
-:arrow_forward: [kotlin-multi-module-template](https://github.com/bestdevhyo1225/kotlin-multi-module-template)
+- [large-scale-system:sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
+- [kotlin-multi-module-template](https://github.com/bestdevhyo1225/kotlin-multi-module-template)
 
 - `2023.06.27 ~ 진행중` - 다시 한 번 만들어보고 있음
 
@@ -24,7 +24,7 @@
 
 ### :white_check_mark: 팬 아웃 Push 모델
 
-#### :arrow_forward: 프로세스
+#### 프로세스
 
 1. `Post` 를 데이터베이스에 저장한다.
 2. `Post 캐시`, `PostIdsByMemberId 캐시(회원이 등록한 Post Id 리스트)` 를 레디스에 캐싱한다.
@@ -36,7 +36,7 @@
 
 ### :white_check_mark: Post 캐시
 
-#### :arrow_forward: 전략
+#### 전략
 
 - `post:ids:member:$memberId` Key에 `postId` 를 저장한다.
     - 만료 시간은 `30일` 을 부여한다.
@@ -46,7 +46,7 @@
     - 단 건 조회시, `get` 명령을 사용한다.
     - 여러 건 요청시, `mget` 명령어를 사용한다.
 
-#### :arrow_forward: 캐시 메모리 계산 결과
+#### 캐시 메모리 계산 결과
 
 - `240,000` 건의 캐시를 저장하는데, `92.3 MB` 를 사용함.
     - `1 GB` 의 경우, 대략 `2,400,000` 건의 Post 관련 캐시를 저장할 수 있음.
@@ -55,7 +55,7 @@
 
 ### :white_check_mark: Feed 캐시
 
-#### :arrow_forward: 전략
+#### 전략
 
 - `member:$id:feeds` Key에 `postId` 를 저장한다.
     - `SortedSet` 자료구조를 사용하여, 등록순으로 저장한다.
@@ -72,7 +72,7 @@
 
 ### :white_check_mark: 성능 테스트
 
-#### :arrow_forward: 인스턴스 사양
+#### 인스턴스 사양
 
 > Amazon MSK
 
@@ -98,7 +98,7 @@
 - `Xmx` : `4096MB (4G)`
 - `GC` : `ZGC`
 
-#### :arrow_forward: API 서버 성능 테스트 결과
+#### API 서버 성능 테스트 결과
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -112,7 +112,7 @@
 |:------:|:------:|:-------:|:-------:|:--------:|:------:|:---------:|
 | 게시물 생성 | 43,119 | 2,822ms |  89ms   | 75,006ms | 0.05%  | 569.5/sec |
 
-#### :arrow_forward: Query API 서버 성능 테스트 결과 (1)
+#### Query API 서버 성능 테스트 결과 (1)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -128,7 +128,7 @@
 | 총계 | 160,074 | 737ms  |  17ms   | 48,889ms | 0.03%  | 2606.3/sec |
 | 총계 | 170,529 | 696ms  |  10ms   | 75,003ms | 0.01%  | 2710.7/sec |
 
-#### :arrow_forward: Query API 서버 성능 테스트 결과 (2)
+#### Query API 서버 성능 테스트 결과 (2)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -144,7 +144,7 @@
 | 총계 | 304,285 | 388ms  |  10ms   | 59,919ms | 0.00%  | 5017.3/sec |
 | 총계 | 309,815 | 286ms  |  10ms   | 60,473ms | 0.00%  | 5109.6/sec |
 
-#### :arrow_forward: Query API 서버 성능 테스트 결과 (임시)
+#### Query API 서버 성능 테스트 결과 (임시)
 
 - 사용자 수 : `2,000명`
 - Ramp Up 시간 (초) : `1초`
@@ -172,12 +172,12 @@
 
 ### :white_check_mark: 소스 코드
 
-[:arrow_forward: coupon-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
+- [coupon-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/coupon-service-v2)
 
 ### :white_check_mark: 쿠폰 서비스 아키텍처 - V2
 
 <img width="1834" alt="image" src="https://user-images.githubusercontent.com/23515771/197327876-5b53d114-a32f-4fe5-b346-1d20e7a5973d.png">
 
-#### :arrow_forward: Write Through 패턴 사용
+#### Write Through 패턴 사용
 
 - 선착순의 경우, DB에 갑작스런 쓰기 요청이 몰리게 되면 DB 서버가 죽을 수도 있다. 따라서 임시적으로 Redis 서버에 캐시 데이터를 적재하고 Kafka를 활용해서 DB에 쓰기 작업을 처리한다.
