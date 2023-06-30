@@ -73,25 +73,29 @@
 
 #### 인스턴스 사양
 
-- **Amazon MSK**
-    - `kafka.t3.small`
-        - `vCpu` : `2048`
-        - `메모리(GiB)` : `2G`
-        - `네트워크 대역폭 (Gbps)` : `5 Gbps`
+> **Amazon MSK**
 
-- **Amazon Elasticache**
-    - `cache.t3.small`
-        - `메모리(GiB)` : `1.37 GiB`
-        - `Up to 5 Gigabit nework perfomance`
+- `kafka.t3.small`
+    - `vCpu` : `2048`
+    - `메모리(GiB)` : `2G`
+    - `네트워크 대역폭 (Gbps)` : `5 Gbps`
 
-- **AWS ECS Fargate**
-    - `vCpu` : `2048` or `4096`
-    - `Memory` : `6G` or `8G`
+> **Amazon Elasticache**
 
-- **Spring Boot Application**
-    - `Xms` : `4096MB (4G)`
-    - `Xmx` : `4096MB (4G)`
-    - `GC` : `ZGC`
+- `cache.t3.small`
+    - `메모리(GiB)` : `1.37 GiB`
+    - `Up to 5 Gigabit nework perfomance`
+
+> **AWS ECS Fargate**
+
+- `vCpu` : `2048` or `4096`
+- `Memory` : `6G` or `8G`
+
+> **Spring Boot Application**
+
+- `Xms` : `4096MB (4G)`
+- `Xmx` : `4096MB (4G)`
+- `GC` : `ZGC`
 
 #### API 서버 성능 테스트 결과
 
