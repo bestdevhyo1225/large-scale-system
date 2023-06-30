@@ -14,7 +14,9 @@
 
 ### :white_check_mark: 소스 코드
 
-[:arrow_forward: sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
+- [large-scale-system:sns-feed-service-v2](https://github.com/bestdevhyo1225/large-system-design/tree/main/sns-feed-service-v2)
+- [kotlin-multi-module-template](https://github.com/bestdevhyo1225/kotlin-multi-module-template)
+  - `2023.06.27` 부터 다시 한 번 만들어봄
 
 ### :white_check_mark: SNS 피드 서비스 아키텍처
 
